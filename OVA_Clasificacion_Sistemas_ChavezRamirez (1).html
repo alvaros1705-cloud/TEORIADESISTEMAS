@@ -1,0 +1,1244 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OVA – Clasificación y Características de los Sistemas</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0f1e;
+    --surface: #111827;
+    --card: #1a2235;
+    --border: #1e3a5f;
+    --accent1: #00d4ff;
+    --accent2: #7b61ff;
+    --accent3: #00ff9d;
+    --accent4: #ff6b35;
+    --text: #e8f0fe;
+    --muted: #8899bb;
+    --white: #ffffff;
+    --glow1: rgba(0,212,255,0.15);
+    --glow2: rgba(123,97,255,0.15);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    overflow-x: hidden;
+  }
+
+  /* ─── SCROLLBAR ─── */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--accent2); border-radius: 3px; }
+
+  /* ─── NAV ─── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 999;
+    background: rgba(10,15,30,0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    height: 60px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .nav-logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800; font-size: 1.1rem;
+    background: linear-gradient(90deg, var(--accent1), var(--accent2));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .nav-links { display: flex; gap: 0.25rem; }
+  .nav-links a {
+    color: var(--muted); text-decoration: none;
+    font-size: 0.8rem; padding: 6px 12px; border-radius: 6px;
+    transition: all 0.2s; white-space: nowrap;
+  }
+  .nav-links a:hover { color: var(--accent1); background: var(--glow1); }
+  .nav-progress {
+    position: fixed; top: 60px; left: 0; right: 0; height: 3px;
+    background: var(--border); z-index: 998;
+  }
+  .nav-progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent1), var(--accent2));
+    width: 0%; transition: width 0.2s;
+  }
+
+  /* ─── HERO ─── */
+  .hero {
+    min-height: 100vh;
+    display: flex; align-items: center; justify-content: center;
+    position: relative; overflow: hidden;
+    padding-top: 60px;
+  }
+  .hero-bg {
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse 80% 60% at 20% 40%, rgba(0,212,255,0.08) 0%, transparent 60%),
+                radial-gradient(ellipse 60% 80% at 80% 60%, rgba(123,97,255,0.1) 0%, transparent 60%);
+  }
+  .grid-overlay {
+    position: absolute; inset: 0;
+    background-image: linear-gradient(rgba(0,212,255,0.04) 1px, transparent 1px),
+                      linear-gradient(90deg, rgba(0,212,255,0.04) 1px, transparent 1px);
+    background-size: 50px 50px;
+  }
+  .hero-content {
+    position: relative; z-index: 2;
+    text-align: center; max-width: 900px; padding: 2rem;
+  }
+  .hero-badge {
+    display: inline-block;
+    padding: 6px 18px; border-radius: 20px;
+    border: 1px solid var(--accent1);
+    color: var(--accent1); font-size: 0.75rem; letter-spacing: 2px;
+    text-transform: uppercase; margin-bottom: 1.5rem;
+    background: var(--glow1);
+    animation: fadeDown 0.8s ease both;
+  }
+  .hero h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    font-weight: 800; line-height: 1.1;
+    margin-bottom: 1rem;
+    animation: fadeUp 0.8s 0.2s ease both;
+  }
+  .hero h1 span {
+    background: linear-gradient(135deg, var(--accent1), var(--accent2));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .hero-sub {
+    font-size: 1.1rem; color: var(--muted); max-width: 600px;
+    margin: 0 auto 2rem; line-height: 1.7;
+    animation: fadeUp 0.8s 0.35s ease both;
+  }
+  .hero-meta {
+    display: flex; gap: 2rem; justify-content: center; flex-wrap: wrap;
+    font-size: 0.85rem; color: var(--muted);
+    animation: fadeUp 0.8s 0.5s ease both;
+  }
+  .hero-meta span { display: flex; align-items: center; gap: 6px; }
+  .hero-meta .dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--accent3); box-shadow: 0 0 8px var(--accent3);
+  }
+  .hero-scroll {
+    position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%);
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+    color: var(--muted); font-size: 0.75rem;
+    animation: bounce 2s infinite;
+  }
+  .hero-scroll .arrow { width: 20px; height: 20px; border-right: 2px solid var(--muted); border-bottom: 2px solid var(--muted); transform: rotate(45deg); }
+
+  /* ─── FLOATING PARTICLES ─── */
+  .particles { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+  .particle {
+    position: absolute; border-radius: 50%;
+    background: var(--accent1); opacity: 0.3;
+    animation: float linear infinite;
+  }
+
+  /* ─── SECTIONS ─── */
+  section { padding: 5rem 2rem; max-width: 1100px; margin: 0 auto; }
+  .section-label {
+    font-size: 0.7rem; letter-spacing: 3px; text-transform: uppercase;
+    color: var(--accent1); margin-bottom: 0.75rem;
+  }
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    font-weight: 700; margin-bottom: 1rem; line-height: 1.2;
+  }
+  .section-title span { color: var(--accent2); }
+  .section-desc { color: var(--muted); font-size: 1rem; line-height: 1.8; max-width: 700px; }
+  .divider {
+    width: 60px; height: 3px; border-radius: 2px;
+    background: linear-gradient(90deg, var(--accent1), var(--accent2));
+    margin: 1.5rem 0;
+  }
+
+  /* ─── CARDS GRID ─── */
+  .cards-grid { display: grid; gap: 1.5rem; margin-top: 3rem; }
+  .cards-grid.cols2 { grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
+  .cards-grid.cols3 { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px; padding: 1.75rem;
+    transition: all 0.3s; position: relative; overflow: hidden;
+  }
+  .card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, var(--accent1), var(--accent2));
+    opacity: 0; transition: opacity 0.3s;
+  }
+  .card:hover { transform: translateY(-4px); border-color: rgba(0,212,255,0.3); box-shadow: 0 20px 40px rgba(0,0,0,0.3), 0 0 0 1px rgba(0,212,255,0.1); }
+  .card:hover::before { opacity: 1; }
+  .card-icon { font-size: 2rem; margin-bottom: 1rem; }
+  .card-title { font-family: 'Syne', sans-serif; font-size: 1.1rem; font-weight: 700; margin-bottom: 0.75rem; }
+  .card-text { color: var(--muted); font-size: 0.9rem; line-height: 1.7; }
+
+  /* ─── CLASSIFICATION TABLE ─── */
+  .class-section { margin-top: 4rem; }
+  .tabs { display: flex; gap: 0.5rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+  .tab-btn {
+    padding: 8px 20px; border-radius: 8px; border: 1px solid var(--border);
+    background: transparent; color: var(--muted); cursor: pointer;
+    font-family: 'DM Sans', sans-serif; font-size: 0.85rem;
+    transition: all 0.2s;
+  }
+  .tab-btn.active { background: linear-gradient(135deg, var(--accent1), var(--accent2)); border-color: transparent; color: var(--bg); font-weight: 600; }
+  .tab-btn:hover:not(.active) { border-color: var(--accent1); color: var(--accent1); }
+  .tab-content { display: none; }
+  .tab-content.active { display: block; animation: fadeUp 0.4s ease; }
+
+  .type-card {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 16px; padding: 2rem;
+  }
+  .type-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem; }
+  .type-badge {
+    padding: 6px 16px; border-radius: 20px; font-size: 0.75rem;
+    font-weight: 600; text-transform: uppercase; letter-spacing: 1px;
+  }
+  .badge-blue { background: rgba(0,212,255,0.15); color: var(--accent1); border: 1px solid rgba(0,212,255,0.3); }
+  .badge-purple { background: rgba(123,97,255,0.15); color: var(--accent2); border: 1px solid rgba(123,97,255,0.3); }
+  .badge-green { background: rgba(0,255,157,0.15); color: var(--accent3); border: 1px solid rgba(0,255,157,0.3); }
+  .badge-orange { background: rgba(255,107,53,0.15); color: var(--accent4); border: 1px solid rgba(255,107,53,0.3); }
+  .type-name { font-family: 'Syne', sans-serif; font-size: 1.4rem; font-weight: 700; }
+
+  .type-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; }
+  .type-item {
+    background: rgba(255,255,255,0.03); border: 1px solid var(--border);
+    border-radius: 10px; padding: 1rem;
+  }
+  .type-item h4 { font-size: 0.85rem; color: var(--accent1); margin-bottom: 0.4rem; font-weight: 600; }
+  .type-item p { font-size: 0.82rem; color: var(--muted); line-height: 1.6; }
+
+  /* ─── EXAMPLES ─── */
+  .examples-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-top: 2.5rem; }
+  .example-card {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 16px; padding: 1.5rem; position: relative; overflow: hidden;
+    transition: all 0.3s;
+  }
+  .example-card:hover { transform: translateY(-4px); border-color: rgba(0,255,157,0.3); }
+  .example-num {
+    position: absolute; top: 1rem; right: 1rem;
+    font-family: 'Syne', sans-serif; font-size: 3rem; font-weight: 800;
+    color: rgba(255,255,255,0.04);
+  }
+  .example-tag {
+    display: inline-block; padding: 4px 12px; border-radius: 4px;
+    font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;
+    background: rgba(0,255,157,0.1); color: var(--accent3); border: 1px solid rgba(0,255,157,0.2);
+    margin-bottom: 0.75rem;
+  }
+  .example-card h3 { font-family: 'Syne', sans-serif; font-size: 1.05rem; margin-bottom: 0.5rem; }
+  .example-card p { font-size: 0.87rem; color: var(--muted); line-height: 1.7; }
+
+  /* ─── CHARACTERISTICS ─── */
+  .chars-section { background: linear-gradient(135deg, rgba(0,212,255,0.03), rgba(123,97,255,0.03)); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+  .chars-section > div { max-width: 1100px; margin: 0 auto; padding: 5rem 2rem; }
+  .chars-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.25rem; margin-top: 3rem; }
+  .char-card {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 14px; padding: 1.5rem;
+    position: relative; overflow: hidden; transition: all 0.3s;
+  }
+  .char-card:hover { border-color: var(--accent2); transform: translateY(-3px); }
+  .char-num {
+    font-family: 'Syne', sans-serif; font-size: 2.5rem; font-weight: 800;
+    background: linear-gradient(135deg, var(--accent1), var(--accent2));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    display: block; margin-bottom: 0.5rem;
+  }
+  .char-card h4 { font-family: 'Syne', sans-serif; font-size: 0.95rem; font-weight: 700; margin-bottom: 0.5rem; }
+  .char-card p { font-size: 0.82rem; color: var(--muted); line-height: 1.6; }
+
+  /* ─── GAMES ─── */
+  .game-wrapper { background: var(--card); border: 1px solid var(--border); border-radius: 20px; overflow: hidden; margin-top: 2rem; }
+  .game-header { padding: 1.25rem 1.75rem; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; flex-wrap: gap; gap: 1rem; }
+  .game-title { font-family: 'Syne', sans-serif; font-size: 1.1rem; font-weight: 700; }
+  .game-body { padding: 2rem; }
+
+  /* GAME 1: Clasificador drag */
+  #game1 { }
+  .drag-instructions { color: var(--muted); font-size: 0.88rem; margin-bottom: 1.5rem; }
+  .drag-items { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-bottom: 2rem; }
+  .drag-item {
+    padding: 8px 18px; border-radius: 8px;
+    border: 1px solid var(--accent1); color: var(--accent1);
+    background: var(--glow1); cursor: grab; font-size: 0.85rem;
+    transition: all 0.2s; user-select: none;
+  }
+  .drag-item:hover { background: rgba(0,212,255,0.2); transform: scale(1.05); }
+  .drag-item.used { opacity: 0.3; pointer-events: none; }
+
+  .drop-zones { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; }
+  .drop-zone {
+    min-height: 140px; border-radius: 12px;
+    border: 2px dashed var(--border);
+    padding: 1rem; text-align: center;
+    transition: all 0.2s;
+  }
+  .drop-zone.drag-over { border-color: var(--accent1); background: var(--glow1); }
+  .drop-zone-label { font-size: 0.8rem; font-weight: 600; color: var(--muted); margin-bottom: 0.75rem; text-transform: uppercase; letter-spacing: 1px; }
+  .drop-zone-items { display: flex; flex-direction: column; gap: 0.5rem; }
+  .dropped-item {
+    padding: 5px 10px; border-radius: 6px;
+    background: rgba(0,212,255,0.1); border: 1px solid rgba(0,212,255,0.2);
+    font-size: 0.8rem; color: var(--text);
+  }
+  .dropped-item.correct { background: rgba(0,255,157,0.15); border-color: rgba(0,255,157,0.4); color: var(--accent3); }
+  .dropped-item.incorrect { background: rgba(255,107,53,0.15); border-color: rgba(255,107,53,0.4); color: var(--accent4); }
+
+  .game-btns { display: flex; gap: 1rem; margin-top: 1.5rem; flex-wrap: wrap; }
+  .btn {
+    padding: 10px 24px; border-radius: 10px; border: none; cursor: pointer;
+    font-family: 'DM Sans', sans-serif; font-size: 0.9rem; font-weight: 500;
+    transition: all 0.2s;
+  }
+  .btn-primary { background: linear-gradient(135deg, var(--accent1), var(--accent2)); color: var(--bg); font-weight: 600; }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,212,255,0.3); }
+  .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text); }
+  .btn-outline:hover { border-color: var(--accent1); color: var(--accent1); }
+  .game-score { color: var(--muted); font-size: 0.88rem; align-self: center; }
+  .score-val { color: var(--accent1); font-weight: 600; }
+
+  /* GAME 2: Memory */
+  .memory-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.75rem; max-width: 480px; margin: 0 auto; }
+  .memory-card {
+    aspect-ratio: 1; border-radius: 10px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.75rem; text-align: center; padding: 0.5rem;
+    border: 1px solid var(--border); background: var(--surface);
+    transition: all 0.3s; position: relative; perspective: 200px;
+  }
+  .memory-card.flipped { background: var(--glow2); border-color: var(--accent2); }
+  .memory-card.matched { background: rgba(0,255,157,0.1); border-color: var(--accent3); cursor: default; }
+  .memory-front { display: none; font-size: 0.78rem; color: var(--text); line-height: 1.3; }
+  .memory-back { font-size: 1.5rem; }
+  .memory-card.flipped .memory-front { display: block; }
+  .memory-card.flipped .memory-back { display: none; }
+  .memory-card.matched .memory-front { display: block; color: var(--accent3); }
+  .memory-card.matched .memory-back { display: none; }
+  .memory-stats { display: flex; justify-content: center; gap: 2rem; margin: 1.5rem 0; color: var(--muted); font-size: 0.88rem; }
+  .memory-stats span { color: var(--accent1); font-weight: 600; }
+
+  /* ─── QUIZ ─── */
+  .quiz-container { max-width: 700px; margin: 0 auto; }
+  .quiz-progress { display: flex; gap: 0.5rem; margin-bottom: 2rem; }
+  .quiz-dot { height: 6px; flex: 1; border-radius: 3px; background: var(--border); transition: background 0.3s; }
+  .quiz-dot.done { background: var(--accent1); }
+  .quiz-dot.current { background: var(--accent2); }
+  .quiz-q {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 16px; padding: 2rem; margin-bottom: 1rem;
+  }
+  .quiz-num { font-size: 0.75rem; color: var(--muted); margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 2px; }
+  .quiz-question { font-family: 'Syne', sans-serif; font-size: 1.1rem; font-weight: 600; line-height: 1.5; margin-bottom: 1.5rem; }
+  .quiz-options { display: flex; flex-direction: column; gap: 0.75rem; }
+  .quiz-opt {
+    padding: 0.9rem 1.25rem; border-radius: 10px;
+    border: 1px solid var(--border); background: transparent;
+    color: var(--text); text-align: left; cursor: pointer;
+    font-family: 'DM Sans', sans-serif; font-size: 0.9rem;
+    transition: all 0.2s; display: flex; align-items: center; gap: 0.75rem;
+  }
+  .quiz-opt:hover:not(:disabled) { border-color: var(--accent2); background: var(--glow2); }
+  .quiz-opt.correct { border-color: var(--accent3); background: rgba(0,255,157,0.1); color: var(--accent3); }
+  .quiz-opt.incorrect { border-color: var(--accent4); background: rgba(255,107,53,0.1); color: var(--accent4); }
+  .quiz-opt-letter {
+    width: 28px; height: 28px; border-radius: 6px;
+    background: var(--border); display: flex; align-items: center; justify-content: center;
+    font-size: 0.78rem; font-weight: 600; flex-shrink: 0;
+  }
+  .quiz-feedback { padding: 1rem 1.25rem; border-radius: 10px; font-size: 0.88rem; line-height: 1.6; margin-top: 1rem; display: none; }
+  .quiz-feedback.show { display: block; }
+  .quiz-feedback.ok { background: rgba(0,255,157,0.1); border: 1px solid rgba(0,255,157,0.3); color: var(--accent3); }
+  .quiz-feedback.fail { background: rgba(255,107,53,0.1); border: 1px solid rgba(255,107,53,0.3); color: var(--accent4); }
+  .quiz-nav { display: flex; justify-content: flex-end; margin-top: 1rem; }
+  .quiz-result {
+    text-align: center; padding: 3rem 2rem; display: none;
+    background: var(--card); border: 1px solid var(--border); border-radius: 16px;
+  }
+  .quiz-result.show { display: block; }
+  .result-score {
+    font-family: 'Syne', sans-serif; font-size: 5rem; font-weight: 800;
+    background: linear-gradient(135deg, var(--accent1), var(--accent2));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .result-msg { font-size: 1.1rem; color: var(--muted); margin-top: 0.5rem; }
+
+  /* ─── VIDEO ─── */
+  .video-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin-top: 2.5rem; }
+  .video-card {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 16px; overflow: hidden; transition: all 0.3s;
+  }
+  .video-card:hover { transform: translateY(-4px); border-color: rgba(255,107,53,0.3); }
+  .video-thumb {
+    width: 100%; aspect-ratio: 16/9; background: var(--surface);
+    display: flex; align-items: center; justify-content: center;
+    position: relative; overflow: hidden;
+  }
+  .video-thumb iframe { width: 100%; height: 100%; border: none; }
+  .video-info { padding: 1.25rem; }
+  .video-info h4 { font-family: 'Syne', sans-serif; font-size: 0.95rem; margin-bottom: 0.4rem; }
+  .video-info p { font-size: 0.82rem; color: var(--muted); }
+
+  /* ─── REFERENCES ─── */
+  .refs-list { list-style: none; margin-top: 2rem; display: flex; flex-direction: column; gap: 1rem; }
+  .refs-list li {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 10px; padding: 1rem 1.25rem;
+    font-size: 0.88rem; color: var(--muted); line-height: 1.7;
+    position: relative; padding-left: 2.5rem;
+  }
+  .refs-list li::before {
+    content: attr(data-num);
+    position: absolute; left: 1rem; top: 1rem;
+    font-family: 'Syne', sans-serif; font-size: 0.75rem; color: var(--accent1); font-weight: 700;
+  }
+
+  /* ─── FOOTER ─── */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 3rem 2rem; text-align: center;
+    color: var(--muted); font-size: 0.85rem;
+  }
+  footer strong { color: var(--text); }
+
+  /* ─── ANIMATIONS ─── */
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes fadeDown { from { opacity: 0; transform: translateY(-12px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes bounce { 0%,100% { transform: translateX(-50%) translateY(0); } 50% { transform: translateX(-50%) translateY(-8px); } }
+  @keyframes float { 0% { transform: translateY(0) rotate(0); opacity: 0; } 10% { opacity: 0.3; } 90% { opacity: 0.3; } 100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; } }
+
+  .reveal { opacity: 0; transform: translateY(30px); transition: all 0.6s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 640px) {
+    .nav-links { display: none; }
+    .memory-grid { grid-template-columns: repeat(4, 1fr); gap: 0.5rem; }
+    .memory-card { font-size: 0.65rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">OVA · TGS</div>
+  <div class="nav-links">
+    <a href="#contexto">Contexto</a>
+    <a href="#clasificacion">Clasificación</a>
+    <a href="#caracteristicas">Características</a>
+    <a href="#ejemplos">Ejemplos</a>
+    <a href="#juegos">Juegos</a>
+    <a href="#videos">Videos</a>
+    <a href="#quiz">Quiz</a>
+  </div>
+</nav>
+<div class="nav-progress"><div class="nav-progress-bar" id="progressBar"></div></div>
+
+<!-- HERO -->
+<section class="hero" id="inicio">
+  <div class="hero-bg"></div>
+  <div class="grid-overlay"></div>
+  <div class="particles" id="particles"></div>
+  <div class="hero-content">
+    <div class="hero-badge">Teoría General de Sistemas · OVA</div>
+    <h1>Clasificación y<br><span>Características</span><br>de los Sistemas</h1>
+    <p class="hero-sub">Explora los diferentes tipos de sistemas que existen en el mundo y comprende las propiedades fundamentales que los definen como tal.</p>
+    <div class="hero-meta">
+      <span><div class="dot"></div> Chavez Ramirez Jose Fernando</span>
+      <span><div class="dot"></div> Universidad Simón Bolívar</span>
+      <span><div class="dot"></div> Asignatura: TGS</span>
+    </div>
+  </div>
+  <div class="hero-scroll"><div class="arrow"></div>Explorar</div>
+</section>
+
+<!-- CONTEXTO -->
+<section id="contexto">
+  <div class="reveal">
+    <div class="section-label">01 — Contextualización</div>
+    <h2 class="section-title">¿Por qué clasificar <span>los sistemas?</span></h2>
+    <div class="divider"></div>
+    <p class="section-desc">
+      La Teoría General de Sistemas (TGS), desarrollada por Ludwig von Bertalanffy en el siglo XX, 
+      busca entender el mundo como un conjunto de sistemas interrelacionados. Para estudiarlos de forma 
+      organizada, resulta esencial clasificarlos y reconocer sus características comunes. Esta clasificación 
+      nos permite aplicar los principios sistémicos a cualquier campo del conocimiento: biología, ingeniería, 
+      economía, sociología y más.
+    </p>
+  </div>
+  <div class="cards-grid cols3 reveal" style="transition-delay:0.2s">
+    <div class="card">
+      <div class="card-icon">🎯</div>
+      <div class="card-title">Objetivo de la Clasificación</div>
+      <p class="card-text">Organizar el conocimiento sistémico para facilitar el análisis, modelado y comprensión de fenómenos complejos del mundo real.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">🔗</div>
+      <div class="card-title">Interdisciplinariedad</div>
+      <p class="card-text">Los sistemas están presentes en todas las ciencias. Clasificarlos permite trasladar soluciones y modelos entre diferentes disciplinas.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">⚙️</div>
+      <div class="card-title">Aplicación Práctica</div>
+      <p class="card-text">Comprender el tipo de sistema con el que trabajamos define el método de análisis, las herramientas y el enfoque a utilizar.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CLASIFICACIÓN -->
+<section id="clasificacion">
+  <div class="reveal">
+    <div class="section-label">02 — Clasificación</div>
+    <h2 class="section-title">Tipos de <span>Sistemas</span></h2>
+    <div class="divider"></div>
+    <p class="section-desc">Los sistemas pueden clasificarse desde múltiples criterios. Selecciona cada categoría para explorarla en detalle.</p>
+  </div>
+
+  <div class="class-section reveal" style="transition-delay:0.1s">
+    <div class="tabs">
+      <button class="tab-btn active" onclick="showTab(0)">Por Origen</button>
+      <button class="tab-btn" onclick="showTab(1)">Por Interacción con el Entorno</button>
+      <button class="tab-btn" onclick="showTab(2)">Por su Complejidad</button>
+      <button class="tab-btn" onclick="showTab(3)">Por su Comportamiento</button>
+      <button class="tab-btn" onclick="showTab(4)">Por su Naturaleza</button>
+    </div>
+
+    <!-- Tab 0: Por Origen -->
+    <div class="tab-content active" id="tab0">
+      <div class="type-card">
+        <div class="type-header">
+          <span class="type-badge badge-blue">Criterio: Origen</span>
+          <span class="type-name">Naturales vs. Artificiales</span>
+        </div>
+        <div class="type-grid">
+          <div class="type-item">
+            <h4>🌿 Sistemas Naturales</h4>
+            <p>Surgen de forma espontánea, sin intervención humana. Son resultado de procesos físicos, químicos o biológicos.</p>
+            <p style="margin-top:0.5rem; color:var(--accent3); font-size:0.78rem;">Ej: ecosistemas, cuerpo humano, sistema solar, ríos, atmósfera.</p>
+          </div>
+          <div class="type-item">
+            <h4>🏭 Sistemas Artificiales</h4>
+            <p>Creados y diseñados por el ser humano con un propósito específico. Requieren intervención y mantenimiento.</p>
+            <p style="margin-top:0.5rem; color:var(--accent3); font-size:0.78rem;">Ej: computadora, automóvil, sistema de transporte, internet.</p>
+          </div>
+          <div class="type-item">
+            <h4>🤝 Sistemas Mixtos</h4>
+            <p>Combinan elementos naturales con artificiales. El ser humano interviene sobre procesos naturales para modificarlos.</p>
+            <p style="margin-top:0.5rem; color:var(--accent3); font-size:0.78rem;">Ej: agricultura tecnificada, acueductos, represas hidráulicas.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab 1: Por Interacción -->
+    <div class="tab-content" id="tab1">
+      <div class="type-card">
+        <div class="type-header">
+          <span class="type-badge badge-purple">Criterio: Relación con el entorno</span>
+          <span class="type-name">Abiertos, Cerrados e Aislados</span>
+        </div>
+        <div class="type-grid">
+          <div class="type-item">
+            <h4>🌐 Sistema Abierto</h4>
+            <p>Intercambia materia, energía e información con su entorno. Es el tipo más común en la naturaleza y en organizaciones sociales.</p>
+            <p style="margin-top:0.5rem; color:var(--accent1); font-size:0.78rem;">Ej: ser vivo, empresa, ciudad, ecosistema.</p>
+          </div>
+          <div class="type-item">
+            <h4>🔒 Sistema Cerrado</h4>
+            <p>Intercambia solo energía con el entorno, no materia. Existe en condiciones controladas de laboratorio o de forma abstracta.</p>
+            <p style="margin-top:0.5rem; color:var(--accent1); font-size:0.78rem;">Ej: recipiente sellado con reacción química, motor de combustión.</p>
+          </div>
+          <div class="type-item">
+            <h4>⬛ Sistema Aislado</h4>
+            <p>No intercambia ni materia ni energía con el entorno. Es un concepto teórico; en la práctica es muy difícil de lograr.</p>
+            <p style="margin-top:0.5rem; color:var(--accent1); font-size:0.78rem;">Ej: universo (teóricamente), termos ideales, calorimetría.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab 2: Por Complejidad -->
+    <div class="tab-content" id="tab2">
+      <div class="type-card">
+        <div class="type-header">
+          <span class="type-badge badge-green">Criterio: Complejidad estructural</span>
+          <span class="type-name">Simples, Complejos y Ultrasistemas</span>
+        </div>
+        <div class="type-grid">
+          <div class="type-item">
+            <h4>📦 Sistema Simple</h4>
+            <p>Pocos elementos y relaciones entre ellos. El comportamiento es fácilmente predecible y puede ser modelado matemáticamente con precisión.</p>
+            <p style="margin-top:0.5rem; color:var(--accent3); font-size:0.78rem;">Ej: interruptor eléctrico, palanca, termómetro.</p>
+          </div>
+          <div class="type-item">
+            <h4>🧩 Sistema Complejo</h4>
+            <p>Gran número de elementos con múltiples relaciones. El comportamiento emergente es difícil de predecir a partir de sus partes.</p>
+            <p style="margin-top:0.5rem; color:var(--accent3); font-size:0.78rem;">Ej: cerebro humano, mercado financiero, red de ciudades.</p>
+          </div>
+          <div class="type-item">
+            <h4>🌌 Ultrasistema</h4>
+            <p>Sistema de sistemas. Nivel de complejidad extrema donde intervienen múltiples sistemas interdependientes a gran escala.</p>
+            <p style="margin-top:0.5rem; color:var(--accent3); font-size:0.78rem;">Ej: biósfera terrestre, economía global, internet of things.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab 3: Por Comportamiento -->
+    <div class="tab-content" id="tab3">
+      <div class="type-card">
+        <div class="type-header">
+          <span class="type-badge badge-orange">Criterio: Comportamiento en el tiempo</span>
+          <span class="type-name">Determinísticos vs. Probabilísticos</span>
+        </div>
+        <div class="type-grid">
+          <div class="type-item">
+            <h4>🎯 Sistema Determinístico</h4>
+            <p>Sus estados futuros pueden predecirse con exactitud a partir del estado actual y las leyes que lo gobiernan. Sin aleatoriedad.</p>
+            <p style="margin-top:0.5rem; color:var(--accent4); font-size:0.78rem;">Ej: movimiento de planetas, calculadora, reloj mecánico.</p>
+          </div>
+          <div class="type-item">
+            <h4>🎲 Sistema Probabilístico</h4>
+            <p>Existen múltiples resultados posibles con diferentes probabilidades. No se puede predecir con certeza el estado futuro.</p>
+            <p style="margin-top:0.5rem; color:var(--accent4); font-size:0.78rem;">Ej: conducta humana, sistemas económicos, clima.</p>
+          </div>
+          <div class="type-item">
+            <h4>⚡ Sistema Caótico</h4>
+            <p>Determinístico en su estructura pero altamente sensible a condiciones iniciales. Pequeñas variaciones generan grandes cambios.</p>
+            <p style="margin-top:0.5rem; color:var(--accent4); font-size:0.78rem;">Ej: turbulencia del aire, doblamiento de fractales, sistemas no lineales.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab 4: Por Naturaleza -->
+    <div class="tab-content" id="tab4">
+      <div class="type-card">
+        <div class="type-header">
+          <span class="type-badge badge-blue">Criterio: Naturaleza de sus elementos</span>
+          <span class="type-name">Concretos, Abstractos y Vivientes</span>
+        </div>
+        <div class="type-grid">
+          <div class="type-item">
+            <h4>🔩 Sistema Concreto (Físico)</h4>
+            <p>Sus elementos son objetos físicos tangibles, observables y medibles en el mundo real.</p>
+            <p style="margin-top:0.5rem; color:var(--accent1); font-size:0.78rem;">Ej: edificio, máquina industrial, red eléctrica.</p>
+          </div>
+          <div class="type-item">
+            <h4>💡 Sistema Abstracto</h4>
+            <p>Sus componentes son conceptos, ideas, reglas o modelos matemáticos que no tienen existencia física tangible.</p>
+            <p style="margin-top:0.5rem; color:var(--accent1); font-size:0.78rem;">Ej: sistema jurídico, lenguaje, modelo matemático, filosofía.</p>
+          </div>
+          <div class="type-item">
+            <h4>🌱 Sistema Viviente (Biológico)</h4>
+            <p>Compuesto por organismos vivos o sus componentes. Poseen propiedades únicas como metabolismo, reproducción y adaptación.</p>
+            <p style="margin-top:0.5rem; color:var(--accent1); font-size:0.78rem;">Ej: célula, órgano, individuo, población, ecosistema.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CARACTERÍSTICAS -->
+<div class="chars-section" id="caracteristicas">
+  <div>
+    <div class="reveal">
+      <div class="section-label">03 — Características</div>
+      <h2 class="section-title">Propiedades <span>Fundamentales</span></h2>
+      <div class="divider"></div>
+      <p class="section-desc">Todo sistema, independientemente de su tipo, comparte un conjunto de características esenciales que lo definen como tal.</p>
+    </div>
+    <div class="chars-grid reveal" style="transition-delay:0.1s">
+      <div class="char-card">
+        <span class="char-num">01</span>
+        <h4>Totalidad</h4>
+        <p>El sistema es más que la suma de sus partes. Las propiedades emergentes surgen de las relaciones entre elementos, no de los elementos aislados.</p>
+      </div>
+      <div class="char-card">
+        <span class="char-num">02</span>
+        <h4>Interrelación</h4>
+        <p>Los componentes del sistema se conectan e influyen mutuamente. Ningún elemento es completamente independiente de los demás.</p>
+      </div>
+      <div class="char-card">
+        <span class="char-num">03</span>
+        <h4>Jerarquía</h4>
+        <p>Los sistemas se organizan en niveles. Un sistema puede contener subsistemas y a su vez ser parte de un sistema mayor (supersistema).</p>
+      </div>
+      <div class="char-card">
+        <span class="char-num">04</span>
+        <h4>Equifinalidad</h4>
+        <p>Un sistema abierto puede alcanzar el mismo estado final a partir de diferentes condiciones iniciales y por diferentes caminos.</p>
+      </div>
+      <div class="char-card">
+        <span class="char-num">05</span>
+        <h4>Entropía</h4>
+        <p>Tendencia de los sistemas cerrados hacia el desorden. Los sistemas abiertos combaten la entropía intercambiando energía con el entorno.</p>
+      </div>
+      <div class="char-card">
+        <span class="char-num">06</span>
+        <h4>Regulación</h4>
+        <p>Capacidad del sistema de mantener sus parámetros dentro de rangos aceptables mediante mecanismos de retroalimentación (feedback).</p>
+      </div>
+      <div class="char-card">
+        <span class="char-num">07</span>
+        <h4>Adaptabilidad</h4>
+        <p>Capacidad de modificar la estructura o comportamiento en respuesta a cambios en el entorno para sobrevivir y cumplir sus objetivos.</p>
+      </div>
+      <div class="char-card">
+        <span class="char-num">08</span>
+        <h4>Límite o Frontera</h4>
+        <p>Todo sistema posee un límite que lo separa de su entorno, que puede ser físico o conceptual, y determina qué pertenece al sistema.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- EJEMPLOS -->
+<section id="ejemplos">
+  <div class="reveal">
+    <div class="section-label">04 — Ejemplos Prácticos</div>
+    <h2 class="section-title">Sistemas en la <span>Vida Real</span></h2>
+    <div class="divider"></div>
+    <p class="section-desc">Analicemos cómo se aplica la clasificación sistémica en contextos cotidianos y profesionales.</p>
+  </div>
+  <div class="examples-grid reveal" style="transition-delay:0.1s">
+    <div class="example-card">
+      <div class="example-num">1</div>
+      <div class="example-tag">Natural · Abierto · Complejo</div>
+      <h3>🌊 El Ecosistema de una Selva</h3>
+      <p>Es un sistema <strong>natural</strong> porque no fue creado por humanos. Es <strong>abierto</strong> porque recibe energía solar e intercambia gases y agua con la atmósfera. Es <strong>complejo</strong> porque involucra miles de especies interdependientes con comportamientos emergentes difíciles de predecir.</p>
+    </div>
+    <div class="example-card">
+      <div class="example-num">2</div>
+      <div class="example-tag">Artificial · Cerrado · Determinístico</div>
+      <h3>💻 Un Sistema Informático</h3>
+      <p>Es un sistema <strong>artificial</strong>, diseñado por ingenieros. Es relativamente <strong>cerrado</strong> en sus procesos internos (el CPU opera según instrucciones definidas). Es <strong>determinístico</strong> porque dado el mismo programa e inputs, produce siempre el mismo resultado.</p>
+    </div>
+    <div class="example-card">
+      <div class="example-num">3</div>
+      <div class="example-tag">Abstracto · Abierto · Probabilístico</div>
+      <h3>📈 El Sistema Económico</h3>
+      <p>Es un sistema <strong>abstracto</strong> compuesto por leyes, políticas y flujos de valor. Es <strong>abierto</strong> porque interactúa con factores externos (política, clima, tecnología). Es <strong>probabilístico</strong> ya que el comportamiento humano introduce aleatoriedad en sus resultados.</p>
+    </div>
+    <div class="example-card">
+      <div class="example-num">4</div>
+      <div class="example-tag">Viviente · Abierto · Complejo</div>
+      <h3>🧬 El Cuerpo Humano</h3>
+      <p>Sistema <strong>viviente</strong> con subsistemas especializados (nervioso, circulatorio, digestivo). Es <strong>abierto</strong> porque requiere energía, oxígeno y nutrientes del entorno. Su <strong>complejidad</strong> es extraordinaria: más de 37 billones de células coordinadas.</p>
+    </div>
+    <div class="example-card">
+      <div class="example-num">5</div>
+      <div class="example-tag">Artificial · Mixto · Simple</div>
+      <h3>🚦 Sistema de Semáforos</h3>
+      <p>Sistema <strong>artificial</strong> de control de tráfico. Es <strong>simple</strong> en su lógica básica (rojo, amarillo, verde). En versiones inteligentes se vuelve <strong>complejo</strong> con sensores y algoritmos adaptativos que responden al flujo real de vehículos.</p>
+    </div>
+    <div class="example-card">
+      <div class="example-num">6</div>
+      <div class="example-tag">Abstracto · Cerrado · Determinístico</div>
+      <h3>📐 Sistema Matemático</h3>
+      <p>Es un sistema <strong>abstracto</strong> formado por axiomas, teoremas y reglas de inferencia. Es <strong>cerrado</strong> en el sentido de que opera bajo sus propias reglas internas. Es completamente <strong>determinístico</strong>: a partir de axiomas, las conclusiones son invariables.</p>
+    </div>
+  </div>
+</section>
+
+<!-- EJERCICIOS -->
+<section id="ejercicios">
+  <div class="reveal">
+    <div class="section-label">05 — Ejercicios Planteados</div>
+    <h2 class="section-title">Practica la <span>Clasificación</span></h2>
+    <div class="divider"></div>
+    <p class="section-desc">Analiza los siguientes casos y determina qué tipo de sistema es según los diferentes criterios de clasificación.</p>
+  </div>
+  <div class="cards-grid cols2 reveal" style="transition-delay:0.1s; margin-top:2rem">
+    <div class="card">
+      <div style="background:rgba(0,212,255,0.1);border:1px solid rgba(0,212,255,0.2);border-radius:8px;padding:1rem;margin-bottom:1rem;">
+        <div style="font-size:0.7rem;color:var(--accent1);letter-spacing:2px;text-transform:uppercase;margin-bottom:0.25rem">Ejercicio 1</div>
+        <p style="font-size:0.9rem;font-weight:600;">Una universidad con estudiantes, profesores, planes de estudio y reglamentos.</p>
+      </div>
+      <p class="card-text"><strong style="color:var(--accent3)">→ Reflexiona:</strong> ¿Es natural o artificial? ¿Intercambia información con la sociedad? ¿Sus resultados son predecibles? ¿Es simple o complejo? Identifica sus subsistemas (académico, administrativo, financiero).</p>
+    </div>
+    <div class="card">
+      <div style="background:rgba(123,97,255,0.1);border:1px solid rgba(123,97,255,0.2);border-radius:8px;padding:1rem;margin-bottom:1rem;">
+        <div style="font-size:0.7rem;color:var(--accent2);letter-spacing:2px;text-transform:uppercase;margin-bottom:0.25rem">Ejercicio 2</div>
+        <p style="font-size:0.9rem;font-weight:600;">El ciclo del agua en la naturaleza (evaporación, condensación, precipitación).</p>
+      </div>
+      <p class="card-text"><strong style="color:var(--accent3)">→ Reflexiona:</strong> ¿Qué tipo de sistema es por su origen? ¿Tiene límites definidos? ¿Intercambia elementos con su entorno? ¿Identifica sus entradas (energía solar, gravedad) y salidas (agua disponible)?</p>
+    </div>
+    <div class="card">
+      <div style="background:rgba(0,255,157,0.1);border:1px solid rgba(0,255,157,0.2);border-radius:8px;padding:1rem;margin-bottom:1rem;">
+        <div style="font-size:0.7rem;color:var(--accent3);letter-spacing:2px;text-transform:uppercase;margin-bottom:0.25rem">Ejercicio 3</div>
+        <p style="font-size:0.9rem;font-weight:600;">Una red social (como Instagram o TikTok) con millones de usuarios.</p>
+      </div>
+      <p class="card-text"><strong style="color:var(--accent3)">→ Reflexiona:</strong> ¿Es concreto o abstracto? ¿Es abierto o cerrado? ¿Es determinístico o probabilístico? ¿Qué hace que sea un sistema complejo? ¿Cuál es su supersistema?</p>
+    </div>
+    <div class="card">
+      <div style="background:rgba(255,107,53,0.1);border:1px solid rgba(255,107,53,0.2);border-radius:8px;padding:1rem;margin-bottom:1rem;">
+        <div style="font-size:0.7rem;color:var(--accent4);letter-spacing:2px;text-transform:uppercase;margin-bottom:0.25rem">Ejercicio 4</div>
+        <p style="font-size:0.9rem;font-weight:600;">Un termostato que regula la temperatura de una habitación.</p>
+      </div>
+      <p class="card-text"><strong style="color:var(--accent3)">→ Reflexiona:</strong> ¿Es simple o complejo? ¿Qué tipo de retroalimentación utiliza? ¿Es determinístico? ¿Cuáles son sus entradas y salidas? ¿Qué característica sistémica ilustra perfectamente?</p>
+    </div>
+  </div>
+</section>
+
+<!-- JUEGOS -->
+<section id="juegos">
+  <div class="reveal">
+    <div class="section-label">06 — Juegos Interactivos</div>
+    <h2 class="section-title">Aprende <span>Jugando</span></h2>
+    <div class="divider"></div>
+    <p class="section-desc">Dos juegos interactivos para reforzar tu comprensión de la clasificación y características de los sistemas.</p>
+  </div>
+
+  <!-- GAME 1: Drag & Drop Classifier -->
+  <div class="game-wrapper reveal" style="transition-delay:0.1s">
+    <div class="game-header">
+      <div class="game-title">🎮 Juego 1: Clasificador de Sistemas</div>
+      <div class="game-score">Correctas: <span class="score-val" id="g1score">0</span> / <span id="g1total">0</span></div>
+    </div>
+    <div class="game-body" id="game1">
+      <p class="drag-instructions">Arrastra cada sistema a la categoría correcta según su relación con el entorno. (También puedes hacer clic para seleccionar y luego clic en la zona de destino.)</p>
+      <div class="drag-items" id="dragItems"></div>
+      <div class="drop-zones" id="dropZones"></div>
+      <div class="game-btns">
+        <button class="btn btn-primary" onclick="checkGame1()">Verificar</button>
+        <button class="btn btn-outline" onclick="resetGame1()">Reiniciar</button>
+      </div>
+      <div id="g1feedback" style="margin-top:1rem; color:var(--muted); font-size:0.88rem;"></div>
+    </div>
+  </div>
+
+  <!-- GAME 2: Memory -->
+  <div class="game-wrapper reveal" style="margin-top:2rem; transition-delay:0.2s">
+    <div class="game-header">
+      <div class="game-title">🧠 Juego 2: Memoria de Conceptos</div>
+      <div class="game-score">Intentos: <span class="score-val" id="memAttempts">0</span> | Pares: <span class="score-val" id="memPairs">0</span>/6</div>
+    </div>
+    <div class="game-body">
+      <p class="drag-instructions" style="text-align:center; margin-bottom:1.5rem;">Encuentra los pares: concepto con su ejemplo o definición.</p>
+      <div class="memory-grid" id="memoryGrid"></div>
+      <div style="display:flex;justify-content:center;margin-top:1.5rem;gap:1rem;">
+        <button class="btn btn-outline" onclick="initMemory()">Reiniciar</button>
+      </div>
+      <div id="memWin" style="display:none;text-align:center;margin-top:1.5rem;">
+        <div style="font-size:2rem; margin-bottom:0.5rem">🎉</div>
+        <div style="font-family:'Syne',sans-serif;font-size:1.2rem;font-weight:700;color:var(--accent3)">¡Completado!</div>
+        <div style="color:var(--muted);font-size:0.88rem;margin-top:0.25rem;">Usaste <span id="memFinalAttempts" style="color:var(--accent1);font-weight:600"></span> intentos.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- VIDEOS -->
+<section id="videos">
+  <div class="reveal">
+    <div class="section-label">07 — Videos Educativos</div>
+    <h2 class="section-title">Aprende con <span>Videos</span></h2>
+    <div class="divider"></div>
+    <p class="section-desc">Recursos audiovisuales seleccionados para complementar el estudio de los sistemas y su clasificación.</p>
+  </div>
+  <div class="video-grid reveal" style="transition-delay:0.1s">
+    <div class="video-card">
+      <div class="video-thumb">
+        <iframe src="https://www.youtube.com/embed/P_6ICbg6mvg" allowfullscreen title="Teoría General de Sistemas"></iframe>
+      </div>
+      <div class="video-info">
+        <h4>Introducción a la Teoría General de Sistemas</h4>
+        <p>Conceptos básicos y fundamentos de la TGS, incluyendo la clasificación de sistemas.</p>
+      </div>
+    </div>
+    <div class="video-card">
+      <div class="video-thumb">
+        <iframe src="https://www.youtube.com/embed/7hBNUPLiBEg" allowfullscreen title="Clasificación de Sistemas"></iframe>
+      </div>
+      <div class="video-info">
+        <h4>Clasificación de Sistemas: Abiertos y Cerrados</h4>
+        <p>Explicación detallada sobre la diferencia entre sistemas abiertos, cerrados y aislados con ejemplos prácticos.</p>
+      </div>
+    </div>
+    <div class="video-card">
+      <div class="video-thumb">
+        <iframe src="https://www.youtube.com/embed/oFoMHiVFTAY" allowfullscreen title="Sistemas Complejos"></iframe>
+      </div>
+      <div class="video-info">
+        <h4>Sistemas Complejos y sus Características</h4>
+        <p>Exploración de los sistemas complejos, emergencia y comportamiento no lineal en el mundo real.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- QUIZ -->
+<section id="quiz">
+  <div class="reveal">
+    <div class="section-label">08 — Evaluación</div>
+    <h2 class="section-title">Quiz <span>Interactivo</span></h2>
+    <div class="divider"></div>
+    <p class="section-desc">Pon a prueba tus conocimientos sobre la clasificación y características de los sistemas.</p>
+  </div>
+  <div class="quiz-container reveal" style="margin-top:2.5rem; transition-delay:0.1s">
+    <div class="quiz-progress" id="quizProgress"></div>
+    <div id="quizArea"></div>
+    <div class="quiz-result" id="quizResult">
+      <div class="result-score" id="resultScore"></div>
+      <div class="result-msg" id="resultMsg"></div>
+      <button class="btn btn-primary" onclick="restartQuiz()" style="margin-top:1.5rem">Intentar de nuevo</button>
+    </div>
+  </div>
+</section>
+
+<!-- REFERENCIAS -->
+<section id="referencias">
+  <div class="reveal">
+    <div class="section-label">09 — Referencias</div>
+    <h2 class="section-title">Fuentes <span>Bibliográficas</span></h2>
+    <div class="divider"></div>
+  </div>
+  <ul class="refs-list reveal" style="transition-delay:0.1s">
+    <li data-num="1">Bertalanffy, L. von. (1968). <em>General System Theory: Foundations, Development, Applications.</em> George Braziller. New York.</li>
+    <li data-num="2">Checkland, P. (1981). <em>Systems Thinking, Systems Practice.</em> John Wiley & Sons. Chichester, UK.</li>
+    <li data-num="3">García, R. (2006). <em>Sistemas Complejos: Conceptos, método y fundamentación epistemológica de la investigación interdisciplinaria.</em> Gedisa Editorial. Barcelona.</li>
+    <li data-num="4">Senge, P. (1990). <em>La Quinta Disciplina: El arte y la práctica de la organización abierta al aprendizaje.</em> Doubleday/Currency. New York.</li>
+    <li data-num="5">Forrester, J. W. (1961). <em>Industrial Dynamics.</em> MIT Press. Cambridge, Massachusetts.</li>
+    <li data-num="6">Morin, E. (1990). <em>Introducción al pensamiento complejo.</em> ESF. Paris.</li>
+    <li data-num="7">Bunge, M. (1980). <em>Epistemología.</em> Ariel. Barcelona. (Clasificación ontológica de sistemas).</li>
+  </ul>
+</section>
+
+<footer>
+  <p>OVA desarrollado por <strong>Jose Fernando Chavez Ramirez</strong></p>
+  <p style="margin-top:0.5rem;">Asignatura: Teoría General de Sistemas · <strong>Universidad Simón Bolívar</strong></p>
+  <p style="margin-top:0.5rem;">Docente: Msc. IS. Alvaro Salamanca Landínez</p>
+</footer>
+
+<script>
+// ─── PROGRESS BAR ───
+window.addEventListener('scroll', () => {
+  const max = document.body.scrollHeight - window.innerHeight;
+  document.getElementById('progressBar').style.width = (window.scrollY / max * 100) + '%';
+});
+
+// ─── REVEAL ON SCROLL ───
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// ─── PARTICLES ───
+(function() {
+  const container = document.getElementById('particles');
+  for (let i = 0; i < 20; i++) {
+    const p = document.createElement('div');
+    p.className = 'particle';
+    const size = Math.random() * 4 + 2;
+    p.style.cssText = `width:${size}px;height:${size}px;left:${Math.random()*100}%;top:${100+Math.random()*20}%;animation-duration:${8+Math.random()*12}s;animation-delay:${Math.random()*8}s;background:${Math.random()>0.5?'var(--accent1)':'var(--accent2)'};`;
+    container.appendChild(p);
+  }
+})();
+
+// ─── TABS ───
+function showTab(idx) {
+  document.querySelectorAll('.tab-content').forEach((t,i) => t.classList.toggle('active', i===idx));
+  document.querySelectorAll('.tab-btn').forEach((b,i) => b.classList.toggle('active', i===idx));
+}
+
+// ─── GAME 1: DRAG & DROP ───
+const g1Data = {
+  items: [
+    { id:'a', text:'🌊 Océano', cat:'abierto' },
+    { id:'b', text:'🧪 Experimento sellado', cat:'cerrado' },
+    { id:'c', text:'🌿 Ecosistema', cat:'abierto' },
+    { id:'d', text:'🔥 Termo ideal', cat:'aislado' },
+    { id:'e', text:'🏭 Empresa', cat:'abierto' },
+    { id:'f', text:'⚗️ Recipiente con reacción', cat:'cerrado' },
+    { id:'g', text:'🌌 Universo teórico', cat:'aislado' },
+    { id:'h', text:'🧬 Ser vivo', cat:'abierto' },
+  ],
+  cats: ['abierto', 'cerrado', 'aislado'],
+  catLabels: { abierto:'Sistema Abierto', cerrado:'Sistema Cerrado', aislado:'Sistema Aislado' }
+};
+let g1Answers = { abierto:[], cerrado:[], aislado:[] };
+let g1Selected = null;
+
+function initGame1() {
+  g1Answers = { abierto:[], cerrado:[], aislado:[] };
+  g1Selected = null;
+  document.getElementById('g1score').textContent = '0';
+  document.getElementById('g1total').textContent = '0';
+  document.getElementById('g1feedback').textContent = '';
+
+  const shuffled = [...g1Data.items].sort(() => Math.random()-0.5);
+  document.getElementById('dragItems').innerHTML = shuffled.map(item =>
+    `<div class="drag-item" id="di_${item.id}" draggable="true"
+      ondragstart="dragStart('${item.id}')"
+      onclick="selectItem('${item.id}')"
+    >${item.text}</div>`
+  ).join('');
+
+  document.getElementById('dropZones').innerHTML = g1Data.cats.map(cat =>
+    `<div class="drop-zone" id="dz_${cat}"
+      ondragover="event.preventDefault();this.classList.add('drag-over')"
+      ondragleave="this.classList.remove('drag-over')"
+      ondrop="dropItem(event,'${cat}')"
+      onclick="dropSelected('${cat}')"
+    >
+      <div class="drop-zone-label">${g1Data.catLabels[cat]}</div>
+      <div class="drop-zone-items" id="dzitems_${cat}"></div>
+    </div>`
+  ).join('');
+}
+function selectItem(id) {
+  document.querySelectorAll('.drag-item').forEach(el => el.style.outline='');
+  if (g1Selected === id) { g1Selected = null; return; }
+  g1Selected = id;
+  const el = document.getElementById('di_'+id);
+  if (el) el.style.outline = '2px solid var(--accent1)';
+}
+function dropSelected(cat) {
+  if (!g1Selected) return;
+  placeItem(g1Selected, cat);
+  g1Selected = null;
+  document.querySelectorAll('.drag-item').forEach(el => el.style.outline='');
+}
+let draggedId = null;
+function dragStart(id) { draggedId = id; }
+function dropItem(event, cat) {
+  event.currentTarget.classList.remove('drag-over');
+  if (draggedId) { placeItem(draggedId, cat); draggedId = null; }
+}
+function placeItem(id, cat) {
+  const item = g1Data.items.find(i=>i.id===id);
+  if (!item) return;
+  for (const c of g1Data.cats) {
+    const idx = g1Answers[c].indexOf(id);
+    if (idx !== -1) { g1Answers[c].splice(idx,1); renderDropZone(c); }
+  }
+  g1Answers[cat].push(id);
+  renderDropZone(cat);
+  const di = document.getElementById('di_'+id);
+  if(di) di.classList.add('used');
+}
+function renderDropZone(cat) {
+  const container = document.getElementById('dzitems_'+cat);
+  container.innerHTML = g1Answers[cat].map(id => {
+    const item = g1Data.items.find(i=>i.id===id);
+    return `<div class="dropped-item">${item.text}</div>`;
+  }).join('');
+}
+function checkGame1() {
+  let correct = 0, total = 0;
+  for (const cat of g1Data.cats) {
+    for (const id of g1Answers[cat]) {
+      total++;
+      const item = g1Data.items.find(i=>i.id===id);
+      const isCorrect = item.cat === cat;
+      if (isCorrect) correct++;
+      // visual feedback
+      const els = document.querySelectorAll(`#dzitems_${cat} .dropped-item`);
+      const idx = g1Answers[cat].indexOf(id);
+      if (els[idx]) els[idx].classList.add(isCorrect ? 'correct' : 'incorrect');
+    }
+  }
+  document.getElementById('g1score').textContent = correct;
+  document.getElementById('g1total').textContent = total;
+  const pct = total > 0 ? Math.round(correct/total*100) : 0;
+  document.getElementById('g1feedback').innerHTML =
+    `Obtuviste <strong style="color:var(--accent1)">${correct}/${total}</strong> correctas (${pct}%). ${pct===100?'¡Perfecto! 🎉':pct>=50?'¡Buen trabajo! Revisa los incorrectos.':'Sigue practicando, revisa la sección de clasificación.'}`;
+}
+function resetGame1() { initGame1(); }
+
+// ─── GAME 2: MEMORY ───
+const memPairs = [
+  { id:1, a:'Sistema Abierto', b:'🌿 Intercambia materia y energía con su entorno' },
+  { id:2, a:'Sistema Cerrado', b:'🔒 Solo intercambia energía, no materia' },
+  { id:3, a:'Totalidad', b:'✨ El todo es más que la suma de las partes' },
+  { id:4, a:'Entropía', b:'🌀 Tendencia al desorden en sistemas cerrados' },
+  { id:5, a:'Sistema Natural', b:'🌊 Ecosistema, río, cuerpo humano' },
+  { id:6, a:'Equifinalidad', b:'🎯 Múltiples caminos hacia el mismo estado final' },
+];
+let memFlipped = [], memMatched = [], memAttemptCount = 0, memLocked = false;
+
+function initMemory() {
+  memFlipped = []; memMatched = []; memAttemptCount = 0; memLocked = false;
+  document.getElementById('memAttempts').textContent = '0';
+  document.getElementById('memPairs').textContent = '0';
+  document.getElementById('memWin').style.display = 'none';
+  const cards = [];
+  memPairs.forEach(p => {
+    cards.push({ uid: `${p.id}a`, pairId: p.id, text: p.a });
+    cards.push({ uid: `${p.id}b`, pairId: p.id, text: p.b });
+  });
+  cards.sort(() => Math.random()-0.5);
+  document.getElementById('memoryGrid').innerHTML = cards.map(c =>
+    `<div class="memory-card" id="mc_${c.uid}" onclick="flipMemory('${c.uid}','${c.pairId}')">
+      <div class="memory-back">❓</div>
+      <div class="memory-front">${c.text}</div>
+    </div>`
+  ).join('');
+}
+
+function flipMemory(uid, pairId) {
+  if (memLocked) return;
+  const el = document.getElementById('mc_'+uid);
+  if (!el || el.classList.contains('matched') || el.classList.contains('flipped')) return;
+  el.classList.add('flipped');
+  memFlipped.push({ uid, pairId });
+  if (memFlipped.length === 2) {
+    memLocked = true;
+    memAttemptCount++;
+    document.getElementById('memAttempts').textContent = memAttemptCount;
+    if (memFlipped[0].pairId === memFlipped[1].pairId) {
+      memFlipped.forEach(f => document.getElementById('mc_'+f.uid).classList.add('matched'));
+      memMatched.push(memFlipped[0].pairId);
+      document.getElementById('memPairs').textContent = memMatched.length;
+      memFlipped = []; memLocked = false;
+      if (memMatched.length === memPairs.length) {
+        document.getElementById('memFinalAttempts').textContent = memAttemptCount;
+        document.getElementById('memWin').style.display = 'block';
+      }
+    } else {
+      setTimeout(() => {
+        memFlipped.forEach(f => document.getElementById('mc_'+f.uid).classList.remove('flipped'));
+        memFlipped = []; memLocked = false;
+      }, 900);
+    }
+  }
+}
+
+// ─── QUIZ ───
+const quizData = [
+  {
+    q: '¿Cuál de las siguientes opciones describe correctamente un sistema ABIERTO?',
+    opts: ['No intercambia materia ni energía con el entorno','Solo intercambia energía pero no materia','Intercambia materia, energía e información con su entorno','Es completamente aislado de cualquier influencia externa'],
+    correct: 2, explanation: 'Un sistema abierto intercambia libremente materia, energía e información con su entorno. Ejemplo: un ser vivo o una organización empresarial.'
+  },
+  {
+    q: 'Un algoritmo de computadora que siempre produce el mismo resultado ante los mismos datos de entrada es un sistema:',
+    opts: ['Probabilístico','Determinístico','Caótico','Estocástico'],
+    correct: 1, explanation: 'Los sistemas determinísticos producen resultados completamente predecibles dado el mismo estado inicial. Un algoritmo bien definido es el ejemplo clásico.'
+  },
+  {
+    q: 'La propiedad del sistema que establece que "el todo es mayor que la suma de sus partes" se denomina:',
+    opts: ['Equifinalidad','Entropía','Totalidad o sinergia','Jerarquía'],
+    correct: 2, explanation: 'La totalidad (o sinergia) expresa que las propiedades emergentes del sistema no pueden explicarse solo por sus componentes aislados, sino por sus interacciones.'
+  },
+  {
+    q: 'El sistema solar es un ejemplo de sistema:',
+    opts: ['Artificial, cerrado y determinístico','Natural, abierto y probabilístico','Natural, con comportamiento predominantemente determinístico','Artificial, abierto y complejo'],
+    correct: 2, explanation: 'El sistema solar es natural (no creado por humanos) y su comportamiento orbital es altamente determinístico, pudiendo predecirse con gran precisión usando las leyes de Newton y la relatividad.'
+  },
+  {
+    q: 'Cuando un sistema puede alcanzar el mismo estado final partiendo de condiciones iniciales diferentes, esta propiedad se llama:',
+    opts: ['Entropía negativa','Adaptabilidad','Equifinalidad','Retroalimentación'],
+    correct: 2, explanation: 'La equifinalidad fue formulada por Bertalanffy y establece que en sistemas abiertos, el estado final no está determinado únicamente por las condiciones iniciales.'
+  },
+  {
+    q: '¿Cuál es la principal diferencia entre un sistema CERRADO y uno AISLADO?',
+    opts: ['El sistema cerrado no existe en la realidad, el aislado sí','El sistema cerrado intercambia solo energía con el entorno; el aislado no intercambia nada','El sistema cerrado es más complejo que el aislado','No existe diferencia, son sinónimos'],
+    correct: 1, explanation: 'El sistema cerrado permite intercambio de energía pero no de materia. El sistema aislado es más restrictivo: no permite ningún tipo de intercambio con el entorno.'
+  },
+  {
+    q: 'Una ciudad con infraestructura física, leyes, población e intercambios comerciales sería clasificada como:',
+    opts: ['Sistema simple, natural y determinístico','Sistema concreto-abstracto mixto, abierto, complejo','Sistema cerrado, artificial y probabilístico','Sistema aislado, viviente y simple'],
+    correct: 1, explanation: 'Una ciudad combina elementos físicos (concretos) con normas y estructuras sociales (abstractas), intercambia continuamente con su entorno (abierto) y tiene complejidad muy alta.'
+  },
+  {
+    q: 'En la jerarquía de sistemas, un conjunto de órganos que forman un sistema corporal (ej: corazón + vasos = sistema circulatorio) ilustra el concepto de:',
+    opts: ['Entropía del sistema','Subsistema dentro de un sistema mayor','Sistema aislado','Equifinalidad'],
+    correct: 1, explanation: 'La jerarquía sistémica implica que un sistema (circulatorio) se compone de subsistemas (órganos) y a su vez forma parte de un supersistema (cuerpo humano completo).'
+  },
+];
+let quizCurrent = 0, quizScore = 0, quizAnswered = false;
+
+function renderQuiz() {
+  const area = document.getElementById('quizArea');
+  const result = document.getElementById('quizResult');
+  if (quizCurrent >= quizData.length) {
+    area.style.display = 'none';
+    result.classList.add('show');
+    document.getElementById('resultScore').textContent = `${quizScore}/${quizData.length}`;
+    const pct = Math.round(quizScore/quizData.length*100);
+    document.getElementById('resultMsg').textContent =
+      pct===100 ? '🌟 ¡Perfecto! Dominaste todos los conceptos.' :
+      pct>=75 ? '🎉 ¡Excelente! Muy buen manejo del tema.' :
+      pct>=50 ? '👍 ¡Buen trabajo! Repasa algunos conceptos.' :
+      '📚 Sigue estudiando, revisa la OVA de nuevo.';
+    return;
+  }
+  const q = quizData[quizCurrent];
+  quizAnswered = false;
+  const prog = document.getElementById('quizProgress');
+  prog.innerHTML = quizData.map((_,i) =>
+    `<div class="quiz-dot ${i<quizCurrent?'done':i===quizCurrent?'current':''}"></div>`
+  ).join('');
+  area.innerHTML = `
+    <div class="quiz-q">
+      <div class="quiz-num">Pregunta ${quizCurrent+1} de ${quizData.length}</div>
+      <div class="quiz-question">${q.q}</div>
+      <div class="quiz-options">
+        ${q.opts.map((opt,i)=>`
+          <button class="quiz-opt" id="qopt${i}" onclick="answerQuiz(${i})">
+            <span class="quiz-opt-letter">${['A','B','C','D'][i]}</span>${opt}
+          </button>
+        `).join('')}
+      </div>
+      <div class="quiz-feedback" id="qfeedback"></div>
+    </div>
+    <div class="quiz-nav">
+      <button class="btn btn-primary" id="qnextBtn" onclick="nextQuestion()" style="display:none">
+        ${quizCurrent===quizData.length-1?'Ver Resultado':'Siguiente →'}
+      </button>
+    </div>
+  `;
+}
+
+function answerQuiz(idx) {
+  if (quizAnswered) return;
+  quizAnswered = true;
+  const q = quizData[quizCurrent];
+  const fb = document.getElementById('qfeedback');
+  document.querySelectorAll('.quiz-opt').forEach((btn,i) => {
+    btn.disabled = true;
+    if (i===q.correct) btn.classList.add('correct');
+    if (i===idx && idx!==q.correct) btn.classList.add('incorrect');
+  });
+  if (idx === q.correct) { quizScore++; fb.className='quiz-feedback ok show'; fb.textContent='✅ ¡Correcto! '+q.explanation; }
+  else { fb.className='quiz-feedback fail show'; fb.textContent='❌ Incorrecto. '+q.explanation; }
+  document.getElementById('qnextBtn').style.display = 'inline-flex';
+}
+
+function nextQuestion() { quizCurrent++; renderQuiz(); }
+function restartQuiz() {
+  quizCurrent=0; quizScore=0; quizAnswered=false;
+  document.getElementById('quizResult').classList.remove('show');
+  document.getElementById('quizArea').style.display='block';
+  renderQuiz();
+}
+
+// ─── INIT ───
+window.addEventListener('DOMContentLoaded', () => {
+  initGame1();
+  initMemory();
+  renderQuiz();
+});
+</script>
+</body>
+</html>
