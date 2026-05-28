@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OVA - Propiedades de los Sistemas</title>
+
+    <!-- Tipografía moderna -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+    <!-- Iconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+    <!-- FONDO ANIMADO -->
+    <div class="bg-grid"></div>
+    <div class="bg-glow bg-glow-1"></div>
+    <div class="bg-glow bg-glow-2"></div>
+    <div class="bg-glow bg-glow-3"></div>
+
+    <!-- HEADER -->
+    <header id="main-header">
+        <nav>
+            <div class="nav-brand">
+                <span class="nav-logo-icon"><i class="fa-solid fa-diagram-project"></i></span>
+                <h1>OVA · TGS</h1>
+            </div>
+
+            <button class="nav-toggle" id="nav-toggle" aria-label="Menú">
+                <span></span><span></span><span></span>
+            </button>
+
+            <ul id="nav-menu">
+                <li><a href="#inicio"><i class="fa-solid fa-house"></i><span>Inicio</span></a></li>
+                <li><a href="#conceptos"><i class="fa-solid fa-lightbulb"></i><span>Conceptos</span></a></li>
+                <li><a href="#ejemplos-reales"><i class="fa-solid fa-globe"></i><span>Ejemplos</span></a></li>
+                <li><a href="#videos"><i class="fa-solid fa-play-circle"></i><span>Videos</span></a></li>
+                <li><a href="#juegos"><i class="fa-solid fa-gamepad"></i><span>Juegos</span></a></li>
+                <li><a href="#quiz"><i class="fa-solid fa-clipboard-question"></i><span>Quiz</span></a></li>
+                <li><a href="#referencias"><i class="fa-solid fa-book"></i><span>Referencias</span></a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- HERO -->
+    <section id="inicio" class="hero">
+        <div class="hero-content">
+            <div class="hero-badge reveal-fade">
+                <i class="fa-solid fa-atom"></i>
+                Teoría General de Sistemas
+            </div>
+            <h2 class="hero-title reveal-up">
+                Propiedades de <br>
+                <span class="glow-text">los Sistemas</span>
+            </h2>
+            <p class="hero-desc reveal-up delay-1">
+                Aprende de manera interactiva las principales propiedades
+                de los sistemas dentro de la Teoría General de Sistemas.
+            </p>
+            <div class="hero-actions reveal-up delay-2">
+                <a href="#conceptos" class="btn btn-primary">
+                    <i class="fa-solid fa-rocket"></i> Comenzar
+                </a>
+                <a href="#quiz" class="btn btn-ghost">
+                    <i class="fa-solid fa-clipboard-question"></i> Ir al Quiz
+                </a>
+            </div>
+        </div>
+
+        <div class="hero-visual reveal-fade delay-2">
+            <div class="orbit-ring ring-1">
+                <div class="orbit-dot dot-1"><i class="fa-solid fa-circle-nodes"></i></div>
+            </div>
+            <div class="orbit-ring ring-2">
+                <div class="orbit-dot dot-2"><i class="fa-solid fa-arrows-spin"></i></div>
+            </div>
+            <div class="orbit-ring ring-3">
+                <div class="orbit-dot dot-3"><i class="fa-solid fa-bolt"></i></div>
+            </div>
+            <div class="orbit-center">
+                <i class="fa-solid fa-diagram-project"></i>
+            </div>
+        </div>
+
+        <div class="hero-scroll-hint">
+            <span>Desplázate</span>
+            <i class="fa-solid fa-chevron-down"></i>
+        </div>
+    </section>
+
+    <!-- CONCEPTOS -->
+    <section id="conceptos" class="section section-dark">
+        <div class="section-inner">
+            <div class="section-label reveal-fade"><i class="fa-solid fa-lightbulb"></i> Conceptos Clave</div>
+            <h2 class="section-title reveal-up">¿Qué son las propiedades <br>de los sistemas?</h2>
+            <p class="section-desc reveal-up delay-1">
+                Las propiedades de los sistemas son características que permiten
+                comprender cómo funcionan los sistemas, cómo se relacionan sus
+                componentes y cómo interactúan con el entorno.
+            </p>
+
+            <div class="cards">
+
+                <div class="card reveal-up delay-1">
+                    <div class="card-icon"><i class="fa-solid fa-circle-nodes"></i></div>
+                    <h3>Totalidad</h3>
+                    <p>Un sistema funciona como un todo integrado donde cada parte contribuye al conjunto.</p>
+                    <div class="card-line"></div>
+                </div>
+
+                <div class="card reveal-up delay-2">
+                    <div class="card-icon"><i class="fa-solid fa-arrows-to-circle"></i></div>
+                    <h3>Sinergia</h3>
+                    <p>La unión de las partes produce mejores resultados que la suma de sus contribuciones individuales.</p>
+                    <div class="card-line"></div>
+                </div>
+
+                <div class="card reveal-up delay-3">
+                    <div class="card-icon"><i class="fa-solid fa-wind"></i></div>
+                    <h3>Entropía</h3>
+                    <p>Tendencia natural al desorden y degradación dentro del sistema si no recibe energía externa.</p>
+                    <div class="card-line"></div>
+                </div>
+
+                <div class="card reveal-up delay-4">
+                    <div class="card-icon"><i class="fa-solid fa-scale-balanced"></i></div>
+                    <h3>Homeostasis</h3>
+                    <p>Capacidad del sistema para mantenerse estable y en equilibrio ante cambios del entorno.</p>
+                    <div class="card-line"></div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- DIVISOR -->
+    <div class="section-divider">
+        <div class="divider-line"></div>
+        <div class="divider-icon"><i class="fa-solid fa-atom"></i></div>
+        <div class="divider-line"></div>
+    </div>
+
+    <!-- EJEMPLOS -->
+    <section id="ejemplos-reales" class="section section-mid">
+        <div class="section-inner">
+            <div class="section-label reveal-fade"><i class="fa-solid fa-globe"></i> Aplicaciones Reales</div>
+            <h2 class="section-title reveal-up">Sistemas en el mundo real</h2>
+            <p class="section-desc reveal-up delay-1">
+                Las propiedades de los sistemas están presentes en
+                múltiples entornos tecnológicos, sociales y organizacionales.
+            </p>
+
+            <div class="real-grid">
+
+                <div class="real-card reveal-up delay-1">
+                    <div class="real-img-wrap">
+                        <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=1200&auto=format&fit=crop" alt="Universidad">
+                        <div class="real-overlay">
+                            <i class="fa-solid fa-graduation-cap"></i>
+                        </div>
+                    </div>
+                    <div class="real-content">
+                        <span class="real-tag">Educación</span>
+                        <h3>Universidad</h3>
+                        <p>Estudiantes, docentes y administración trabajan juntos como un sistema integrado con sinergia y homeostasis.</p>
+                    </div>
+                </div>
+
+                <div class="real-card reveal-up delay-2">
+                    <div class="real-img-wrap">
+                        <img src="https://images.unsplash.com/photo-1611605698335-8b1569810432?q=80&w=1200&auto=format&fit=crop" alt="Red Social">
+                        <div class="real-overlay">
+                            <i class="fa-solid fa-share-nodes"></i>
+                        </div>
+                    </div>
+                    <div class="real-content">
+                        <span class="real-tag">Tecnología</span>
+                        <h3>Red Social</h3>
+                        <p>Usuarios, algoritmos y servidores interactúan constantemente generando un sistema complejo y dinámico.</p>
+                    </div>
+                </div>
+
+                <div class="real-card reveal-up delay-3">
+                    <div class="real-img-wrap">
+                        <img src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?q=80&w=1200&auto=format&fit=crop" alt="Celular">
+                        <div class="real-overlay">
+                            <i class="fa-solid fa-mobile-screen"></i>
+                        </div>
+                    </div>
+                    <div class="real-content">
+                        <span class="real-tag">Dispositivos</span>
+                        <h3>Celular</h3>
+                        <p>Hardware y software trabajan conjuntamente como un sistema total con totalidad y sinergia perfectas.</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- DIVISOR -->
+    <div class="section-divider">
+        <div class="divider-line"></div>
+        <div class="divider-icon"><i class="fa-solid fa-play"></i></div>
+        <div class="divider-line"></div>
+    </div>
+
+    <!-- VIDEOS -->
+    <section id="videos" class="section section-dark">
+        <div class="section-inner">
+            <div class="section-label reveal-fade"><i class="fa-solid fa-play-circle"></i> Videos Educativos</div>
+            <h2 class="section-title reveal-up">Aprende con videos</h2>
+            <p class="section-desc reveal-up delay-1">
+                Aprende más sobre las propiedades de los sistemas
+                mediante videos educativos seleccionados.
+            </p>
+
+            <div class="videos-grid">
+
+                <div class="video-card reveal-up delay-1">
+                    <div class="video-thumbnail">
+                        <img src="https://img.youtube.com/vi/7TUTtyLsyik/maxresdefault.jpg" alt="Video 1">
+                        <div class="video-overlay">
+                            <a href="https://www.youtube.com/watch?v=7TUTtyLsyik" target="_blank" class="video-play-btn">
+                                <i class="fa-solid fa-play"></i>
+                            </a>
+                        </div>
+                        <div class="video-duration"><i class="fa-solid fa-clock"></i> TGS</div>
+                    </div>
+                    <div class="video-info">
+                        <h3>Introducción a la Teoría General de Sistemas</h3>
+                        <p>Explicación introductoria sobre la TGS y sus componentes principales.</p>
+                        <a href="https://www.youtube.com/watch?v=7TUTtyLsyik" target="_blank" class="video-link">
+                            Ver en YouTube <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="video-card reveal-up delay-2">
+                    <div class="video-thumbnail">
+                        <img src="https://img.youtube.com/vi/atB117zQyKc/maxresdefault.jpg" alt="Video 2">
+                        <div class="video-overlay">
+                            <a href="https://www.youtube.com/watch?v=atB117zQyKc" target="_blank" class="video-play-btn">
+                                <i class="fa-solid fa-play"></i>
+                            </a>
+                        </div>
+                        <div class="video-duration"><i class="fa-solid fa-clock"></i> Propiedades</div>
+                    </div>
+                    <div class="video-info">
+                        <h3>Propiedades de los Sistemas</h3>
+                        <p>Las principales propiedades de los sistemas y su importancia dentro de la TGS.</p>
+                        <a href="https://www.youtube.com/watch?v=atB117zQyKc" target="_blank" class="video-link">
+                            Ver en YouTube <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="video-card reveal-up delay-3">
+                    <div class="video-thumbnail">
+                        <img src="https://img.youtube.com/vi/tAPOnUCIa3s/maxresdefault.jpg" alt="Video 3">
+                        <div class="video-overlay">
+                            <a href="https://youtu.be/tAPOnUCIa3s?si=7JlOkKjqpdbGdrMe&t=408" target="_blank" class="video-play-btn">
+                                <i class="fa-solid fa-play"></i>
+                            </a>
+                        </div>
+                        <div class="video-duration"><i class="fa-solid fa-clock"></i> Ejemplos</div>
+                    </div>
+                    <div class="video-info">
+                        <h3>Explicación y ejemplos prácticos</h3>
+                        <p>Video con ejemplos aplicados de propiedades de los sistemas.</p>
+                        <a href="https://youtu.be/tAPOnUCIa3s?si=7JlOkKjqpdbGdrMe&t=408" target="_blank" class="video-link">
+                            Ver en YouTube <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- DIVISOR -->
+    <div class="section-divider">
+        <div class="divider-line"></div>
+        <div class="divider-icon"><i class="fa-solid fa-gamepad"></i></div>
+        <div class="divider-line"></div>
+    </div>
+
+    <!-- JUEGOS -->
+    <section id="juegos" class="section games-section">
+        <div class="section-inner">
+            <div class="section-label reveal-fade"><i class="fa-solid fa-gamepad"></i> Actividades Interactivas</div>
+            <h2 class="section-title reveal-up">Juegos Interactivos</h2>
+            <p class="section-desc reveal-up delay-1">
+                Pon a prueba tus conocimientos sobre las propiedades de los sistemas.
+            </p>
+
+            <div class="game-card reveal-up delay-1">
+                <div class="game-card-header">
+                    <div class="game-icon"><i class="fa-solid fa-link"></i></div>
+                    <h3>Relacionar conceptos</h3>
+                    <span class="game-tag">Wordwall</span>
+                </div>
+                <div class="game-frame-wrap">
+                    <iframe style="max-width:100%"
+                        src="https://wordwall.net/embed/2d34f7fd8bcd4a8f89cd79e23a8e36ff?themeId=1&templateId=3&fontStackId=0"
+                        width="100%" height="380" frameborder="0" allowfullscreen>
+                    </iframe>
+                </div>
+            </div>
+
+            <div class="game-card reveal-up delay-2">
+                <div class="game-card-header">
+                    <div class="game-icon"><i class="fa-solid fa-circle-check"></i></div>
+                    <h3>Verdadero o falso</h3>
+                    <span class="game-tag">Educaplay</span>
+                </div>
+                <div class="game-frame-wrap">
+                    <iframe allowfullscreen width="100%" height="690" frameborder="0"
+                        src="https://www.educaplay.com/game/29245309-propiedades_de_los_sistemas.html">
+                    </iframe>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- DIVISOR -->
+    <div class="section-divider">
+        <div class="divider-line"></div>
+        <div class="divider-icon"><i class="fa-solid fa-brain"></i></div>
+        <div class="divider-line"></div>
+    </div>
+
+    <!-- QUIZ -->
+    <section id="quiz" class="quiz-section">
+        <div class="section-inner">
+            <div class="section-label reveal-fade"><i class="fa-solid fa-clipboard-question"></i> Evaluación</div>
+            <h2 class="section-title reveal-up">Quiz Interactivo</h2>
+            <p class="section-desc reveal-up delay-1">Evalúa tus conocimientos sobre las propiedades de los sistemas.</p>
+
+            <div class="quiz-container reveal-up delay-2">
+
+                <!-- Progreso -->
+                <div class="quiz-progress-wrap">
+                    <div class="quiz-progress-info">
+                        <span id="quiz-progress-text">Pregunta 1 de 4</span>
+                        <span id="quiz-score-live">Puntos: 0</span>
+                    </div>
+                    <div class="quiz-progress-bar">
+                        <div class="quiz-progress-fill" id="quiz-progress-fill"></div>
+                    </div>
+                </div>
+
+                <div id="quiz-box">
+                    <h3 id="question">Pregunta</h3>
+                    <div id="answers" class="answers"></div>
+                    <button id="next-btn">Siguiente <i class="fa-solid fa-arrow-right"></i></button>
+                    <p id="score"></p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- DIVISOR -->
+    <div class="section-divider">
+        <div class="divider-line"></div>
+        <div class="divider-icon"><i class="fa-solid fa-book"></i></div>
+        <div class="divider-line"></div>
+    </div>
+
+    <!-- REFERENCIAS -->
+    <section id="referencias" class="section section-dark">
+        <div class="section-inner">
+            <div class="section-label reveal-fade"><i class="fa-solid fa-book"></i> Fuentes Académicas</div>
+            <h2 class="section-title reveal-up">Referencias APA</h2>
+
+            <div class="references-container">
+
+                <div class="reference-card reveal-up delay-1">
+                    <div class="ref-icon"><i class="fa-solid fa-book-open"></i></div>
+                    <div class="ref-content">
+                        <p>
+                            Bertalanffy, L. von. (1989).
+                            <em>Teoría general de los sistemas</em>.
+                            Fondo de Cultura Económica.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="reference-card reveal-up delay-2">
+                    <div class="ref-icon"><i class="fa-solid fa-book-open"></i></div>
+                    <div class="ref-content">
+                        <p>
+                            Chiavenato, I. (2006).
+                            <em>Introducción a la teoría general de la administración</em>.
+                            McGraw-Hill.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="reference-card reveal-up delay-3">
+                    <div class="ref-icon"><i class="fa-solid fa-book-open"></i></div>
+                    <div class="ref-content">
+                        <p>
+                            Checkland, P. (1999).
+                            <em>Systems Thinking, Systems Practice</em>.
+                            Wiley.
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-inner">
+            <div class="footer-brand">
+                <i class="fa-solid fa-diagram-project"></i>
+                <span>OVA · TGS</span>
+            </div>
+            <p class="footer-title">OVA — Propiedades de los Sistemas</p>
+            <p class="footer-author">Desarrollado por <strong>Edwin Fernando Gutierrez Parra</strong></p>
+            <div class="footer-line"></div>
+            <p class="footer-copy">Teoría General de Sistemas · Objeto Virtual de Aprendizaje</p>
+        </div>
+    </footer>
+
+    <script src="scripts.js"></script>
+</body>
+
+</html>
