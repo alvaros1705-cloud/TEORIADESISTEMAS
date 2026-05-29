@@ -1,0 +1,1110 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OVA – Tipos de Sistemas | TGS</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:ital,wght@0,300;0,500;0,700;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0e1a;
+    --surface: #111827;
+    --surface2: #1a2235;
+    --accent: #00e5ff;
+    --accent2: #7c3aed;
+    --accent3: #10b981;
+    --accent4: #f59e0b;
+    --text: #e2e8f0;
+    --text-muted: #94a3b8;
+    --border: rgba(0,229,255,0.15);
+    --radius: 12px;
+    --font-mono: 'Space Mono', monospace;
+    --font-body: 'DM Sans', sans-serif;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+  /* ─── NAV ─── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: rgba(10,14,26,0.92);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    display: flex; align-items: center; justify-content: space-between; height: 60px;
+  }
+  .nav-brand { font-family: var(--font-mono); color: var(--accent); font-size: .85rem; letter-spacing: .05em; }
+  .nav-links { display: flex; gap: 1.5rem; list-style: none; flex-wrap: wrap; }
+  .nav-links a {
+    color: var(--text-muted); text-decoration: none; font-size: .82rem;
+    font-family: var(--font-mono); transition: color .2s;
+  }
+  .nav-links a:hover { color: var(--accent); }
+
+  /* ─── HERO ─── */
+  #hero {
+    min-height: 100vh; display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    padding: 80px 2rem 4rem; text-align: center;
+    position: relative; overflow: hidden;
+  }
+  #hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse 80% 60% at 50% 40%, rgba(0,229,255,.07) 0%, transparent 70%),
+                radial-gradient(ellipse 50% 40% at 80% 80%, rgba(124,58,237,.08) 0%, transparent 60%);
+  }
+  .hero-tag {
+    font-family: var(--font-mono); font-size: .75rem; color: var(--accent);
+    letter-spacing: .15em; text-transform: uppercase;
+    border: 1px solid var(--border); padding: .35rem .9rem; border-radius: 999px;
+    margin-bottom: 1.5rem; display: inline-block;
+  }
+  #hero h1 {
+    font-size: clamp(2.2rem, 6vw, 4.5rem);
+    font-family: var(--font-mono); font-weight: 700; line-height: 1.1;
+    margin-bottom: 1.2rem;
+  }
+  .h1-accent { color: var(--accent); }
+  #hero p.lead {
+    max-width: 620px; color: var(--text-muted); font-size: 1.1rem;
+    font-weight: 300; margin-bottom: 2.5rem;
+  }
+  .hero-cta {
+    display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center;
+  }
+  .btn {
+    font-family: var(--font-mono); font-size: .82rem; padding: .7rem 1.6rem;
+    border-radius: 8px; text-decoration: none; cursor: pointer;
+    transition: all .2s; display: inline-block; border: none;
+  }
+  .btn-primary {
+    background: var(--accent); color: #000; font-weight: 700;
+  }
+  .btn-primary:hover { box-shadow: 0 0 20px rgba(0,229,255,.4); transform: translateY(-2px); }
+  .btn-outline {
+    background: transparent; color: var(--text); border: 1px solid var(--border);
+  }
+  .btn-outline:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* ─── SECTIONS ─── */
+  section { padding: 5rem 2rem; }
+  .container { max-width: 1100px; margin: 0 auto; }
+  .section-label {
+    font-family: var(--font-mono); font-size: .72rem; color: var(--accent);
+    letter-spacing: .18em; text-transform: uppercase; margin-bottom: .6rem;
+  }
+  .section-title {
+    font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+    font-family: var(--font-mono); font-weight: 700; margin-bottom: 1.2rem;
+  }
+  .section-desc { color: var(--text-muted); max-width: 640px; font-size: 1rem; margin-bottom: 3rem; }
+
+  /* ─── CONTEXTUALIZACIÓN ─── */
+  #contexto { background: var(--surface); }
+  .context-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;
+  }
+  .context-card {
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 2rem;
+  }
+  .context-card h3 { font-family: var(--font-mono); color: var(--accent); margin-bottom: .8rem; font-size: 1rem; }
+  .context-card p { color: var(--text-muted); font-size: .95rem; }
+
+  /* ─── TIPOS DE SISTEMAS ─── */
+  #tipos { background: var(--bg); }
+  .tipos-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem;
+  }
+  .tipo-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 1.8rem;
+    transition: all .25s; cursor: default; position: relative; overflow: hidden;
+  }
+  .tipo-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: var(--card-accent, var(--accent));
+  }
+  .tipo-card:hover { transform: translateY(-4px); border-color: var(--card-accent, var(--accent)); box-shadow: 0 8px 30px rgba(0,0,0,.3); }
+  .tipo-icon { font-size: 2rem; margin-bottom: .8rem; }
+  .tipo-card h3 { font-family: var(--font-mono); font-size: .95rem; color: var(--text); margin-bottom: .6rem; }
+  .tipo-card p { color: var(--text-muted); font-size: .88rem; line-height: 1.6; }
+  .tipo-badge {
+    display: inline-block; margin-top: .8rem; padding: .2rem .7rem;
+    border-radius: 999px; font-size: .7rem; font-family: var(--font-mono);
+    background: rgba(0,229,255,.1); color: var(--accent); border: 1px solid rgba(0,229,255,.2);
+  }
+
+  /* ─── EJEMPLOS ─── */
+  #ejemplos { background: var(--surface); }
+  .ejemplos-tabs { display: flex; gap: .5rem; flex-wrap: wrap; margin-bottom: 2rem; }
+  .tab-btn {
+    font-family: var(--font-mono); font-size: .78rem; padding: .5rem 1.2rem;
+    border-radius: 8px; border: 1px solid var(--border);
+    background: transparent; color: var(--text-muted); cursor: pointer; transition: all .2s;
+  }
+  .tab-btn.active, .tab-btn:hover {
+    background: var(--accent); color: #000; border-color: var(--accent);
+  }
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; animation: fadeIn .3s ease; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+  .ejemplo-content {
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 2rem;
+  }
+  .ejemplo-content h3 { font-family: var(--font-mono); color: var(--accent); margin-bottom: 1rem; }
+  .ejemplo-content p { color: var(--text-muted); margin-bottom: .8rem; }
+  .ejemplo-content ul { color: var(--text-muted); padding-left: 1.2rem; }
+  .ejemplo-content ul li { margin-bottom: .4rem; }
+  .ejemplo-tag {
+    display: inline-block; padding: .25rem .7rem; border-radius: 6px;
+    font-size: .72rem; font-family: var(--font-mono); font-weight: 700;
+    margin-bottom: .8rem; background: rgba(16,185,129,.15); color: var(--accent3);
+    border: 1px solid rgba(16,185,129,.3);
+  }
+
+  /* ─── EJERCICIOS ─── */
+  #ejercicios { background: var(--bg); }
+  .ejercicios-list { display: flex; flex-direction: column; gap: 1.5rem; }
+  .ejercicio-item {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 1.8rem;
+  }
+  .ejercicio-num {
+    font-family: var(--font-mono); font-size: 2rem; color: var(--border);
+    font-weight: 700; margin-bottom: .5rem;
+  }
+  .ejercicio-item h3 { font-family: var(--font-mono); color: var(--text); margin-bottom: .6rem; font-size: .95rem; }
+  .ejercicio-item p { color: var(--text-muted); font-size: .92rem; margin-bottom: 1rem; }
+  .ejercicio-answer {
+    display: none; background: var(--surface2); border-radius: 8px; padding: 1rem;
+    border-left: 3px solid var(--accent3); margin-top: .5rem;
+    color: var(--text); font-size: .9rem;
+  }
+  .ejercicio-answer.show { display: block; animation: fadeIn .3s ease; }
+  .toggle-answer {
+    font-family: var(--font-mono); font-size: .75rem; padding: .45rem 1rem;
+    border-radius: 8px; border: 1px solid var(--border); background: transparent;
+    color: var(--text-muted); cursor: pointer; transition: all .2s;
+  }
+  .toggle-answer:hover { border-color: var(--accent3); color: var(--accent3); }
+
+  /* ─── VIDEO ─── */
+  #video { background: var(--surface); }
+  .video-wrapper {
+    position: relative; padding-bottom: 56.25%; height: 0;
+    border-radius: var(--radius); overflow: hidden;
+    border: 1px solid var(--border); max-width: 860px; margin: 0 auto;
+  }
+  .video-wrapper iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: none; }
+
+  /* ─── JUEGO 1: SOPA DE LETRAS ─── */
+  #juego1 { background: var(--bg); }
+  #sopa-container {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 2rem; max-width: 700px; margin: 0 auto;
+  }
+  #sopa-info { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.5rem; }
+  .palabras-lista { display: flex; flex-wrap: wrap; gap: .5rem; margin-bottom: 1rem; }
+  .palabra-chip {
+    font-family: var(--font-mono); font-size: .72rem; padding: .3rem .8rem;
+    border-radius: 999px; border: 1px solid var(--border);
+    background: var(--surface2); color: var(--text-muted); transition: all .3s;
+    user-select: none;
+  }
+  .palabra-chip.found { background: rgba(16,185,129,.2); color: var(--accent3); border-color: var(--accent3); text-decoration: line-through; }
+  #sopa-grid {
+    display: grid; gap: 2px; margin: 0 auto 1.5rem;
+    user-select: none; width: fit-content;
+  }
+  .sopa-row { display: flex; gap: 2px; }
+  .sopa-cell {
+    width: 34px; height: 34px; display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-mono); font-size: .8rem; font-weight: 700;
+    background: var(--surface2); border-radius: 6px; cursor: pointer;
+    transition: all .15s; color: var(--text); border: 1px solid transparent;
+    text-transform: uppercase;
+  }
+  .sopa-cell:hover { background: rgba(0,229,255,.1); border-color: var(--accent); }
+  .sopa-cell.selected { background: rgba(0,229,255,.25); border-color: var(--accent); color: var(--accent); }
+  .sopa-cell.found { background: rgba(16,185,129,.2); border-color: var(--accent3); color: var(--accent3); }
+  #sopa-msg { text-align: center; font-family: var(--font-mono); font-size: .85rem; color: var(--accent); min-height: 1.5rem; }
+  #sopa-score { font-family: var(--font-mono); font-size: .8rem; color: var(--text-muted); }
+
+  /* ─── JUEGO 2: EMPAREJAR ─── */
+  #juego2 { background: var(--surface); }
+  #match-container { max-width: 780px; margin: 0 auto; }
+  .match-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .match-col h4 { font-family: var(--font-mono); font-size: .75rem; color: var(--text-muted); margin-bottom: .8rem; text-align: center; }
+  .match-card {
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 10px; padding: 1rem 1.2rem; cursor: pointer;
+    transition: all .2s; font-size: .88rem; min-height: 70px;
+    display: flex; align-items: center;
+  }
+  .match-card.term { justify-content: center; text-align: center; font-family: var(--font-mono); font-weight: 700; color: var(--accent); }
+  .match-card.def { color: var(--text-muted); font-size: .83rem; line-height: 1.5; }
+  .match-card:hover:not(.matched):not(.selected) { border-color: var(--accent); }
+  .match-card.selected { border-color: var(--accent); background: rgba(0,229,255,.1); }
+  .match-card.matched { border-color: var(--accent3); background: rgba(16,185,129,.15); color: var(--accent3); cursor: default; }
+  .match-card.wrong { border-color: #ef4444; background: rgba(239,68,68,.1); animation: shake .3s ease; }
+  @keyframes shake { 0%,100% {transform:translateX(0)} 25% {transform:translateX(-6px)} 75% {transform:translateX(6px)} }
+  #match-score { text-align: center; margin-top: 1.5rem; font-family: var(--font-mono); font-size: .85rem; color: var(--text-muted); }
+  #match-win { display: none; text-align: center; margin-top: 1rem; padding: 1.2rem; border-radius: var(--radius); background: rgba(16,185,129,.1); border: 1px solid rgba(16,185,129,.3); }
+  #match-win.show { display: block; animation: fadeIn .4s ease; }
+  #match-win p { color: var(--accent3); font-family: var(--font-mono); }
+
+  /* ─── QUIZ ─── */
+  #quiz { background: var(--bg); }
+  #quiz-container { max-width: 760px; margin: 0 auto; }
+  .quiz-progress-bar {
+    width: 100%; height: 4px; background: var(--surface2);
+    border-radius: 999px; margin-bottom: 2rem; overflow: hidden;
+  }
+  .quiz-progress-fill {
+    height: 100%; background: var(--accent); border-radius: 999px;
+    transition: width .4s ease;
+  }
+  .quiz-question-box {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 2rem; margin-bottom: 1.5rem;
+  }
+  .quiz-q-num { font-family: var(--font-mono); font-size: .72rem; color: var(--text-muted); margin-bottom: .8rem; }
+  .quiz-q-text { font-size: 1.05rem; margin-bottom: 1.5rem; font-weight: 500; }
+  .quiz-options { display: flex; flex-direction: column; gap: .7rem; }
+  .quiz-opt {
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 10px; padding: .9rem 1.2rem; cursor: pointer;
+    transition: all .2s; font-size: .92rem; display: flex; align-items: center; gap: .8rem;
+  }
+  .quiz-opt:hover:not(.disabled) { border-color: var(--accent); color: var(--accent); }
+  .quiz-opt.correct { border-color: var(--accent3); background: rgba(16,185,129,.15); color: var(--accent3); }
+  .quiz-opt.wrong { border-color: #ef4444; background: rgba(239,68,68,.1); color: #ef4444; }
+  .quiz-opt.disabled { cursor: default; }
+  .opt-letter {
+    font-family: var(--font-mono); font-size: .75rem; width: 24px; height: 24px;
+    border-radius: 50%; background: var(--surface); border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .quiz-feedback { margin-top: 1rem; padding: .9rem 1.2rem; border-radius: 8px; font-size: .88rem; display: none; }
+  .quiz-feedback.show { display: block; animation: fadeIn .3s ease; }
+  .quiz-feedback.correct-fb { background: rgba(16,185,129,.1); border: 1px solid rgba(16,185,129,.3); color: var(--accent3); }
+  .quiz-feedback.wrong-fb { background: rgba(239,68,68,.08); border: 1px solid rgba(239,68,68,.25); color: #f87171; }
+  #quiz-nav { display: flex; justify-content: flex-end; }
+  #quiz-result {
+    display: none; background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 2.5rem; text-align: center;
+  }
+  #quiz-result.show { display: block; animation: fadeIn .4s ease; }
+  #quiz-result h3 { font-family: var(--font-mono); color: var(--accent); font-size: 1.4rem; margin-bottom: 1rem; }
+  #quiz-result .score-big { font-size: 3.5rem; font-family: var(--font-mono); font-weight: 700; }
+  #quiz-result .score-label { color: var(--text-muted); margin-bottom: 1.5rem; }
+  .score-green { color: var(--accent3); }
+  .score-yellow { color: var(--accent4); }
+  .score-red { color: #ef4444; }
+  #quiz-breakdown { text-align: left; max-width: 500px; margin: 1.5rem auto 0; }
+  #quiz-breakdown li { font-size: .85rem; margin-bottom: .5rem; color: var(--text-muted); list-style: none; padding-left: 1rem; border-left: 2px solid var(--border); }
+  #quiz-breakdown li.ok { border-color: var(--accent3); color: var(--accent3); }
+  #quiz-breakdown li.fail { border-color: #ef4444; color: #f87171; }
+
+  /* ─── FOOTER ─── */
+  footer {
+    padding: 2.5rem 2rem; border-top: 1px solid var(--border);
+    display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 1rem;
+  }
+  footer p { color: var(--text-muted); font-size: .8rem; font-family: var(--font-mono); }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 700px) {
+    .context-grid { grid-template-columns: 1fr; }
+    .match-grid { grid-template-columns: 1fr; }
+    .nav-links { display: none; }
+    .sopa-cell { width: 28px; height: 28px; font-size: .7rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══ NAV ═══ -->
+<nav>
+  <span class="nav-brand">TGS // OVA-04</span>
+  <ul class="nav-links">
+    <li><a href="#contexto">Contexto</a></li>
+    <li><a href="#tipos">Tipos</a></li>
+    <li><a href="#ejemplos">Ejemplos</a></li>
+    <li><a href="#ejercicios">Ejercicios</a></li>
+    <li><a href="#video">Video</a></li>
+    <li><a href="#juego1">Juego 1</a></li>
+    <li><a href="#juego2">Juego 2</a></li>
+    <li><a href="#quiz">Quiz</a></li>
+  </ul>
+</nav>
+
+<!-- ═══ HERO ═══ -->
+<section id="hero">
+  <span class="hero-tag">Teoría General de Sistemas</span>
+  <h1>Tipos de<br><span class="h1-accent">Sistemas</span></h1>
+  <p class="lead">Una exploración interactiva de los sistemas dinámicos, estáticos, adaptativos, abiertos, cerrados y más — fundamentos esenciales de la TGS.</p>
+  <div class="hero-cta">
+    <a href="#contexto" class="btn btn-primary">Comenzar</a>
+    <a href="#quiz" class="btn btn-outline">Ir al Quiz</a>
+  </div>
+</section>
+
+<!-- ═══ CONTEXTUALIZACIÓN ═══ -->
+<section id="contexto">
+  <div class="container">
+    <p class="section-label">01 / Contextualización</p>
+    <h2 class="section-title">¿Por qué clasificar los sistemas?</h2>
+    <p class="section-desc">La Teoría General de Sistemas, propuesta por Ludwig von Bertalanffy en el siglo XX, busca principios universales aplicables a todo tipo de sistemas. Clasificarlos nos permite entender su comportamiento, predecir su evolución y diseñar soluciones adecuadas.</p>
+    <div class="context-grid">
+      <div class="context-card">
+        <h3>🎯 ¿Qué es un sistema?</h3>
+        <p>Un sistema es un conjunto de elementos interrelacionados que trabajan juntos para lograr un objetivo común. Todo sistema tiene límites, entradas, procesos, salidas y retroalimentación.</p>
+      </div>
+      <div class="context-card">
+        <h3>🔬 ¿Por qué importa el tipo?</h3>
+        <p>El tipo de sistema determina cómo debe ser analizado, modelado e intervenido. Un ingeniero de sistemas usa esta clasificación para elegir las herramientas y metodologías correctas de análisis.</p>
+      </div>
+      <div class="context-card">
+        <h3>🌍 Contexto histórico</h3>
+        <p>Bertalanffy (1950) observó que sistemas biológicos, sociales y mecánicos comparten principios estructurales. Norbert Wiener, con la cibernética, añadió la dimensión del control y la retroalimentación.</p>
+      </div>
+      <div class="context-card">
+        <h3>🔗 Relación con la Ingeniería</h3>
+        <p>En ingeniería de sistemas y software, entender el tipo de sistema permite diseñar arquitecturas apropiadas: desde bases de datos estáticas hasta sistemas adaptativos de inteligencia artificial.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ TIPOS DE SISTEMAS ═══ -->
+<section id="tipos">
+  <div class="container">
+    <p class="section-label">02 / Contenido Teórico</p>
+    <h2 class="section-title">Clasificación de los Sistemas</h2>
+    <p class="section-desc">Los sistemas se clasifican según distintos criterios: su comportamiento en el tiempo, su relación con el entorno, su capacidad de respuesta y su grado de determinismo.</p>
+    <div class="tipos-grid">
+
+      <div class="tipo-card" style="--card-accent:#00e5ff">
+        <div class="tipo-icon">⚡</div>
+        <h3>Sistema Dinámico</h3>
+        <p>Su estado cambia con el tiempo en respuesta a entradas o condiciones internas. Posee variables de estado que evolucionan mediante ecuaciones diferenciales o de diferencia.</p>
+        <p style="margin-top:.6rem; font-size:.82rem; color:#94a3b8"><strong style="color:#e2e8f0">Características:</strong> Evolución temporal, retroalimentación, estados variables.</p>
+        <span class="tipo-badge">Varía con el tiempo</span>
+      </div>
+
+      <div class="tipo-card" style="--card-accent:#7c3aed">
+        <div class="tipo-icon">🏛️</div>
+        <h3>Sistema Estático</h3>
+        <p>Sus propiedades y estado no cambian con el tiempo (o cambian de forma insignificante). La salida en un momento dado depende solo de la entrada en ese instante, sin memoria temporal.</p>
+        <p style="margin-top:.6rem; font-size:.82rem; color:#94a3b8"><strong style="color:#e2e8f0">Características:</strong> Sin memoria, respuesta instantánea, invariante en el tiempo.</p>
+        <span class="tipo-badge" style="background:rgba(124,58,237,.15);color:#a78bfa;border-color:rgba(124,58,237,.3)">Sin variación temporal</span>
+      </div>
+
+      <div class="tipo-card" style="--card-accent:#10b981">
+        <div class="tipo-icon">🦎</div>
+        <h3>Sistema Adaptativo</h3>
+        <p>Modifica su comportamiento o estructura en respuesta a cambios en el entorno para mantener o mejorar su desempeño. Aprende de la experiencia y se reorganiza.</p>
+        <p style="margin-top:.6rem; font-size:.82rem; color:#94a3b8"><strong style="color:#e2e8f0">Características:</strong> Autoajuste, aprendizaje, respuesta al entorno.</p>
+        <span class="tipo-badge" style="background:rgba(16,185,129,.15);color:#10b981;border-color:rgba(16,185,129,.3)">Autoajustable</span>
+      </div>
+
+      <div class="tipo-card" style="--card-accent:#f59e0b">
+        <div class="tipo-icon">🌐</div>
+        <h3>Sistema Abierto</h3>
+        <p>Intercambia materia, energía e información con su entorno. Depende del ambiente para subsistir y puede crecer, evolucionar o decaer en función de sus intercambios.</p>
+        <p style="margin-top:.6rem; font-size:.82rem; color:#94a3b8"><strong style="color:#e2e8f0">Características:</strong> Frontera permeable, entropía negativa (negentropía), equifinalidad.</p>
+        <span class="tipo-badge" style="background:rgba(245,158,11,.15);color:#f59e0b;border-color:rgba(245,158,11,.3)">Intercambia con entorno</span>
+      </div>
+
+      <div class="tipo-card" style="--card-accent:#ec4899">
+        <div class="tipo-icon">🔒</div>
+        <h3>Sistema Cerrado</h3>
+        <p>No intercambia materia con el entorno (puede intercambiar energía en sentido termodinámico). Tiende al equilibrio y al aumento de la entropía interna con el tiempo.</p>
+        <p style="margin-top:.6rem; font-size:.82rem; color:#94a3b8"><strong style="color:#e2e8f0">Características:</strong> Frontera impermeable (a la materia), entropía creciente, autocontenido.</p>
+        <span class="tipo-badge" style="background:rgba(236,72,153,.15);color:#ec4899;border-color:rgba(236,72,153,.3)">Aislado del entorno</span>
+      </div>
+
+      <div class="tipo-card" style="--card-accent:#06b6d4">
+        <div class="tipo-icon">🎲</div>
+        <h3>Sistema Probabilístico</h3>
+        <p>Su comportamiento futuro no puede predecirse con certeza absoluta. Las salidas se describen mediante distribuciones de probabilidad. También llamado sistema estocástico.</p>
+        <p style="margin-top:.6rem; font-size:.82rem; color:#94a3b8"><strong style="color:#e2e8f0">Características:</strong> Incertidumbre, aleatoriedad, predicción estadística.</p>
+        <span class="tipo-badge" style="background:rgba(6,182,212,.15);color:#06b6d4;border-color:rgba(6,182,212,.3)">Incierto / Estocástico</span>
+      </div>
+
+      <div class="tipo-card" style="--card-accent:#8b5cf6">
+        <div class="tipo-icon">⚙️</div>
+        <h3>Sistema Determinístico</h3>
+        <p>Dado el estado inicial y las entradas, el comportamiento futuro puede predecirse con exactitud. No hay aleatoriedad en la evolución del sistema.</p>
+        <p style="margin-top:.6rem; font-size:.82rem; color:#94a3b8"><strong style="color:#e2e8f0">Características:</strong> Reproducibilidad, previsibilidad total, ausencia de aleatoriedad.</p>
+        <span class="tipo-badge" style="background:rgba(139,92,246,.15);color:#8b5cf6;border-color:rgba(139,92,246,.3)">Predecible / Exacto</span>
+      </div>
+
+      <div class="tipo-card" style="--card-accent:#f97316">
+        <div class="tipo-icon">🤖</div>
+        <h3>Sistema Autónomo</h3>
+        <p>Opera sin entradas externas continuas; su dinámica está gobernada exclusivamente por su estado interno y condiciones iniciales. En control, implica que no depende de señales de referencia externas.</p>
+        <p style="margin-top:.6rem; font-size:.82rem; color:#94a3b8"><strong style="color:#e2e8f0">Características:</strong> Autogestión, sin referencia externa, estabilidad interna.</p>
+        <span class="tipo-badge" style="background:rgba(249,115,22,.15);color:#f97316;border-color:rgba(249,115,22,.3)">Autogobernable</span>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══ EJEMPLOS ═══ -->
+<section id="ejemplos">
+  <div class="container">
+    <p class="section-label">03 / Ejemplos Prácticos</p>
+    <h2 class="section-title">Sistemas en la vida real</h2>
+    <p class="section-desc">Selecciona un tipo de sistema para ver ejemplos concretos de su aplicación en contextos reales de ingeniería y vida cotidiana.</p>
+    <div class="ejemplos-tabs">
+      <button class="tab-btn active" onclick="showTab('e-dinamico',this)">Dinámico</button>
+      <button class="tab-btn" onclick="showTab('e-estatico',this)">Estático</button>
+      <button class="tab-btn" onclick="showTab('e-adaptativo',this)">Adaptativo</button>
+      <button class="tab-btn" onclick="showTab('e-abierto',this)">Abierto</button>
+      <button class="tab-btn" onclick="showTab('e-cerrado',this)">Cerrado</button>
+      <button class="tab-btn" onclick="showTab('e-prob',this)">Probabilístico</button>
+    </div>
+    <div id="e-dinamico" class="tab-panel active">
+      <div class="ejemplo-content">
+        <span class="ejemplo-tag">Sistema Dinámico</span>
+        <h3>🚗 Sistema de suspensión de un automóvil</h3>
+        <p>La suspensión de un vehículo es un sistema dinámico clásico. Sus variables de estado (posición vertical, velocidad) evolucionan con el tiempo al pasar por irregularidades del terreno.</p>
+        <ul>
+          <li><strong>Entrada:</strong> Perfil del terreno (perturbaciones)</li>
+          <li><strong>Proceso:</strong> Amortiguadores, resortes y masa del vehículo interactúan</li>
+          <li><strong>Salida:</strong> Desplazamiento vertical del chasis</li>
+          <li><strong>Retroalimentación:</strong> Los sensores activos ajustan la amortiguación</li>
+        </ul>
+        <p style="margin-top:.8rem">Otro ejemplo: un ecosistema biológico donde las poblaciones de presas y depredadores evolucionan mutuamente (modelo Lotka-Volterra).</p>
+      </div>
+    </div>
+    <div id="e-estatico" class="tab-panel">
+      <div class="ejemplo-content">
+        <span class="ejemplo-tag">Sistema Estático</span>
+        <h3>⚖️ Una báscula (balanza de resorte)</h3>
+        <p>Al colocar un objeto, la lectura es inmediata y proporcional al peso. No hay memoria de mediciones anteriores; la salida depende únicamente de la entrada actual.</p>
+        <ul>
+          <li><strong>Entrada:</strong> Masa del objeto</li>
+          <li><strong>Proceso:</strong> Deformación proporcional del resorte (Ley de Hooke)</li>
+          <li><strong>Salida:</strong> Lectura de peso en la escala</li>
+        </ul>
+        <p style="margin-top:.8rem">También: un circuito resistivo puro (sin capacitores ni inductores) donde la tensión de salida depende solo de la entrada en ese instante.</p>
+      </div>
+    </div>
+    <div id="e-adaptativo" class="tab-panel">
+      <div class="ejemplo-content">
+        <span class="ejemplo-tag">Sistema Adaptativo</span>
+        <h3>🧠 Un algoritmo de recomendación (Netflix/Spotify)</h3>
+        <p>Estos sistemas aprenden continuamente de las preferencias del usuario y modifican sus parámetros internos para mejorar sus predicciones con el tiempo.</p>
+        <ul>
+          <li><strong>Entrada:</strong> Historial de reproducciones, calificaciones, tiempo de visualización</li>
+          <li><strong>Proceso:</strong> Modelos de machine learning que se reentrenan</li>
+          <li><strong>Salida:</strong> Lista personalizada de recomendaciones</li>
+          <li><strong>Adaptación:</strong> Los pesos del modelo cambian con cada interacción</li>
+        </ul>
+        <p style="margin-top:.8rem">También: el sistema inmunológico humano, que "aprende" a reconocer y combatir nuevos patógenos.</p>
+      </div>
+    </div>
+    <div id="e-abierto" class="tab-panel">
+      <div class="ejemplo-content">
+        <span class="ejemplo-tag">Sistema Abierto</span>
+        <h3>🏭 Una empresa de manufactura</h3>
+        <p>La empresa intercambia continuamente con su entorno: recibe materias primas, capital humano e información; devuelve productos, empleos y residuos.</p>
+        <ul>
+          <li><strong>Entradas:</strong> Materias primas, trabajadores, capital, tecnología</li>
+          <li><strong>Proceso:</strong> Transformación productiva</li>
+          <li><strong>Salidas:</strong> Productos, servicios, empleos, contaminantes</li>
+          <li><strong>Entorno:</strong> Mercado, leyes, proveedores, competidores</li>
+        </ul>
+        <p style="margin-top:.8rem">También: el cuerpo humano, que intercambia oxígeno, nutrientes y calor con el ambiente para mantener la homeostasis.</p>
+      </div>
+    </div>
+    <div id="e-cerrado" class="tab-panel">
+      <div class="ejemplo-content">
+        <span class="ejemplo-tag">Sistema Cerrado</span>
+        <h3>🌡️ Un termo (frasco Dewar)</h3>
+        <p>Diseñado para minimizar el intercambio de calor con el exterior. Aproxima un sistema termodinámicamente cerrado, donde la energía interna se conserva casi por completo.</p>
+        <ul>
+          <li><strong>Contenido:</strong> Líquido a temperatura controlada</li>
+          <li><strong>Barrera:</strong> Vacío entre paredes que aísla térmicamente</li>
+          <li><strong>Comportamiento:</strong> Tendencia al equilibrio térmico interno lento</li>
+        </ul>
+        <p style="margin-top:.8rem">En ingeniería de software: un sistema embebido sin conectividad de red, que opera únicamente con su firmware y entradas físicas predefinidas.</p>
+      </div>
+    </div>
+    <div id="e-prob" class="tab-panel">
+      <div class="ejemplo-content">
+        <span class="ejemplo-tag">Sistema Probabilístico</span>
+        <h3>📡 Red de comunicaciones con ruido</h3>
+        <p>En telecomunicaciones, el canal de comunicación introduce ruido aleatorio. La señal recibida es una versión distorsionada de forma impredecible de la señal enviada.</p>
+        <ul>
+          <li><strong>Entrada:</strong> Señal digital transmitida</li>
+          <li><strong>Proceso:</strong> Canal con ruido gaussiano blanco (AWGN)</li>
+          <li><strong>Salida:</strong> Señal recibida con errores probabilísticos</li>
+          <li><strong>Modelo:</strong> Tasa de error de bits (BER) como función del SNR</li>
+        </ul>
+        <p style="margin-top:.8rem">También: modelos epidemiológicos (SIR/SEIR) donde los contagios dependen de interacciones aleatorias entre individuos.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ EJERCICIOS ═══ -->
+<section id="ejercicios">
+  <div class="container">
+    <p class="section-label">04 / Ejercicios</p>
+    <h2 class="section-title">Pon a prueba tu análisis</h2>
+    <p class="section-desc">Lee cada situación y determina qué tipo(s) de sistema se describen. Reflexiona tu respuesta antes de ver la solución.</p>
+    <div class="ejercicios-list">
+      <div class="ejercicio-item">
+        <div class="ejercicio-num">01</div>
+        <h3>El termostato inteligente de una casa</h3>
+        <p>Un dispositivo de climatización que mide la temperatura del hogar cada 5 minutos. Si la temperatura baja del umbral programado, enciende la calefacción. Con el tiempo, comienza a aprender los horarios habituales de los ocupantes y ajusta automáticamente los umbrales para ahorrar energía, sin que el usuario lo reprograme manualmente. También recibe actualizaciones de un servidor en la nube.</p>
+        <button class="toggle-answer" onclick="toggleAnswer(this)">Ver respuesta</button>
+        <div class="ejercicio-answer">
+          <strong>Análisis de tipos de sistema:</strong><br><br>
+          ✅ <strong>Dinámico:</strong> Su estado (temperatura, configuración) cambia con el tiempo.<br>
+          ✅ <strong>Adaptativo:</strong> Aprende patrones de uso y modifica su comportamiento autónomamente.<br>
+          ✅ <strong>Abierto:</strong> Intercambia información con el servidor en la nube y con el entorno físico (temperatura).<br><br>
+          <em>Este es un ejemplo de sistema complejo con múltiples clasificaciones simultáneas, lo cual es frecuente en sistemas reales.</em>
+        </div>
+      </div>
+      <div class="ejercicio-item">
+        <div class="ejercicio-num">02</div>
+        <h3>La lotería nacional</h3>
+        <p>Cada semana se realizan sorteos en los que se extraen números al azar de un bombo mecánico. Los participantes adquieren boletos con números fijos. El resultado de cada sorteo es completamente independiente de los anteriores y no puede ser influenciado por ningún agente externo durante el proceso de extracción (la sala está sellada). El premio mayor solo puede ganarse una vez por sorteo.</p>
+        <button class="toggle-answer" onclick="toggleAnswer(this)">Ver respuesta</button>
+        <div class="ejercicio-answer">
+          <strong>Análisis de tipos de sistema:</strong><br><br>
+          ✅ <strong>Probabilístico (Estocástico):</strong> La salida (número ganador) no puede predecirse; sigue una distribución uniforme discreta.<br>
+          ✅ <strong>Cerrado (durante el sorteo):</strong> La sala sellada elimina intercambios con el entorno que puedan influir el resultado.<br>
+          ✅ <strong>Estático (por sorteo):</strong> El resultado de un sorteo no depende del historial de sorteos anteriores (cada extracción es independiente).<br><br>
+          <em>Nota: el sistema de lotería como organización sí es abierto (paga premios, recibe ingresos), pero el mecanismo del sorteo es lo que se describe aquí.</em>
+        </div>
+      </div>
+      <div class="ejercicio-item">
+        <div class="ejercicio-num">03</div>
+        <h3>Un programa de cálculo de nómina</h3>
+        <p>Un software empresarial que, al ingresar el número de horas trabajadas y el salario hora de un empleado, calcula automáticamente el salario bruto, las deducciones y el salario neto mediante fórmulas fijas establecidas por la ley colombiana. El programa no almacena resultados anteriores para influir en cálculos futuros y no se conecta a internet.</p>
+        <button class="toggle-answer" onclick="toggleAnswer(this)">Ver respuesta</button>
+        <div class="ejercicio-answer">
+          <strong>Análisis de tipos de sistema:</strong><br><br>
+          ✅ <strong>Determinístico:</strong> Dadas las mismas horas y salario, el resultado siempre es idéntico y predecible.<br>
+          ✅ <strong>Estático:</strong> No tiene memoria de estados anteriores; cada cálculo es independiente.<br>
+          ✅ <strong>Cerrado:</strong> No se conecta a redes externas; opera de forma autocontenida.<br><br>
+          <em>Reflexión adicional: ¿Cambiaría la clasificación si el software empezara a consultar automáticamente las tablas de retención en la fuente actualizadas de la DIAN en línea?</em>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ VIDEO ═══ -->
+<section id="video">
+  <div class="container">
+    <p class="section-label">05 / Recurso Multimedia</p>
+    <h2 class="section-title">Video educativo</h2>
+    <p class="section-desc">Complementa la teoría con este recurso audiovisual sobre la clasificación y tipos de sistemas en la Teoría General de Sistemas.</p>
+    <div class="video-wrapper">
+      <iframe src="https://www.youtube.com/embed/tAPOnUCIa3s" title="Tipos de Sistemas - TGS" allowfullscreen loading="lazy"></iframe>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ JUEGO 1: SOPA DE LETRAS ═══ -->
+<section id="juego1">
+  <div class="container">
+    <p class="section-label">06 / Juego Interactivo 1</p>
+    <h2 class="section-title">Sopa de Letras</h2>
+    <p class="section-desc">Encuentra las 5 palabras clave relacionadas con los tipos de sistemas. Haz clic en la primera y última letra de cada palabra.</p>
+    <div id="sopa-container">
+      <div id="sopa-info">
+        <div class="palabras-lista" id="palabras-lista"></div>
+        <span id="sopa-score">Encontradas: 0 / 5</span>
+      </div>
+      <div id="sopa-grid"></div>
+      <div id="sopa-msg"></div>
+      <div style="display:flex;justify-content:center;margin-top:1rem">
+        <button class="btn btn-outline" onclick="resetSopa()">Reiniciar</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ JUEGO 2: EMPAREJAR ═══ -->
+<section id="juego2">
+  <div class="container">
+    <p class="section-label">07 / Juego Interactivo 2</p>
+    <h2 class="section-title">Empareja: Tipo → Definición</h2>
+    <p class="section-desc">Haz clic en un tipo de sistema (izquierda) y luego en su definición correcta (derecha). ¡Empareja los 6 pares!</p>
+    <div id="match-container">
+      <div class="match-grid">
+        <div>
+          <h4>TIPO DE SISTEMA</h4>
+          <div id="terms-col" style="display:flex;flex-direction:column;gap:.7rem"></div>
+        </div>
+        <div>
+          <h4>DEFINICIÓN</h4>
+          <div id="defs-col" style="display:flex;flex-direction:column;gap:.7rem"></div>
+        </div>
+      </div>
+      <div id="match-score">Pares encontrados: 0 / 6</div>
+      <div id="match-win">
+        <p>🎉 ¡Excelente! Emparejaste todos los tipos correctamente.</p>
+        <button class="btn btn-outline" onclick="resetMatch()" style="margin-top:1rem">Jugar de nuevo</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ QUIZ ═══ -->
+<section id="quiz">
+  <div class="container">
+    <p class="section-label">08 / Evaluación</p>
+    <h2 class="section-title">Quiz Interactivo</h2>
+    <p class="section-desc">Responde las 5 preguntas sobre tipos de sistemas. Al finalizar verás tu puntaje y retroalimentación detallada.</p>
+    <div id="quiz-container">
+      <div class="quiz-progress-bar">
+        <div class="quiz-progress-fill" id="quiz-bar" style="width:0%"></div>
+      </div>
+      <div id="quiz-question-area"></div>
+      <div id="quiz-result"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FOOTER ═══ -->
+<footer class="container">
+  <p>OVA desarrollada por FLOREZ SERNA DEIVY JESUS · TGS · Universidad Simón Bolívar</p>
+  <p>Msc. IS. Alvaro Salamanca Landínez · 2025</p>
+</footer>
+
+<script>
+// ════════════════════════════════════════════
+//  TABS (Ejemplos)
+// ════════════════════════════════════════════
+function showTab(id, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+}
+
+// ════════════════════════════════════════════
+//  EJERCICIOS
+// ════════════════════════════════════════════
+function toggleAnswer(btn) {
+  const ans = btn.nextElementSibling;
+  ans.classList.toggle('show');
+  btn.textContent = ans.classList.contains('show') ? 'Ocultar respuesta' : 'Ver respuesta';
+}
+
+// ════════════════════════════════════════════
+//  SOPA DE LETRAS
+// ════════════════════════════════════════════
+const PALABRAS = [
+  { word: 'DINAMICO',  color: '#00e5ff', found: false },
+  { word: 'ESTATICO',  color: '#7c3aed', found: false },
+  { word: 'ADAPTATIVO', color: '#10b981', found: false },
+  { word: 'ABIERTO',   color: '#f59e0b', found: false },
+  { word: 'CERRADO',   color: '#ec4899', found: false },
+];
+const FILAS = 14, COLS = 16;
+let gridData = [], selectedCells = [], foundCells = new Set();
+
+function buildSopa() {
+  gridData = Array.from({length: FILAS}, () => Array(COLS).fill(''));
+  const placements = [];
+
+  const directions = [
+    [0,1],[1,0],[1,1],[0,-1],[-1,0],[-1,-1],[1,-1],[-1,1]
+  ];
+
+  PALABRAS.forEach(p => {
+    let placed = false, attempts = 0;
+    while (!placed && attempts < 300) {
+      attempts++;
+      const dir = directions[Math.floor(Math.random()*directions.length)];
+      const r = Math.floor(Math.random()*FILAS);
+      const c = Math.floor(Math.random()*COLS);
+      const cells = [];
+      let ok = true;
+      for (let i = 0; i < p.word.length; i++) {
+        const nr = r + dir[0]*i, nc = c + dir[1]*i;
+        if (nr < 0 || nr >= FILAS || nc < 0 || nc >= COLS) { ok = false; break; }
+        if (gridData[nr][nc] !== '' && gridData[nr][nc] !== p.word[i]) { ok = false; break; }
+        cells.push([nr,nc]);
+      }
+      if (ok) {
+        cells.forEach(([nr,nc], i) => gridData[nr][nc] = p.word[i]);
+        placements.push({ word: p.word, cells, color: p.color });
+        placed = true;
+      }
+    }
+  });
+
+  // Llenar huecos
+  const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  for (let r = 0; r < FILAS; r++)
+    for (let c = 0; c < COLS; c++)
+      if (!gridData[r][c]) gridData[r][c] = letters[Math.floor(Math.random()*26)];
+
+  // Renderizar
+    const grid = document.getElementById('sopa-grid');
+    grid.style.gridTemplateColumns = `repeat(${COLS}, 34px)`;
+    grid.innerHTML = '';
+    for (let r = 0; r < FILAS; r++) {
+      for (let c = 0; c < COLS; c++) {
+        const cell = document.createElement('div');
+        cell.className = 'sopa-cell';
+        cell.textContent = gridData[r][c];
+        cell.dataset.r = r; cell.dataset.c = c;
+        cell.addEventListener('click', sopaClick);
+        grid.appendChild(cell); // <-- Ahora la celda va directo al grid principal
+      }
+    }
+
+  // Chips
+  const lista = document.getElementById('palabras-lista');
+  lista.innerHTML = '';
+  PALABRAS.forEach(p => {
+    const chip = document.createElement('span');
+    chip.className = 'palabra-chip'; chip.id = 'chip-'+p.word;
+    chip.textContent = p.word; lista.appendChild(chip);
+  });
+
+  return placements;
+}
+
+let sopaPlacement = [], sopaFoundCount = 0;
+
+function resetSopa() {
+  selectedCells = []; foundCells = new Set(); sopaFoundCount = 0;
+  PALABRAS.forEach(p => p.found = false);
+  sopaPlacement = buildSopa();
+  document.getElementById('sopa-score').textContent = 'Encontradas: 0 / 5';
+  document.getElementById('sopa-msg').textContent = '';
+}
+
+function sopaClick(e) {
+  const cell = e.currentTarget;
+  const r = +cell.dataset.r, c = +cell.dataset.c;
+  const key = `${r},${c}`;
+  if (foundCells.has(key)) return;
+
+  if (selectedCells.length === 0) {
+    selectedCells = [{r, c, el: cell}];
+    cell.classList.add('selected');
+  } else if (selectedCells.length === 1) {
+    if (selectedCells[0].r === r && selectedCells[0].c === c) {
+      selectedCells[0].el.classList.remove('selected');
+      selectedCells = []; return;
+    }
+    selectedCells.push({r, c, el: cell});
+    cell.classList.add('selected');
+    checkSopaWord();
+  }
+}
+
+function getCellsBetween(r1,c1,r2,c2) {
+  const dr = r2-r1, dc = c2-c1;
+  const len = Math.max(Math.abs(dr), Math.abs(dc));
+  if (len === 0) return null;
+  const sr = dr === 0 ? 0 : dr/Math.abs(dr);
+  const sc = dc === 0 ? 0 : dc/Math.abs(dc);
+  if (dr !== 0 && dc !== 0 && Math.abs(dr) !== Math.abs(dc)) return null;
+  const cells = [];
+  for (let i = 0; i <= len; i++) cells.push([r1+sr*i, c1+sc*i]);
+  return cells;
+}
+
+function checkSopaWord() {
+  const {r:r1,c:c1,el:el1} = selectedCells[0];
+  const {r:r2,c:c2,el:el2} = selectedCells[1];
+  const betweenCells = getCellsBetween(r1,c1,r2,c2);
+
+  if (!betweenCells) {
+    clearSelection(); return;
+  }
+
+  const word = betweenCells.map(([r,c]) => gridData[r][c]).join('');
+  const wordRev = word.split('').reverse().join('');
+
+  const match = PALABRAS.find(p => !p.found && (p.word === word || p.word === wordRev));
+
+  if (match) {
+    match.found = true; sopaFoundCount++;
+    betweenCells.forEach(([r,c]) => {
+      foundCells.add(`${r},${c}`);
+      const cell = document.querySelector(`.sopa-cell[data-r="${r}"][data-c="${c}"]`);
+      if (cell) { cell.classList.remove('selected'); cell.classList.add('found'); cell.style.color = match.color; }
+    });
+    document.getElementById('chip-'+match.word).classList.add('found');
+    document.getElementById('sopa-score').textContent = `Encontradas: ${sopaFoundCount} / 5`;
+    document.getElementById('sopa-msg').textContent = `✅ ¡"${match.word}" encontrada!`;
+    if (sopaFoundCount === 5) {
+      setTimeout(() => { document.getElementById('sopa-msg').textContent = '🎉 ¡Encontraste todas las palabras! ¡Excelente!'; }, 300);
+    }
+  } else {
+    clearSelection();
+  }
+  selectedCells = [];
+}
+
+function clearSelection() {
+  selectedCells.forEach(s => s.el.classList.remove('selected'));
+  selectedCells = [];
+}
+
+// ════════════════════════════════════════════
+//  JUEGO 2: EMPAREJAR
+// ════════════════════════════════════════════
+const matchData = [
+  { term: 'DINÁMICO',       def: 'Su estado evoluciona con el tiempo mediante retroalimentación continua.' },
+  { term: 'ESTÁTICO',       def: 'Su salida depende solo de la entrada actual, sin memoria temporal.' },
+  { term: 'ADAPTATIVO',     def: 'Modifica su estructura o parámetros para mantener su desempeño ante cambios del entorno.' },
+  { term: 'ABIERTO',        def: 'Intercambia materia, energía e información con su entorno externo.' },
+  { term: 'PROBABILÍSTICO', def: 'Su comportamiento futuro se describe mediante distribuciones de probabilidad.' },
+  { term: 'DETERMINÍSTICO', def: 'Dado el estado inicial, su evolución puede predecirse con total exactitud.' },
+];
+
+let matchSelected = null, matchFoundCount = 0;
+
+function buildMatch() {
+  matchFoundCount = 0; matchSelected = null;
+  document.getElementById('match-score').textContent = 'Pares encontrados: 0 / 6';
+  document.getElementById('match-win').classList.remove('show');
+
+  const terms = [...matchData].sort(() => Math.random()-.5);
+  const defs  = [...matchData].sort(() => Math.random()-.5);
+
+  const termsCol = document.getElementById('terms-col');
+  const defsCol  = document.getElementById('defs-col');
+  termsCol.innerHTML = ''; defsCol.innerHTML = '';
+
+  terms.forEach(item => {
+    const card = document.createElement('div');
+    card.className = 'match-card term'; card.dataset.id = item.term;
+    card.textContent = item.term; card.addEventListener('click', matchClick);
+    termsCol.appendChild(card);
+  });
+  defs.forEach(item => {
+    const card = document.createElement('div');
+    card.className = 'match-card def'; card.dataset.id = item.term;
+    card.textContent = item.def; card.addEventListener('click', matchClick);
+    defsCol.appendChild(card);
+  });
+}
+
+function matchClick(e) {
+  const card = e.currentTarget;
+  if (card.classList.contains('matched')) return;
+
+  if (!matchSelected) {
+    matchSelected = card;
+    card.classList.add('selected');
+  } else {
+    if (matchSelected === card) { card.classList.remove('selected'); matchSelected = null; return; }
+
+    const id1 = matchSelected.dataset.id;
+    const id2 = card.dataset.id;
+
+    if (id1 === id2) {
+      // Match!
+      [matchSelected, card].forEach(c => { c.classList.remove('selected'); c.classList.add('matched'); c.removeEventListener('click', matchClick); });
+      matchFoundCount++;
+      document.getElementById('match-score').textContent = `Pares encontrados: ${matchFoundCount} / 6`;
+      if (matchFoundCount === 6) document.getElementById('match-win').classList.add('show');
+    } else {
+      // Wrong
+      [matchSelected, card].forEach(c => { c.classList.add('wrong'); setTimeout(() => c.classList.remove('wrong','selected'), 600); });
+    }
+    matchSelected = null;
+  }
+}
+
+function resetMatch() { buildMatch(); }
+
+// ════════════════════════════════════════════
+//  QUIZ
+// ════════════════════════════════════════════
+const quizData = [
+  {
+    q: '¿Cuál es la principal característica de un sistema dinámico?',
+    opts: [
+      'Su salida es constante en el tiempo',
+      'Su estado evoluciona con el tiempo en respuesta a entradas o condiciones internas',
+      'No intercambia información con el entorno',
+      'Sus resultados son siempre impredecibles'
+    ],
+    correct: 1,
+    fb: 'Correcto. Un sistema dinámico tiene variables de estado que cambian con el tiempo, a diferencia del sistema estático cuya salida es instantánea.',
+    fbWrong: 'Incorrecto. La característica principal de un sistema dinámico es precisamente que su estado varía con el tiempo.'
+  },
+  {
+    q: 'Un ecosistema boscoso que recibe lluvia, luz solar, y expulsa oxígeno y vapor de agua es un ejemplo de sistema:',
+    opts: [
+      'Cerrado y determinístico',
+      'Estático y adaptativo',
+      'Abierto y dinámico',
+      'Autónomo y estocástico'
+    ],
+    correct: 2,
+    fb: '¡Exacto! El ecosistema intercambia materia y energía con su entorno (abierto) y sus variables evolucionan constantemente (dinámico).',
+    fbWrong: 'No es correcto. Un ecosistema intercambia con su entorno (abierto) y cambia con el tiempo (dinámico).'
+  },
+  {
+    q: '¿Qué distingue a un sistema probabilístico de uno determinístico?',
+    opts: [
+      'El determinístico siempre falla, el probabilístico nunca',
+      'El probabilístico describe sus salidas mediante distribuciones de probabilidad; el determinístico predice salidas exactas',
+      'El probabilístico es siempre dinámico; el determinístico siempre estático',
+      'No hay diferencia real entre ambos tipos'
+    ],
+    correct: 1,
+    fb: 'Correcto. La diferencia fundamental está en la capacidad de predicción: certeza total vs. distribución de probabilidades.',
+    fbWrong: 'Incorrecto. La distinción clave es que el probabilístico usa probabilidades para describir salidas futuras, mientras el determinístico las predice con exactitud.'
+  },
+  {
+    q: 'Un algoritmo de machine learning que mejora su precisión con más datos es principalmente un sistema:',
+    opts: [
+      'Cerrado y estático',
+      'Determinístico y autónomo',
+      'Adaptativo',
+      'Cerrado y estático'
+    ],
+    correct: 2,
+    fb: 'Correcto. El machine learning es el ejemplo más emblemático de sistema adaptativo: modifica sus parámetros internos en respuesta a nuevos datos.',
+    fbWrong: 'Incorrecto. Un algoritmo que aprende y mejora con el tiempo es un sistema adaptativo por definición.'
+  },
+  {
+    q: '¿Cuál de las siguientes afirmaciones sobre los sistemas CERRADOS es verdadera?',
+    opts: [
+      'Intercambian libremente materia con el entorno',
+      'Aprenden del entorno y se adaptan continuamente',
+      'Tienden al incremento de entropía interna y al equilibrio sin intercambio de materia',
+      'Siempre son sistemas determinísticos'
+    ],
+    correct: 2,
+    fb: '¡Correcto! Los sistemas cerrados no intercambian materia con el entorno, lo que lleva a un aumento de entropía y tendencia al equilibrio (Segunda Ley de la Termodinámica).',
+    fbWrong: 'Incorrecto. Los sistemas cerrados se caracterizan por no intercambiar materia con su entorno, lo que incrementa la entropía interna.'
+  }
+];
+
+let quizIdx = 0, quizScore = 0, quizAnswers = [];
+
+function renderQuiz() {
+  const area = document.getElementById('quiz-question-area');
+  const result = document.getElementById('quiz-result');
+
+  if (quizIdx >= quizData.length) {
+    area.style.display = 'none';
+    showQuizResult(); return;
+  }
+
+  result.classList.remove('show');
+  area.style.display = 'block';
+  document.getElementById('quiz-bar').style.width = `${(quizIdx/quizData.length)*100}%`;
+
+  const q = quizData[quizIdx];
+  const letters = ['A','B','C','D'];
+
+  area.innerHTML = `
+    <div class="quiz-question-box">
+      <div class="quiz-q-num">Pregunta ${quizIdx+1} de ${quizData.length}</div>
+      <div class="quiz-q-text">${q.q}</div>
+      <div class="quiz-options" id="quiz-opts">
+        ${q.opts.map((o,i) => `
+          <div class="quiz-opt" data-idx="${i}" onclick="selectOpt(${i})">
+            <span class="opt-letter">${letters[i]}</span>${o}
+          </div>
+        `).join('')}
+      </div>
+      <div class="quiz-feedback" id="quiz-fb"></div>
+    </div>
+    <div id="quiz-nav" class="quiz-nav"></div>
+  `;
+}
+
+function selectOpt(idx) {
+  const q = quizData[quizIdx];
+  const opts = document.querySelectorAll('.quiz-opt');
+  opts.forEach(o => o.classList.add('disabled'));
+
+  const chosen = opts[idx];
+  const fb = document.getElementById('quiz-fb');
+
+  if (idx === q.correct) {
+    chosen.classList.add('correct');
+    fb.textContent = '✅ ' + q.fb;
+    fb.className = 'quiz-feedback show correct-fb';
+    quizScore++;
+    quizAnswers.push({q: q.q, correct: true, answer: q.opts[idx]});
+  } else {
+    chosen.classList.add('wrong');
+    opts[q.correct].classList.add('correct');
+    fb.textContent = '❌ ' + q.fbWrong;
+    fb.className = 'quiz-feedback show wrong-fb';
+    quizAnswers.push({q: q.q, correct: false, answer: q.opts[idx], correctAnswer: q.opts[q.correct]});
+  }
+
+  const nav = document.getElementById('quiz-nav');
+  nav.innerHTML = `<button class="btn btn-primary" onclick="nextQuizQ()">${quizIdx < quizData.length-1 ? 'Siguiente →' : 'Ver resultados'}</button>`;
+}
+
+function nextQuizQ() { quizIdx++; renderQuiz(); }
+
+function showQuizResult() {
+  document.getElementById('quiz-bar').style.width = '100%';
+  const result = document.getElementById('quiz-result');
+  const pct = (quizScore/quizData.length)*100;
+  const cls = pct >= 80 ? 'score-green' : pct >= 60 ? 'score-yellow' : 'score-red';
+  const msg = pct >= 80 ? '¡Excelente dominio del tema!' : pct >= 60 ? 'Buen trabajo, sigue repasando.' : 'Revisa el contenido e inténtalo de nuevo.';
+
+  const breakdown = quizAnswers.map(a =>
+    `<li class="${a.correct ? 'ok' : 'fail'}">${a.correct ? '✅' : '❌'} ${a.q.substring(0,60)}...</li>`
+  ).join('');
+
+  result.innerHTML = `
+    <h3>Resultado del Quiz</h3>
+    <div class="score-big ${cls}">${quizScore}/${quizData.length}</div>
+    <div class="score-label">${pct.toFixed(0)}% — ${msg}</div>
+    <ul id="quiz-breakdown">${breakdown}</ul>
+    <button class="btn btn-outline" onclick="resetQuiz()" style="margin-top:1.5rem">Reintentar</button>
+  `;
+  result.classList.add('show');
+}
+
+function resetQuiz() {
+  quizIdx = 0; quizScore = 0; quizAnswers = [];
+  document.getElementById('quiz-bar').style.width = '0%';
+  document.getElementById('quiz-result').classList.remove('show');
+  document.getElementById('quiz-question-area').style.display = 'block';
+  renderQuiz();
+}
+
+// ════════════════════════════════════════════
+//  INIT
+// ════════════════════════════════════════════
+document.addEventListener('DOMContentLoaded', () => {
+  sopaPlacement = buildSopa();
+  buildMatch();
+  renderQuiz();
+});
+</script>
+</body>
+</html>
