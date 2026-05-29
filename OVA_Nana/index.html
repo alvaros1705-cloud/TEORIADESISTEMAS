@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OVA - Teoría de Colas y Teoría de Juegos</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,600&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+  <style>
+
+    :root {
+      --rose-50: #fff1f3;
+      --rose-100: #ffe4e8;
+      --rose-200: #fecdd6;
+      --rose-300: #fda4b4;
+      --rose-400: #fb7091;
+      --rose-500: #f43f6b;
+      --rose-600: #e11d55;
+      --rose-700: #be1246;
+      --rose-800: #9f1239;
+      --plum: #6b2d5e;
+      --plum-light: #9b4d8a;
+      --cream: #fdf8f5;
+      --warm-white: #fffaf8;
+      --text-dark: #2a1520;
+      --text-mid: #5c3048;
+      --text-muted: #9a6880;
+    }
+
+    * { margin:0; padding:0; box-sizing:border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--cream);
+      color: var(--text-dark);
+      font-family: 'EB Garamond', serif;
+      font-size: 18px;
+      line-height: 1.75;
+    }
+
+    /* ─── HEADER ─── */
+    header {
+      position: relative;
+      background: var(--plum);
+      overflow: hidden;
+      padding: 90px 20px 80px;
+      text-align: center;
+    }
+
+    header::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 20% 30%, rgba(244,63,107,0.35) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 80% at 80% 70%, rgba(155,77,138,0.4) 0%, transparent 55%);
+    }
+
+    header::after {
+      content: '❧';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 2.5rem;
+      color: var(--rose-300);
+      opacity: 0.6;
+    }
+
+    .header-ornament {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-weight: 300;
+      color: var(--rose-300);
+      font-size: 1.1rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      margin-bottom: 18px;
+      position: relative;
+      animation: fadeDown 0.8s ease both;
+    }
+
+    header h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 600;
+      font-size: clamp(2.4rem, 6vw, 4.2rem);
+      color: #fff;
+      line-height: 1.15;
+      position: relative;
+      animation: fadeDown 0.9s ease 0.1s both;
+      letter-spacing: -0.01em;
+    }
+
+    header h1 em {
+      font-style: italic;
+      color: var(--rose-300);
+    }
+
+    header p {
+      font-family: 'Lato', sans-serif;
+      font-weight: 300;
+      font-size: 1rem;
+      color: rgba(255,255,255,0.75);
+      max-width: 560px;
+      margin: 20px auto 0;
+      letter-spacing: 0.04em;
+      position: relative;
+      animation: fadeDown 1s ease 0.2s both;
+    }
+
+    /* ─── NAV ─── */
+    nav {
+      background: var(--warm-white);
+      border-bottom: 1px solid var(--rose-200);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 20px rgba(107,45,94,0.08);
+    }
+
+    nav ul {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 4px;
+      list-style: none;
+      padding: 12px 16px;
+    }
+
+    nav a {
+      font-family: 'Lato', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-mid);
+      text-decoration: none;
+      padding: 7px 16px;
+      border-radius: 40px;
+      transition: all 0.25s;
+    }
+
+    nav a:hover {
+      background: var(--rose-100);
+      color: var(--rose-600);
+    }
+
+    /* ─── SECTIONS ─── */
+    section {
+      padding: 80px 8%;
+    }
+
+    section:nth-child(even) {
+      background: var(--warm-white);
+    }
+
+    .section-label {
+      font-family: 'Lato', sans-serif;
+      font-size: 0.72rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--rose-500);
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 600;
+      font-size: clamp(2rem, 4vw, 3rem);
+      color: var(--plum);
+      margin-bottom: 10px;
+      line-height: 1.2;
+    }
+
+    h2 em { font-style: italic; color: var(--rose-500); }
+
+    .divider {
+      width: 60px;
+      height: 2px;
+      background: linear-gradient(90deg, var(--rose-400), var(--rose-200));
+      margin: 18px 0 36px;
+      border-radius: 2px;
+    }
+
+    /* ─── CARDS ─── */
+    .card {
+      background: #fff;
+      border-radius: 20px;
+      padding: 32px 36px;
+      margin-top: 20px;
+      border: 1px solid var(--rose-100);
+      box-shadow: 0 4px 30px rgba(107,45,94,0.07);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 40px rgba(107,45,94,0.13);
+    }
+
+    .card h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 600;
+      font-size: 1.6rem;
+      color: var(--plum);
+      margin-bottom: 12px;
+    }
+
+    .card h4 {
+      font-family: 'Lato', sans-serif;
+      font-size: 0.78rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--rose-500);
+      font-weight: 700;
+      margin: 18px 0 10px;
+    }
+
+    .card ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .card ul li {
+      padding: 5px 0 5px 22px;
+      position: relative;
+      color: var(--text-mid);
+      font-size: 0.97rem;
+    }
+
+    .card ul li::before {
+      content: '◆';
+      position: absolute;
+      left: 0;
+      color: var(--rose-300);
+      font-size: 0.5rem;
+      top: 11px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+      margin-top: 24px;
+    }
+
+    /* ─── EXAMPLES ─── */
+    .example {
+      background: linear-gradient(135deg, var(--rose-50), #fff);
+      border-left: 4px solid var(--rose-400);
+      border-radius: 0 16px 16px 0;
+      padding: 24px 28px;
+      margin-top: 20px;
+    }
+
+    .example h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.35rem;
+      font-weight: 600;
+      color: var(--plum);
+      margin-bottom: 10px;
+    }
+
+    .example p {
+      color: var(--text-mid);
+      font-size: 0.97rem;
+    }
+    .example img{
+width:70%;
+height:180px;
+object-fit:cover;
+display:block;
+margin:auto;
+margin-bottom:18px;
+border-radius:16px;
+box-shadow:0 4px 20px rgba(0,0,0,0.08);
+}
+
+
+    /* ─── GAME BOXES ─── */
+    .game-box {
+      background: #fff;
+      border: 1px solid var(--rose-200);
+      border-radius: 20px;
+      padding: 36px;
+      margin-top: 28px;
+      position: relative;
+      overflow: hidden;
+      transition: box-shadow 0.3s;
+    }
+
+    .game-box::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--rose-400), var(--plum-light));
+    }
+
+    .game-box:hover { box-shadow: 0 8px 40px rgba(107,45,94,0.12); }
+
+    .game-box h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--plum);
+      margin-bottom: 14px;
+    }
+
+    .game-box p { color: var(--text-mid); margin-bottom: 16px; }
+
+    .game-input {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .game-input input {
+      flex: 1;
+      min-width: 180px;
+      font-family: 'EB Garamond', serif;
+      font-size: 1rem;
+      padding: 12px 18px;
+      border: 1.5px solid var(--rose-200);
+      border-radius: 12px;
+      outline: none;
+      background: var(--rose-50);
+      color: var(--text-dark);
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .game-input input:focus {
+      border-color: var(--rose-400);
+      box-shadow: 0 0 0 3px rgba(244,63,107,0.12);
+    }
+
+    /* ─── BUTTONS ─── */
+    .btn {
+      font-family: 'Lato', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      background: var(--plum);
+      color: #fff;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 40px;
+      cursor: pointer;
+      transition: all 0.25s;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn:hover {
+      background: var(--rose-600);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(244,63,107,0.3);
+    }
+
+    .btn:active { transform: translateY(0); }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--plum);
+      border: 2px solid var(--rose-300);
+    }
+
+    .btn-outline:hover {
+      background: var(--rose-50);
+      border-color: var(--rose-500);
+      color: var(--rose-600);
+      box-shadow: none;
+    }
+
+    .btn-vf {
+      background: transparent;
+      color: var(--plum);
+      border: 2px solid var(--rose-300);
+      padding: 12px 32px;
+      font-size: 0.85rem;
+    }
+
+    .btn-vf:hover {
+      background: var(--plum);
+      color: #fff;
+      border-color: var(--plum);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(107,45,94,0.25);
+    }
+
+    /* ─── RESULT MESSAGES ─── */
+    .result-msg {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 14px;
+      padding: 10px 20px;
+      border-radius: 40px;
+      font-family: 'Lato', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 700;
+      opacity: 0;
+      transform: translateY(8px);
+      transition: opacity 0.4s, transform 0.4s;
+    }
+
+    .result-msg.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .result-msg.success {
+      background: #f0fdf4;
+      color: #16a34a;
+      border: 1px solid #bbf7d0;
+    }
+
+    .result-msg.error {
+      background: #fff1f2;
+      color: #e11d48;
+      border: 1px solid #fecdd3;
+    }
+
+    /* ─── QUIZ ─── */
+    .quiz-question {
+      margin-bottom: 28px;
+    }
+
+    .quiz-question p {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.25rem;
+      font-weight: 500;
+      color: var(--plum);
+      margin-bottom: 14px;
+    }
+
+    .radio-option {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 16px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background 0.2s;
+      font-size: 0.97rem;
+      color: var(--text-mid);
+      margin-bottom: 6px;
+    }
+
+    .radio-option:hover { background: var(--rose-50); }
+
+    .radio-option input[type="radio"] {
+      accent-color: var(--rose-500);
+      width: 16px;
+      height: 16px;
+      cursor: pointer;
+    }
+
+    #resultadoQuiz {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--plum);
+      margin-top: 20px;
+      padding: 20px 28px;
+      background: var(--rose-50);
+      border-radius: 16px;
+      border: 1px solid var(--rose-200);
+      display: none;
+    }
+
+    /* ─── VIDEOS ─── */
+    iframe {
+      width: 100%;
+      height: 380px;
+      border: none;
+      border-radius: 16px;
+      margin-top: 20px;
+    }
+
+    /* ─── FOOTER ─── */
+    footer {
+      background: var(--plum);
+      color: rgba(255,255,255,0.7);
+      text-align: center;
+      padding: 50px 20px;
+      font-family: 'Lato', sans-serif;
+      font-size: 0.85rem;
+      letter-spacing: 0.05em;
+      position: relative;
+    }
+
+    footer::before {
+      content: '❧';
+      display: block;
+      font-size: 2rem;
+      color: var(--rose-300);
+      opacity: 0.5;
+      margin-bottom: 18px;
+    }
+
+    footer strong {
+      display: block;
+      font-weight: 700;
+      color: #fff;
+      font-size: 1rem;
+      margin-bottom: 6px;
+    }
+
+    /* ─── ANIMATIONS ─── */
+    @keyframes fadeDown {
+      from { opacity: 0; transform: translateY(-18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes popIn {
+      0%   { transform: scale(0.85); opacity: 0; }
+      70%  { transform: scale(1.04); }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    @keyframes shake {
+      0%,100% { transform: translateX(0); }
+      20%     { transform: translateX(-6px); }
+      40%     { transform: translateX(6px); }
+      60%     { transform: translateX(-4px); }
+      80%     { transform: translateX(4px); }
+    }
+
+    @keyframes confettiFall {
+      0%   { transform: translateY(-20px) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(60px) rotate(360deg); opacity: 0; }
+    }
+
+    .pop { animation: popIn 0.45s cubic-bezier(0.34,1.56,0.64,1) both; }
+    .shake { animation: shake 0.5s ease both; }
+
+    .confetti-piece {
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      border-radius: 2px;
+      animation: confettiFall 0.8s ease forwards;
+      pointer-events: none;
+    }
+
+    /* ─── FLIP CARD (VF game) ─── */
+    .vf-options {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-top: 6px;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-ornament"></div>
+  <h1>Teoría de <em>Colas</em> &<br>Teoría de <em>Juegos</em></h1>
+  <p>Teoría General de Sistemas — Fundamentos y aplicaciones prácticas</p>
+</header>
+
+<nav>
+  <ul>
+    <li><a href="#contexto">Contextualización</a></li>
+    <li><a href="#conceptos">Conceptos</a></li>
+    <li><a href="#ejemplos">Ejemplos</a></li>
+    <li><a href="#ejercicios">Ejercicios</a></li>
+    <li><a href="#juegos">Juegos</a></li>
+    <li><a href="#videos">Video</a></li>
+    <li><a href="#quiz">Quiz</a></li>
+  </ul>
+</nav>
+
+<!-- CONTEXTUALIZACIÓN -->
+<section id="contexto">
+  <div class="section-label">Introducción</div>
+  <h2>Contextualización <em>del tema</em></h2>
+  <div class="divider"></div>
+
+  <div class="card">
+    <p>La teoría de colas y la teoría de juegos son ramas fundamentales dentro de la Teoría General de Sistemas. Ambas permiten analizar situaciones reales relacionadas con la toma de decisiones, administración de recursos, tiempos de espera y comportamiento estratégico entre individuos o empresas.</p>
+
+    <br>
+
+    <p>La <strong>teoría de colas</strong> estudia los sistemas donde las personas, vehículos o procesos deben esperar para recibir un servicio. Ejemplos comunes son bancos, hospitales, supermercados, plataformas digitales y sistemas de atención telefónica.</p>
+
+    <br>
+
+    <p>Un sistema de colas funciona cuando los usuarios llegan a un sistema, esperan si no hay capacidad disponible y son atendidos según una regla establecida. El objetivo es analizar cómo se comporta el sistema bajo diferentes niveles de demanda.</p>
+
+    <br>
+
+    <p>Por otro lado, la <strong>teoría de juegos</strong> analiza cómo las decisiones tomadas por una persona o grupo afectan a los demás participantes. Se utiliza en economía, política, negocios, deportes y tecnología.</p>
+     <br>
+      <p>La teoría de juegos estudia cómo las decisiones de un individuo dependen de las decisiones de otros. Cada participante busca obtener el mejor resultado posible según lo que espera que hagan los demás.</p>
+  
+</div>
+</section>
+
+<!-- CONCEPTOS -->
+<section id="conceptos">
+  <div class="section-label">Marco Teórico</div>
+  <h2>Explicación <em>conceptual</em></h2>
+  <div class="divider"></div>
+
+  <div class="grid">
+    <div class="card">
+      <h3>Teoría de Colas</h3>
+      <p>Es una disciplina matemática que estudia el comportamiento de las líneas de espera. Busca optimizar tiempos y recursos para mejorar la eficiencia de los sistemas.</p>
+      <h4>Elementos principales</h4>
+      <ul>
+        <li>Clientes</li>
+        <li>Servidor</li>
+        <li>Tiempo de espera</li>
+        <li>Capacidad del sistema</li>
+        <li>Disciplina de atención</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h3>Teoría de Juegos</h3>
+      <p>Rama matemática que estudia la toma de decisiones estratégicas entre diferentes participantes llamados jugadores.</p>
+      <h4>Conceptos importantes</h4>
+      <ul>
+        <li>Jugadores</li>
+        <li>Estrategias</li>
+        <li>Recompensas</li>
+        <li>Cooperación</li>
+        <li>Competencia</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- EJEMPLOS -->
+<section id="ejemplos">
+  <div class="section-label">Aplicaciones</div>
+  <h2>Ejemplos <em>prácticos</em></h2>
+  <div class="divider"></div>
+
+  <div class="example">
+    <img src="img/Ejemplo_T.Colas.png" alt="Teoría de colas">
+    <h3>Ejemplo — Teoría de Colas</h3>
+    <p>En un banco llegan aproximadamente 20 personas por hora y el cajero puede atender hasta 25 personas en ese mismo tiempo. Gracias a la teoría de colas es posible analizar el tiempo promedio de espera de los clientes, identificar momentos de congestión y determinar si es necesario abrir más cajas de atención.
+    Este tipo de análisis ayuda a mejorar la eficiencia del servicio, reducir filas y aumentar la satisfacción de los usuarios. La teoría de colas también es utilizada en hospitales, supermercados, restaurantes y plataformas digitales de atención al cliente.</p>
+  </div>
+
+  <div class="example">
+    <img src="img/Ejemplo_T.Juegos.png" alt="Teoría de juegos">
+    <h3>Ejemplo — Teoría de Juegos</h3>
+    <p>Dos empresas competidoras deben decidir entre bajar o mantener los precios de sus productos. Si ambas bajan los precios, pueden atraer más clientes, pero también disminuir sus ganancias. Si ambas mantienen los precios, las ganancias pueden ser más estables.
+
+La teoría de juegos permite analizar las posibles decisiones estratégicas de cada empresa y predecir cuál opción resulta más conveniente dependiendo de las acciones del otro participante. Esta teoría es utilizada en economía, política, negocios y negociaciones internacionales.</p>
+  </div>
+</section>
+
+<!-- EJERCICIOS -->
+<section id="ejercicios">
+  <div class="section-label">Práctica</div>
+  <h2>Ejercicios <em>planteados</em></h2>
+  <div class="divider"></div>
+
+  <div class="card">
+    <h3>Ejercicio 1</h3>
+    <p>Un supermercado atiende 30 clientes por hora y llegan 25 clientes. ¿Crees que habrá largas filas?</p>
+  </div>
+
+  <div class="card">
+    <h3>Ejercicio 2</h3>
+    <p>Dos jugadores participan en un juego donde pueden cooperar o competir. Analiza cuál opción genera mayor beneficio colectivo.</p>
+  </div>
+</section>
+
+<!-- JUEGOS -->
+<section id="juegos">
+  <div class="section-label">Interactividad</div>
+  <h2>Juegos <em>interactivos</em></h2>
+  <div class="divider"></div>
+
+  <!-- Juego 1 -->
+  <div class="game-box" id="game1">
+    <h3>Juego 1 — Adivina el concepto</h3>
+    <p>¿Qué teoría estudia los tiempos de espera en sistemas de servicio?</p>
+    <div class="game-input">
+      <input type="text" id="respuesta1" placeholder="Escribe tu respuesta…">
+      <button class="btn" onclick="verificarJuego1()">Verificar ›</button>
+    </div>
+    <span id="resultado1" class="result-msg"></span>
+  </div>
+
+  <!-- Juego 2 -->
+  <div class="game-box" id="game2">
+    <h3>Juego 2 — Decisión estratégica</h3>
+    <p>Si dos empresas cooperan, ambas ganan más. ¿Qué teoría explica este comportamiento?</p>
+    <div class="game-input">
+      <input type="text" id="respuesta2" placeholder="Escribe tu respuesta…">
+      <button class="btn" onclick="verificarJuego2()">Verificar ›</button>
+    </div>
+    <span id="resultado2" class="result-msg"></span>
+  </div>
+
+  <!-- Juego 3 -->
+  <div class="game-box" id="game3">
+    <h3>Juego 3 — Verdadero o falso</h3>
+    <p>¿Es verdad que la teoría de juegos <em>solo</em> se utiliza en videojuegos?</p>
+    <div class="vf-options">
+      <button class="btn btn-vf" onclick="verdaderoFalso(true)">Verdadero</button>
+      <button class="btn btn-vf" onclick="verdaderoFalso(false)">Falso</button>
+    </div>
+    <span id="resultado3" class="result-msg"></span>
+  </div>
+</section>
+
+<!-- VIDEOS -->
+<section id="videos">
+  <div class="section-label">Recursos</div>
+  <h2>Videos <em>relacionados</em></h2>
+  <div class="divider"></div>
+
+  <div class="grid">
+    <div class="card">
+      <h3>Introducción a la Teoría de Colas</h3>
+      <iframe src="https://www.youtube.com/embed/ZwRrsCwdCi4" allowfullscreen></iframe>
+    </div>
+    <div class="card">
+      <h3>Introducción a la Teoría de Juegos</h3>
+      <iframe src="https://www.youtube.com/embed/-kVD7v_c-R8" allowfullscreen></iframe>
+    </div>
+  </div>
+</section>
+
+<!-- QUIZ -->
+<section id="quiz">
+  <div class="section-label">Evaluación</div>
+  <h2>Quiz <em>interactivo</em></h2>
+  <div class="divider"></div>
+
+  <div class="card">
+    <div class="quiz-question">
+      <p><strong>1.</strong> ¿Qué estudia la teoría de colas?</p>
+      <label class="radio-option"><input type="radio" name="q1" value="a"> Sistemas solares</label>
+      <label class="radio-option"><input type="radio" name="q1" value="b"> Líneas de espera</label>
+      <label class="radio-option"><input type="radio" name="q1" value="c"> Redes sociales</label>
+    </div>
+
+    <div class="quiz-question">
+      <p><strong>2.</strong> ¿Qué analiza la teoría de juegos?</p>
+      <label class="radio-option"><input type="radio" name="q2" value="a"> Estrategias y decisiones</label>
+      <label class="radio-option"><input type="radio" name="q2" value="b"> Solo videojuegos</label>
+      <label class="radio-option"><input type="radio" name="q2" value="c"> El clima</label>
+    </div>
+
+    <button class="btn" onclick="calificarQuiz()">Enviar Quiz ›</button>
+    <div id="resultadoQuiz"></div>
+  </div>
+</section>
+
+<footer>
+  <strong>Diana Janneth Umaña Bayona</strong>
+  Universidad Simón Bolivar — Teoría General de Sistemas
+</footer>
+
+<script>
+function spawnConfetti(el) {
+  const colors = ['#fda4b4','#fb7091','#f43f6b','#9b4d8a','#fecdd6'];
+  const rect = el.getBoundingClientRect();
+  for (let i = 0; i < 14; i++) {
+    const c = document.createElement('div');
+    c.className = 'confetti-piece';
+    c.style.cssText = `
+      left:${Math.random()*100}%;
+      top:${20 + Math.random()*20}px;
+      background:${colors[Math.floor(Math.random()*colors.length)]};
+      animation-delay:${Math.random()*0.3}s;
+      transform:rotate(${Math.random()*360}deg);
+    `;
+    el.style.position = 'relative';
+    el.style.overflow = 'visible';
+    el.appendChild(c);
+    setTimeout(() => c.remove(), 1100);
+  }
+}
+
+function showResult(id, success, msg) {
+  const el = document.getElementById(id);
+  el.textContent = success ? '✓ ' + msg : '✗ ' + msg;
+  el.className = 'result-msg ' + (success ? 'success' : 'error');
+  void el.offsetWidth;
+  el.classList.add('show');
+  el.classList.add(success ? 'pop' : 'shake');
+  setTimeout(() => el.classList.remove('pop','shake'), 500);
+  if (success) spawnConfetti(el.closest('.game-box'));
+}
+
+function verificarJuego1() {
+  const r = document.getElementById('respuesta1').value.toLowerCase();
+  if (r.includes('colas')) {
+    showResult('resultado1', true, '¡Correcto! Es la Teoría de Colas.');
+  } else {
+    showResult('resultado1', false, 'Intenta de nuevo. Pista: piensa en filas…');
+  }
+}
+
+function verificarJuego2() {
+  const r = document.getElementById('respuesta2').value.toLowerCase();
+  if (r.includes('juegos')) {
+    showResult('resultado2', true, '¡Muy bien! Es la Teoría de Juegos.');
+  } else {
+    showResult('resultado2', false, 'Intenta de nuevo. Pista: decisiones estratégicas…');
+  }
+}
+
+function verdaderoFalso(valor) {
+  if (!valor) {
+    showResult('resultado3', true, 'Correcto — también se aplica en economía, negocios y política.');
+  } else {
+    showResult('resultado3', false, 'Incorrecto. Se usa en muchos campos más allá de los videojuegos.');
+  }
+}
+
+function calificarQuiz() {
+  let puntos = 0;
+  const q1 = document.querySelector('input[name="q1"]:checked');
+  const q2 = document.querySelector('input[name="q2"]:checked');
+  if (q1 && q1.value === 'b') puntos++;
+  if (q2 && q2.value === 'a') puntos++;
+
+  const res = document.getElementById('resultadoQuiz');
+  const msgs = [
+    '0 / 2 — Revisa el material e inténtalo de nuevo.',
+    '1 / 2 — ¡Vas bien! Repasa el tema que te costó.',
+    '2 / 2 — ¡Excelente! Dominas los conceptos fundamentales.'
+  ];
+  res.style.display = 'block';
+  res.textContent = msgs[puntos];
+  res.classList.add('pop');
+  setTimeout(() => res.classList.remove('pop'), 500);
+  if (puntos === 2) spawnConfetti(res);
+}
+</script>
+</body>
+</html>
