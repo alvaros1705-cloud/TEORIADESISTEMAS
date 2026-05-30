@@ -1,0 +1,1090 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>OVA – Orígenes y Principios de la TGS | Cristian Miranda Zuluaga</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --bg: #0a0e1a;
+    --surface: #111827;
+    --surface2: #1a2234;
+    --accent: #00d4aa;
+    --accent2: #f59e0b;
+    --accent3: #6366f1;
+    --text: #e8edf5;
+    --muted: #8892a4;
+    --border: rgba(0,212,170,0.15);
+    --card: rgba(26,34,52,0.8);
+    --glow: 0 0 40px rgba(0,212,170,0.15);
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'DM Sans',sans-serif;
+    font-weight:300;
+    line-height:1.7;
+    overflow-x:hidden;
+  }
+
+  /* ── BACKGROUND MESH ── */
+  body::before{
+    content:'';
+    position:fixed;inset:0;
+    background:
+      radial-gradient(ellipse 80% 50% at 20% 10%, rgba(99,102,241,0.12) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 40% at 80% 80%, rgba(0,212,170,0.08) 0%, transparent 50%),
+      radial-gradient(ellipse 40% 60% at 50% 50%, rgba(245,158,11,0.04) 0%, transparent 60%);
+    pointer-events:none;z-index:0;
+  }
+
+  /* ── NAV ── */
+  nav{
+    position:fixed;top:0;left:0;right:0;
+    background:rgba(10,14,26,0.92);
+    backdrop-filter:blur(20px);
+    border-bottom:1px solid var(--border);
+    z-index:1000;
+    padding:0 2rem;
+  }
+  .nav-inner{
+    max-width:1200px;margin:0 auto;
+    display:flex;align-items:center;justify-content:space-between;
+    height:64px;
+  }
+  .nav-logo{
+    font-family:'Playfair Display',serif;
+    font-size:1.1rem;color:var(--accent);
+    letter-spacing:0.02em;
+  }
+  .nav-logo span{color:var(--text);font-size:0.75rem;display:block;font-family:'DM Sans',sans-serif;font-weight:300;}
+  .nav-links{display:flex;gap:0.25rem;flex-wrap:wrap;}
+  .nav-links a{
+    color:var(--muted);text-decoration:none;
+    font-size:0.78rem;font-weight:500;letter-spacing:0.04em;
+    padding:0.35rem 0.75rem;border-radius:6px;
+    transition:all .2s;text-transform:uppercase;
+  }
+  .nav-links a:hover{color:var(--accent);background:rgba(0,212,170,0.08);}
+
+  /* ── HERO ── */
+  .hero{
+    min-height:100vh;
+    display:flex;align-items:center;justify-content:center;
+    padding:100px 2rem 4rem;
+    position:relative;z-index:1;
+  }
+  .hero-inner{max-width:900px;margin:0 auto;text-align:center;}
+  .hero-badge{
+    display:inline-block;
+    background:rgba(0,212,170,0.1);
+    border:1px solid rgba(0,212,170,0.3);
+    color:var(--accent);
+    font-size:0.72rem;letter-spacing:0.12em;text-transform:uppercase;
+    padding:0.4rem 1.2rem;border-radius:100px;
+    margin-bottom:2rem;
+    animation:fadeDown .6s ease both;
+  }
+  .hero h1{
+    font-family:'Playfair Display',serif;
+    font-size:clamp(2.8rem,7vw,5.5rem);
+    font-weight:900;
+    line-height:1.05;
+    margin-bottom:1.5rem;
+    animation:fadeDown .7s .1s ease both;
+  }
+  .hero h1 em{
+    font-style:normal;
+    background:linear-gradient(135deg, var(--accent) 0%, var(--accent3) 100%);
+    -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  }
+  .hero-sub{
+    color:var(--muted);font-size:1.1rem;max-width:620px;margin:0 auto 2.5rem;
+    animation:fadeDown .7s .2s ease both;
+  }
+  .hero-meta{
+    display:flex;gap:2rem;justify-content:center;flex-wrap:wrap;
+    animation:fadeDown .7s .3s ease both;
+  }
+  .hero-meta-item{text-align:center;}
+  .hero-meta-item strong{display:block;color:var(--accent);font-size:1.1rem;font-weight:500;}
+  .hero-meta-item span{color:var(--muted);font-size:0.8rem;}
+  .scroll-hint{
+    position:absolute;bottom:2.5rem;left:50%;transform:translateX(-50%);
+    display:flex;flex-direction:column;align-items:center;gap:0.5rem;
+    color:var(--muted);font-size:0.72rem;letter-spacing:0.1em;text-transform:uppercase;
+    animation:pulse 2s infinite;
+  }
+  .scroll-hint::after{
+    content:'';width:1px;height:40px;
+    background:linear-gradient(to bottom, var(--muted), transparent);
+  }
+
+  /* ── SECTIONS ── */
+  section{position:relative;z-index:1;padding:5rem 2rem;}
+  .section-inner{max-width:1100px;margin:0 auto;}
+  .section-label{
+    font-size:0.7rem;letter-spacing:0.16em;text-transform:uppercase;
+    color:var(--accent);font-weight:500;margin-bottom:0.75rem;
+  }
+  .section-title{
+    font-family:'Playfair Display',serif;
+    font-size:clamp(2rem,4vw,3rem);font-weight:700;
+    margin-bottom:1rem;line-height:1.15;
+  }
+  .section-desc{color:var(--muted);max-width:640px;margin-bottom:3rem;font-size:1rem;}
+
+  /* ── CARDS ── */
+  .cards-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1.5rem;}
+  .card{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:16px;
+    padding:2rem;
+    backdrop-filter:blur(12px);
+    transition:all .3s;
+    position:relative;overflow:hidden;
+  }
+  .card::before{
+    content:'';position:absolute;inset:0;
+    background:linear-gradient(135deg,rgba(0,212,170,0.04),transparent);
+    opacity:0;transition:opacity .3s;
+  }
+  .card:hover{transform:translateY(-4px);border-color:rgba(0,212,170,0.35);box-shadow:var(--glow);}
+  .card:hover::before{opacity:1;}
+  .card-icon{font-size:2rem;margin-bottom:1rem;}
+  .card h3{font-family:'Playfair Display',serif;font-size:1.2rem;margin-bottom:0.75rem;color:var(--text);}
+  .card p{color:var(--muted);font-size:0.9rem;}
+
+  /* ── TIMELINE ── */
+  .timeline{position:relative;padding-left:2rem;}
+  .timeline::before{
+    content:'';position:absolute;left:0;top:0;bottom:0;
+    width:2px;background:linear-gradient(to bottom,var(--accent),var(--accent3),transparent);
+    border-radius:2px;
+  }
+  .timeline-item{
+    position:relative;margin-bottom:3rem;padding-left:2.5rem;
+  }
+  .timeline-item::before{
+    content:'';position:absolute;left:-2rem;top:0.35rem;
+    width:12px;height:12px;border-radius:50%;
+    background:var(--accent);
+    box-shadow:0 0 12px var(--accent);
+    transform:translateX(-5px);
+  }
+  .timeline-year{
+    font-size:0.72rem;letter-spacing:0.1em;text-transform:uppercase;
+    color:var(--accent2);font-weight:500;margin-bottom:0.35rem;
+  }
+  .timeline-item h3{font-family:'Playfair Display',serif;font-size:1.3rem;margin-bottom:0.5rem;}
+  .timeline-item p{color:var(--muted);font-size:0.95rem;}
+
+  /* ── PRINCIPLES ── */
+  .principles-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1.25rem;}
+  .principle{
+    background:var(--card);border:1px solid var(--border);border-radius:12px;
+    padding:1.5rem;transition:all .3s;cursor:default;
+  }
+  .principle:hover{border-color:var(--accent3);box-shadow:0 0 30px rgba(99,102,241,0.12);}
+  .principle-num{
+    font-size:2.5rem;font-weight:700;font-family:'Playfair Display',serif;
+    color:rgba(0,212,170,0.15);line-height:1;margin-bottom:0.5rem;
+  }
+  .principle h4{font-size:1rem;font-weight:500;margin-bottom:0.5rem;color:var(--text);}
+  .principle p{color:var(--muted);font-size:0.85rem;}
+
+  /* ── VIDEO ── */
+  .video-wrap{
+    border-radius:16px;overflow:hidden;
+    border:1px solid var(--border);
+    aspect-ratio:16/9;
+    box-shadow:var(--glow);
+  }
+  .video-wrap iframe{width:100%;height:100%;border:0;}
+
+  /* ── EXERCISES ── */
+  .exercise-box{
+    background:var(--card);border:1px solid var(--border);border-radius:16px;
+    padding:2rem;margin-bottom:1.5rem;
+  }
+  .exercise-box h4{color:var(--accent2);font-size:0.78rem;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.5rem;}
+  .exercise-box p{color:var(--text);font-size:1rem;margin-bottom:1rem;}
+  .exercise-toggle{
+    background:transparent;border:1px solid var(--border);
+    color:var(--accent);font-size:0.85rem;padding:0.5rem 1.2rem;
+    border-radius:8px;cursor:pointer;font-family:'DM Sans',sans-serif;
+    transition:all .2s;
+  }
+  .exercise-toggle:hover{background:rgba(0,212,170,0.1);}
+  .exercise-answer{
+    display:none;margin-top:1rem;padding:1rem;
+    background:rgba(0,212,170,0.05);border-radius:8px;
+    border-left:2px solid var(--accent);
+    color:var(--muted);font-size:0.9rem;
+  }
+  .exercise-answer.visible{display:block;}
+
+  /* ── GAMES ── */
+  .game-section{margin-top:2rem;}
+  .game-title{font-family:'Playfair Display',serif;font-size:1.6rem;margin-bottom:0.5rem;}
+  .game-desc{color:var(--muted);font-size:0.9rem;margin-bottom:1.5rem;}
+
+  /* WORDSEARCH */
+  #ws-grid{
+    display:inline-grid;
+    gap:2px;
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:12px;
+    padding:1rem;
+    user-select:none;
+  }
+  .ws-cell{
+    width:36px;height:36px;
+    display:flex;align-items:center;justify-content:center;
+    font-size:1rem;font-weight:500;
+    background:var(--surface2);border-radius:6px;
+    cursor:pointer;transition:all .15s;color:var(--text);
+    border:1px solid transparent;
+  }
+  .ws-cell:hover{background:rgba(0,212,170,0.15);}
+  .ws-cell.selected{background:rgba(0,212,170,0.25);border-color:var(--accent);}
+  .ws-cell.found{background:rgba(0,212,170,0.35);color:var(--bg);font-weight:700;}
+  #ws-words-list{
+    display:flex;flex-wrap:wrap;gap:0.5rem;margin-bottom:1rem;
+  }
+  .ws-word{
+    padding:0.3rem 0.8rem;border-radius:100px;font-size:0.8rem;
+    background:var(--surface2);border:1px solid var(--border);
+    color:var(--muted);transition:all .3s;
+  }
+  .ws-word.found-word{background:rgba(0,212,170,0.2);border-color:var(--accent);color:var(--accent);text-decoration:line-through;}
+  #ws-msg{margin-top:1rem;font-size:1rem;color:var(--accent);min-height:1.5rem;}
+
+  /* DRAG-MATCH */
+  .match-container{display:grid;grid-template-columns:1fr 1fr;gap:2rem;max-width:700px;}
+  .match-col h4{color:var(--muted);font-size:0.75rem;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:1rem;}
+  .draggable{
+    background:var(--surface2);border:1px solid var(--border);border-radius:10px;
+    padding:0.75rem 1rem;margin-bottom:0.75rem;cursor:grab;
+    font-size:0.9rem;transition:all .2s;
+  }
+  .draggable:hover{border-color:var(--accent3);transform:translateX(4px);}
+  .draggable.dragging{opacity:0.5;cursor:grabbing;}
+  .drop-target{
+    background:rgba(26,34,52,0.5);border:2px dashed rgba(99,102,241,0.3);
+    border-radius:10px;padding:0.75rem 1rem;margin-bottom:0.75rem;
+    font-size:0.85rem;min-height:48px;color:var(--muted);
+    transition:all .2s;display:flex;align-items:center;
+  }
+  .drop-target.over{border-color:var(--accent3);background:rgba(99,102,241,0.1);}
+  .drop-target.correct{border-color:var(--accent);background:rgba(0,212,170,0.1);color:var(--text);}
+  .drop-target.wrong{border-color:#ef4444;background:rgba(239,68,68,0.1);}
+  #match-check{
+    margin-top:1rem;
+    background:var(--accent);color:var(--bg);
+    border:0;padding:0.75rem 2rem;border-radius:10px;
+    cursor:pointer;font-size:0.95rem;font-weight:500;font-family:'DM Sans',sans-serif;
+    transition:all .2s;
+  }
+  #match-check:hover{background:#00b894;}
+  #match-result{margin-top:1rem;font-size:0.95rem;min-height:1.5rem;}
+  #match-reset{
+    margin-top:0.5rem;margin-left:1rem;
+    background:transparent;border:1px solid var(--border);
+    color:var(--muted);padding:0.75rem 1.5rem;border-radius:10px;
+    cursor:pointer;font-size:0.9rem;font-family:'DM Sans',sans-serif;
+    transition:all .2s;display:none;
+  }
+  #match-reset:hover{border-color:var(--accent);color:var(--accent);}
+
+  /* ── QUIZ ── */
+  .quiz-wrap{max-width:700px;}
+  .quiz-question{
+    background:var(--card);border:1px solid var(--border);border-radius:14px;
+    padding:2rem;margin-bottom:1.5rem;
+  }
+  .quiz-question h4{font-size:1rem;margin-bottom:1.25rem;color:var(--text);}
+  .quiz-option{
+    display:block;width:100%;text-align:left;
+    background:var(--surface2);border:1px solid var(--border);
+    color:var(--text);font-size:0.9rem;font-family:'DM Sans',sans-serif;
+    padding:0.75rem 1rem;border-radius:8px;margin-bottom:0.5rem;
+    cursor:pointer;transition:all .2s;
+  }
+  .quiz-option:hover{border-color:var(--accent3);}
+  .quiz-option.selected{border-color:var(--accent3);background:rgba(99,102,241,0.15);}
+  .quiz-option.correct{border-color:var(--accent);background:rgba(0,212,170,0.15);}
+  .quiz-option.wrong{border-color:#ef4444;background:rgba(239,68,68,0.1);}
+  #quiz-submit{
+    background:var(--accent3);color:#fff;border:0;
+    padding:0.85rem 2.5rem;border-radius:10px;cursor:pointer;
+    font-size:1rem;font-family:'DM Sans',sans-serif;font-weight:500;
+    transition:all .2s;margin-top:0.5rem;
+  }
+  #quiz-submit:hover{background:#4f46e5;}
+  #quiz-result{
+    display:none;background:var(--card);border:1px solid var(--border);
+    border-radius:16px;padding:2.5rem;text-align:center;
+  }
+  #quiz-result h3{font-family:'Playfair Display',serif;font-size:2rem;margin-bottom:0.5rem;}
+  #quiz-result p{color:var(--muted);margin-bottom:1.5rem;}
+  #quiz-score-num{color:var(--accent);font-size:3.5rem;font-weight:700;font-family:'Playfair Display',serif;}
+  #quiz-reset{
+    background:transparent;border:1px solid var(--border);color:var(--accent);
+    padding:0.75rem 2rem;border-radius:10px;cursor:pointer;
+    font-family:'DM Sans',sans-serif;font-size:0.9rem;transition:all .2s;
+  }
+  #quiz-reset:hover{background:rgba(0,212,170,0.1);}
+  .feedback-list{text-align:left;margin-bottom:1.5rem;}
+  .feedback-item{
+    padding:0.5rem 0.75rem;border-radius:6px;margin-bottom:0.4rem;font-size:0.85rem;
+  }
+  .feedback-item.ok{background:rgba(0,212,170,0.1);color:var(--accent);}
+  .feedback-item.bad{background:rgba(239,68,68,0.1);color:#f87171;}
+
+  /* ── REFERENCES ── */
+  .ref-item{
+    border-left:2px solid var(--border);padding-left:1.25rem;margin-bottom:1.25rem;
+    transition:border-color .2s;
+  }
+  .ref-item:hover{border-color:var(--accent);}
+  .ref-item p{color:var(--muted);font-size:0.88rem;}
+  .ref-item strong{color:var(--text);font-size:0.9rem;}
+
+  /* ── FOOTER ── */
+  footer{
+    border-top:1px solid var(--border);padding:3rem 2rem;
+    text-align:center;color:var(--muted);font-size:0.85rem;
+    position:relative;z-index:1;
+  }
+  footer strong{color:var(--text);}
+
+  /* ── DIVIDER ── */
+  .divider{
+    height:1px;background:linear-gradient(to right,transparent,var(--border),transparent);
+    margin:0;
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeDown{
+    from{opacity:0;transform:translateY(-20px);}
+    to{opacity:1;transform:translateY(0);}
+  }
+  @keyframes pulse{
+    0%,100%{opacity:.4;} 50%{opacity:1;}
+  }
+
+  /* ── RESPONSIVE ── */
+  @media(max-width:700px){
+    .nav-links{display:none;}
+    .match-container{grid-template-columns:1fr;}
+    .hero h1{font-size:2.5rem;}
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <div class="nav-logo">TGS <span>Cristian Miranda Zuluaga</span></div>
+    <div class="nav-links">
+      <a href="#contexto">Contexto</a>
+      <a href="#historia">Historia</a>
+      <a href="#principios">Principios</a>
+      <a href="#ejemplos">Ejemplos</a>
+      <a href="#video">Video</a>
+      <a href="#ejercicios">Ejercicios</a>
+      <a href="#juegos">Juegos</a>
+      <a href="#quiz">Quiz</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-badge">OVA · Teoría General de Sistemas</div>
+    <h1>Orígenes y Principios<br/>de la <em>TGS</em></h1>
+    <p class="hero-sub">Un recorrido interactivo por los fundamentos históricos y conceptuales que dieron origen a una de las teorías más influyentes del pensamiento científico moderno.</p>
+    <div class="hero-meta">
+      <div class="hero-meta-item"><strong>Cristian Miranda Zuluaga</strong><span>Estudiante</span></div>
+      <div class="hero-meta-item"><strong>Msc. IS. Álvaro Salamanca</strong><span>Docente</span></div>
+      <div class="hero-meta-item"><strong>Ingeniería de Sistemas</strong><span>Universidad Simón Bolívar</span></div>
+    </div>
+  </div>
+  <div class="scroll-hint">Explorar</div>
+</section>
+
+<div class="divider"></div>
+
+<!-- CONTEXTUALIZACIÓN -->
+<section id="contexto">
+  <div class="section-inner">
+    <div class="section-label">01 · Contextualización</div>
+    <h2 class="section-title">¿Qué es la Teoría<br/>General de Sistemas?</h2>
+    <p class="section-desc">Un marco conceptual que trasciende disciplinas y unifica el estudio de la complejidad.</p>
+    <div class="cards-grid">
+      <div class="card">
+        <div class="card-icon">🌐</div>
+        <h3>Definición</h3>
+        <p>La Teoría General de Sistemas (TGS) es un enfoque científico e interdisciplinario que estudia los sistemas en su totalidad, sus propiedades, relaciones y leyes comunes, independientemente de la naturaleza de sus elementos.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">🔗</div>
+        <h3>Interdisciplinariedad</h3>
+        <p>Surgió como respuesta al reduccionismo científico. La TGS propone que para entender un fenómeno complejo no basta con analizar sus partes; es necesario comprender las relaciones e interacciones entre ellas.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">🎯</div>
+        <h3>Propósito Central</h3>
+        <p>Proveer un lenguaje y principios comunes aplicables a la física, biología, ingeniería, ciencias sociales y más, permitiendo transferir conocimiento entre disciplinas distintas.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">⚙️</div>
+        <h3>Un Sistema</h3>
+        <p>Se define como un conjunto de elementos interrelacionados que conforman un todo organizado, con entradas, procesos, salidas y retroalimentación, que persigue uno o más objetivos.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">📚</div>
+        <h3>Contexto Histórico</h3>
+        <p>Nació en la primera mitad del siglo XX como reacción al creciente aislamiento de las ciencias. Bertalanffy observó que los biólogos, físicos e ingenieros abordaban los mismos problemas con lenguajes y métodos incompatibles.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">🚀</div>
+        <h3>Relevancia Actual</h3>
+        <p>Hoy en día, la TGS es base de la cibernética, la teoría de la información, la ecología de sistemas, la ingeniería de software, los sistemas organizacionales y la inteligencia artificial.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- HISTORIA / TIMELINE -->
+<section id="historia" style="background:rgba(17,24,39,0.4);">
+  <div class="section-inner">
+    <div class="section-label">02 · Historia</div>
+    <h2 class="section-title">Línea del Tiempo:<br/>Orígenes de la TGS</h2>
+    <p class="section-desc">Del pensamiento filosófico antiguo a la formalización científica del siglo XX.</p>
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="timeline-year">Siglo IV a.C.</div>
+        <h3>Aristóteles: El Todo es más que la suma de sus partes</h3>
+        <p>El filósofo griego formuló uno de los principios más citados en la TGS. Su concepto de "sinergia" anticipa la idea de que los sistemas emergentes poseen propiedades que sus componentes individuales no tienen.</p>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-year">Siglo XVII–XIX</div>
+        <h3>La Revolución Científica y el Reduccionismo</h3>
+        <p>Descartes propuso el método analítico: dividir los problemas en partes más pequeñas. Newton consolidó una visión mecanicista del universo. El reduccionismo dominó la ciencia por siglos, pero mostró límites ante la complejidad biológica y social.</p>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-year">1920s – 1930s</div>
+        <h3>Bertalanffy y la Biología Orgánica</h3>
+        <p>Ludwig von Bertalanffy, biólogo austríaco, comenzó a desarrollar sus ideas sobre sistemas abiertos al estudiar organismos vivos. Observó que los seres vivos no podían explicarse solo por sus componentes químicos; era necesaria una perspectiva holística.</p>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-year">1940</div>
+        <h3>Primer esbozo formal de la TGS</h3>
+        <p>Bertalanffy presentó su propuesta de una "Teoría General de Sistemas" en un seminario en Chicago. Planteó la necesidad de una ciencia unificadora de los sistemas que permitiera compartir principios entre disciplinas.</p>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-year">1948</div>
+        <h3>Wiener y la Cibernética</h3>
+        <p>Norbert Wiener publicó "Cibernética", la ciencia del control y la comunicación en animales y máquinas. Introdujo conceptos como retroalimentación (feedback) y homeostasis que se integran directamente a la TGS.</p>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-year">1948</div>
+        <h3>Shannon y la Teoría de la Información</h3>
+        <p>Claude Shannon publicó "A Mathematical Theory of Communication", estableciendo las bases matemáticas para entender el flujo de información en los sistemas, otro pilar fundamental de la TGS.</p>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-year">1954</div>
+        <h3>Fundación de la SGSR</h3>
+        <p>Se fundó la Sociedad para la Investigación General de Sistemas (Society for General Systems Research) con Bertalanffy, Kenneth Boulding, Anatol Rapoport y Ralph Gerard como fundadores. Su objetivo: promover el desarrollo de marcos teóricos aplicables a múltiples campos.</p>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-year">1968</div>
+        <h3>"Teoría General de los Sistemas" – La obra definitiva</h3>
+        <p>Bertalanffy publicó su libro fundamental "General System Theory", que consolidó y sistematizó décadas de trabajo. Definió formalmente los sistemas abiertos, la equifinalidad, la entropía negativa y los principios isomórficos entre disciplinas.</p>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-year">Post-1968</div>
+        <h3>Expansión y Aplicaciones</h3>
+        <p>La TGS se extendió a la ingeniería de sistemas, la administración (con el enfoque sistémico de las organizaciones), la ecología, la psicología gestáltica, la teoría del caos y, más recientemente, los sistemas complejos adaptativos y la inteligencia artificial.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- PRINCIPIOS -->
+<section id="principios">
+  <div class="section-inner">
+    <div class="section-label">03 · Principios Fundamentales</div>
+    <h2 class="section-title">Los Principios que<br/>Sustentan la TGS</h2>
+    <p class="section-desc">Bertalanffy y sus contemporáneos establecieron un conjunto de principios universales que aplican a cualquier sistema.</p>
+    <div class="principles-grid">
+      <div class="principle">
+        <div class="principle-num">01</div>
+        <h4>Holismo</h4>
+        <p>El todo es más que la suma de sus partes. Las propiedades emergentes del sistema no pueden deducirse solo de sus componentes individuales.</p>
+      </div>
+      <div class="principle">
+        <div class="principle-num">02</div>
+        <h4>Isomorfismo</h4>
+        <p>Distintos tipos de sistemas (biológicos, sociales, mecánicos) comparten estructuras y leyes similares que pueden estudiarse con los mismos principios.</p>
+      </div>
+      <div class="principle">
+        <div class="principle-num">03</div>
+        <h4>Equifinalidad</h4>
+        <p>Un sistema abierto puede alcanzar el mismo estado final desde condiciones iniciales distintas y por caminos diferentes, a diferencia de los sistemas cerrados deterministas.</p>
+      </div>
+      <div class="principle">
+        <div class="principle-num">04</div>
+        <h4>Homeostasis</h4>
+        <p>Los sistemas tienden a mantener su equilibrio interno frente a perturbaciones externas, regulándose mediante mecanismos de retroalimentación negativa.</p>
+      </div>
+      <div class="principle">
+        <div class="principle-num">05</div>
+        <h4>Retroalimentación (Feedback)</h4>
+        <p>La salida de un sistema puede volver como entrada para regular su comportamiento futuro. La retroalimentación negativa estabiliza; la positiva amplifica.</p>
+      </div>
+      <div class="principle">
+        <div class="principle-num">06</div>
+        <h4>Entropía Negativa (Neguentropía)</h4>
+        <p>Los sistemas abiertos pueden importar energía/información del entorno para contrarrestar la tendencia natural al desorden (entropía), manteniendo y aumentando su organización.</p>
+      </div>
+      <div class="principle">
+        <div class="principle-num">07</div>
+        <h4>Jerarquía</h4>
+        <p>Los sistemas están organizados en niveles jerárquicos: un sistema es a la vez un subsistema de otro mayor y un suprasistema de sus propios componentes.</p>
+      </div>
+      <div class="principle">
+        <div class="principle-num">08</div>
+        <h4>Sinergia</h4>
+        <p>La interacción coordinada de los elementos produce un resultado mayor que el que lograrían actuando de manera independiente, generando valor adicional emergente.</p>
+      </div>
+      <div class="principle">
+        <div class="principle-num">09</div>
+        <h4>Interdependencia</h4>
+        <p>Los elementos de un sistema están relacionados de tal manera que el cambio en uno afecta a los demás. No hay componente aislado dentro de un sistema verdadero.</p>
+      </div>
+      <div class="principle">
+        <div class="principle-num">10</div>
+        <h4>Adaptabilidad</h4>
+        <p>Los sistemas complejos pueden modificar su estructura o comportamiento en respuesta a cambios en el entorno, garantizando su supervivencia y continuidad.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- EJEMPLOS PRÁCTICOS -->
+<section id="ejemplos" style="background:rgba(17,24,39,0.4);">
+  <div class="section-inner">
+    <div class="section-label">04 · Ejemplos Prácticos</div>
+    <h2 class="section-title">Los Principios de la TGS<br/>en la Vida Real</h2>
+    <p class="section-desc">Cada principio cobra vida cuando se aplica a contextos cotidianos, biológicos y tecnológicos.</p>
+    <div class="cards-grid">
+      <div class="card">
+        <div class="card-icon">🩺</div>
+        <h3>El Cuerpo Humano (Holismo)</h3>
+        <p>El sistema inmunológico no puede entenderse solo estudiando linfocitos aislados; es la interacción entre células, órganos y señales químicas lo que genera inmunidad. El todo —la salud— emerge de relaciones complejas.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">🌡️</div>
+        <h3>Termostato (Homeostasis/Retroalimentación)</h3>
+        <p>Un termostato mide la temperatura del ambiente (entrada), la compara con el valor deseado y activa o desactiva la calefacción (proceso), manteniendo el equilibrio. Es el ejemplo clásico de retroalimentación negativa en ingeniería.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">🏢</div>
+        <h3>Una Empresa (Jerarquía/Isomorfismo)</h3>
+        <p>Una empresa es un sistema con subsistemas (departamentos), que a su vez es subsistema de un sector económico y de la economía nacional. Su estructura jerárquica sigue los mismos principios que un ecosistema o un organismo biológico.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">🌊</div>
+        <h3>Un Ecosistema (Equifinalidad/Adaptabilidad)</h3>
+        <p>Un arrecife de coral dañado puede recuperar su estado de equilibrio desde múltiples condiciones iniciales si las interacciones entre especies, temperatura y nutrientes están adecuadas. Distintos caminos, mismo estado final.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">💻</div>
+        <h3>Internet (Sinergia/Interdependencia)</h3>
+        <p>Millones de servidores, protocolos y usuarios individuales, actuando en conjunto, generan capacidades que ningún componente aislado podría proveer: búsqueda global, comunicación instantánea, comercio electrónico.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">🎓</div>
+        <h3>Una Universidad (TGS Aplicada)</h3>
+        <p>Docentes, estudiantes, currículos, infraestructura y normativas son subsistemas interdependientes. El cambio en uno (ej. tecnología educativa) afecta a todos los demás. El objetivo del sistema —formación de profesionales— emerge de su interacción.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- VIDEO -->
+<section id="video">
+  <div class="section-inner">
+    <div class="section-label">05 · Video Educativo</div>
+    <h2 class="section-title">TGS en Movimiento</h2>
+    <p class="section-desc">Refuerza los conceptos con este video explicativo sobre los orígenes y fundamentos de la Teoría General de Sistemas.</p>
+    <div class="video-wrap">
+      <iframe width="560" height="315" src="https://www.youtube.com/embed/exoQVbSnM24" title="Reproductor de video de YouTube" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- EJERCICIOS -->
+<section id="ejercicios" style="background:rgba(17,24,39,0.4);">
+  <div class="section-inner">
+    <div class="section-label">06 · Ejercicios Planteados</div>
+    <h2 class="section-title">Pon a Prueba tu<br/>Comprensión</h2>
+    <p class="section-desc">Reflexiona sobre cada situación antes de ver la solución propuesta.</p>
+
+    <div class="exercise-box">
+      <h4>Ejercicio 01</h4>
+      <p>En una ciudad, el aumento del tráfico vehicular genera más contaminación, lo que deteriora la salud de la población, lo que incrementa el gasto en salud pública, lo que reduce el presupuesto para infraestructura vial, lo que empeora el tráfico. ¿Qué principios de la TGS identificas en esta situación? Explica cómo se manifiesta cada uno.</p>
+      <button class="exercise-toggle" onclick="toggleAnswer(this)">Ver solución propuesta ↓</button>
+      <div class="exercise-answer">
+        <strong>Retroalimentación positiva:</strong> cada efecto amplifica la causa original, creando un ciclo de deterioro creciente.<br/><br/>
+        <strong>Interdependencia:</strong> los elementos (tráfico, salud, presupuesto, infraestructura) están tan relacionados que ninguno puede analizarse de forma aislada.<br/><br/>
+        <strong>Jerarquía:</strong> la ciudad es un sistema compuesto por subsistemas (transporte, salud, finanzas públicas) que interactúan.<br/><br/>
+        <strong>Holismo:</strong> el problema del tráfico no es solo un problema de vías; es un problema sistémico que involucra economía, salud y planeación urbana simultáneamente.
+      </div>
+    </div>
+
+    <div class="exercise-box">
+      <h4>Ejercicio 02</h4>
+      <p>Un estudiante reprueba una materia (A), lo que baja su promedio (B), lo que le genera estrés (C), lo que reduce su capacidad de concentración (D), lo que hace que repruebe más materias (vuelve a A). Por otro lado, al buscar apoyo de tutores (entrada nueva), logra aprobar, recupera su autoestima y mejora su rendimiento global. ¿Qué principio de la TGS demuestra este segundo escenario? ¿Y cuál principio justifica que dos estudiantes con distintas condiciones iniciales puedan alcanzar el mismo buen rendimiento?</p>
+      <button class="exercise-toggle" onclick="toggleAnswer(this)">Ver solución propuesta ↓</button>
+      <div class="exercise-answer">
+        <strong>Retroalimentación negativa:</strong> la tutoría actúa como regulador que interrumpe el ciclo negativo y lleva al sistema hacia el equilibrio.<br/><br/>
+        <strong>Equifinalidad:</strong> estudiantes con distintos puntos de partida (diferente nivel inicial, diferentes recursos) pueden alcanzar el mismo estado final (buen rendimiento) mediante caminos distintos (tutoría, estudio independiente, cambio de metodología).<br/><br/>
+        <strong>Adaptabilidad:</strong> el estudiante modifica su comportamiento (estrategia de aprendizaje) en respuesta a perturbaciones del entorno (reprobación), demostrando capacidad sistémica de ajuste.
+      </div>
+    </div>
+
+    <div class="exercise-box">
+      <h4>Ejercicio 03</h4>
+      <p>Bertalanffy observó que tanto un organismo vivo como una empresa pueden importar recursos del exterior para organizarse y crecer, resistiendo el desorden. ¿Qué principio unifica estos dos fenómenos aparentemente distintos? ¿Qué nombre le da la TGS a esta propiedad y cómo se relaciona con la Segunda Ley de la Termodinámica?</p>
+      <button class="exercise-toggle" onclick="toggleAnswer(this)">Ver solución propuesta ↓</button>
+      <div class="exercise-answer">
+        <strong>Isomorfismo:</strong> tanto el organismo como la empresa son sistemas abiertos que siguen las mismas leyes estructurales, aunque sus elementos sean completamente distintos.<br/><br/>
+        <strong>Neguentropía (Entropía Negativa):</strong> los sistemas abiertos pueden importar energía/materia/información del entorno para aumentar su organización interna, contrariando la tendencia al desorden que predice la Segunda Ley de la Termodinámica para sistemas cerrados.<br/><br/>
+        La Segunda Ley dice que en sistemas aislados la entropía siempre aumenta (el desorden crece). Pero los sistemas vivos y las organizaciones son abiertos; intercambian con el entorno y por eso pueden mantenerse organizados e incluso evolucionar.
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- JUEGOS -->
+<section id="juegos">
+  <div class="section-inner">
+    <div class="section-label">07 · Juegos Interactivos</div>
+    <h2 class="section-title">Aprender Jugando</h2>
+    <p class="section-desc">Dos actividades para fijar los conceptos de forma divertida.</p>
+
+    <!-- JUEGO 1: SOPA DE LETRAS -->
+    <div class="game-section">
+      <h3 class="game-title">🔍 Juego 1 – Sopa de Letras</h3>
+      <p class="game-desc">Encuentra los 5 términos clave de la TGS. Haz clic en la primera letra y luego en la última de la palabra (horizontal o vertical).</p>
+      <div id="ws-words-list"></div>
+      <div id="ws-grid"></div>
+      <div id="ws-msg"></div>
+    </div>
+
+    <div style="margin:4rem 0 0;border-top:1px solid var(--border);padding-top:4rem;">
+    <!-- JUEGO 2: EMPAREJAMIENTO -->
+    <h3 class="game-title">🧩 Juego 2 – Emparejamiento</h3>
+    <p class="game-desc">Arrastra cada concepto a su definición correcta. Luego presiona "Verificar".</p>
+    <div class="match-container">
+      <div class="match-col">
+        <h4>Concepto</h4>
+        <div id="draggables-col"></div>
+      </div>
+      <div class="match-col">
+        <h4>Definición</h4>
+        <div id="targets-col"></div>
+      </div>
+    </div>
+    <button id="match-check">Verificar respuestas</button>
+    <button id="match-reset">Reintentar</button>
+    <div id="match-result"></div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- QUIZ -->
+<section id="quiz" style="background:rgba(17,24,39,0.4);">
+  <div class="section-inner">
+    <div class="section-label">08 · Evaluación Interactiva</div>
+    <h2 class="section-title">Quiz Final</h2>
+    <p class="section-desc">5 preguntas de selección múltiple. Al finalizar verás tu puntaje y retroalimentación detallada.</p>
+    <div class="quiz-wrap" id="quiz-form">
+      <!-- Questions injected by JS -->
+    </div>
+    <button id="quiz-submit">Enviar respuestas</button>
+    <div id="quiz-result">
+      <div id="quiz-score-num"></div>
+      <h3>Resultado Final</h3>
+      <p id="quiz-result-msg"></p>
+      <div class="feedback-list" id="quiz-feedback"></div>
+      <button id="quiz-reset">Reintentar quiz</button>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- REFERENCIAS -->
+<section id="referencias">
+  <div class="section-inner">
+    <div class="section-label">09 · Referencias</div>
+    <h2 class="section-title">Fuentes Consultadas</h2>
+    <p class="section-desc">Contenido basado en fuentes académicas reconocidas.</p>
+    <div class="ref-item"><strong>Bertalanffy, L. von (1968).</strong> <p><em>General System Theory: Foundations, Development, Applications.</em> George Braziller. Nueva York.</p></div>
+    <div class="ref-item"><strong>Wiener, N. (1948).</strong> <p><em>Cybernetics: Or Control and Communication in the Animal and the Machine.</em> MIT Press.</p></div>
+    <div class="ref-item"><strong>Shannon, C. E., & Weaver, W. (1949).</strong> <p><em>The Mathematical Theory of Communication.</em> University of Illinois Press.</p></div>
+    <div class="ref-item"><strong>Checkland, P. (1981).</strong> <p><em>Systems Thinking, Systems Practice.</em> John Wiley & Sons. Chichester.</p></div>
+    <div class="ref-item"><strong>Johansen Bertoglio, O. (2004).</strong> <p><em>Introducción a la Teoría General de Sistemas.</em> Limusa Noriega Editores. México D.F.</p></div>
+    <div class="ref-item"><strong>Boulding, K. E. (1956).</strong> <p>"General Systems Theory – The Skeleton of Science." <em>Management Science, 2</em>(3), 197–208.</p></div>
+  </div>
+</section>
+
+<footer>
+  <p>OVA desarrollada por <strong>Cristian Miranda Zuluaga</strong> · Ingeniería de Sistemas · Universidad Simón Bolívar</p>
+  <p style="margin-top:.5rem;">Asignatura: Teoría General de Sistemas · Docente: Msc. IS. Álvaro Salamanca Landínez · 2025</p>
+</footer>
+
+<script>
+// ── EXERCISE TOGGLE ──────────────────────────────────────────────
+function toggleAnswer(btn){
+  const ans=btn.nextElementSibling;
+  ans.classList.toggle('visible');
+  btn.textContent=ans.classList.contains('visible')?'Ocultar solución ↑':'Ver solución propuesta ↓';
+}
+
+// ── WORDSEARCH ───────────────────────────────────────────────────
+(function(){
+  const SIZE=12;
+  const WORDS=['HOLISMO','ENTROPIA','SISTEMA','SINERGIA','FEEDBACK'];
+  let grid=[];
+  let placed=[];
+  let selecting=false;
+  let startCell=null;
+  let foundWords=new Set();
+
+  function initGrid(){
+    grid=Array.from({length:SIZE},()=>Array(SIZE).fill(''));
+    placed=[];
+    foundWords=new Set();
+  }
+
+  function placeWord(word){
+    const dirs=[[0,1],[1,0]]; // horizontal, vertical only (simpler UX)
+    let attempts=0;
+    while(attempts<200){
+      const dir=dirs[Math.floor(Math.random()*dirs.length)];
+      const r=Math.floor(Math.random()*SIZE);
+      const c=Math.floor(Math.random()*SIZE);
+      const er=r+dir[0]*(word.length-1);
+      const ec=c+dir[1]*(word.length-1);
+      if(er<0||er>=SIZE||ec<0||ec>=SIZE){attempts++;continue;}
+      let ok=true;
+      for(let i=0;i<word.length;i++){
+        const nr=r+dir[0]*i, nc=c+dir[1]*i;
+        if(grid[nr][nc]!==''&&grid[nr][nc]!==word[i]){ok=false;break;}
+      }
+      if(ok){
+        const cells=[];
+        for(let i=0;i<word.length;i++){
+          const nr=r+dir[0]*i, nc=c+dir[1]*i;
+          grid[nr][nc]=word[i];
+          cells.push([nr,nc]);
+        }
+        placed.push({word,cells});
+        return true;
+      }
+      attempts++;
+    }
+    return false;
+  }
+
+  function fillRandom(){
+    const letters='ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    for(let r=0;r<SIZE;r++) for(let c=0;c<SIZE;c++)
+      if(grid[r][c]==='') grid[r][c]=letters[Math.floor(Math.random()*26)];
+  }
+
+  function renderGrid(){
+    const container=document.getElementById('ws-grid');
+    container.innerHTML='';
+    container.style.gridTemplateColumns=`repeat(${SIZE},36px)`;
+    for(let r=0;r<SIZE;r++) for(let c=0;c<SIZE;c++){
+      const cell=document.createElement('div');
+      cell.className='ws-cell';
+      cell.textContent=grid[r][c];
+      cell.dataset.r=r; cell.dataset.c=c;
+      cell.addEventListener('click',onCellClick);
+      container.appendChild(cell);
+    }
+  }
+
+  function renderWordList(){
+    const el=document.getElementById('ws-words-list');
+    el.innerHTML='';
+    WORDS.forEach(w=>{
+      const span=document.createElement('span');
+      span.className='ws-word';
+      span.textContent=w;
+      span.id='wsword-'+w;
+      el.appendChild(span);
+    });
+  }
+
+  function getCell(r,c){
+    return document.querySelector(`[data-r="${r}"][data-c="${c}"]`);
+  }
+
+  function clearSelected(){
+    document.querySelectorAll('.ws-cell.selected').forEach(el=>el.classList.remove('selected'));
+  }
+
+  function onCellClick(e){
+    const r=+e.target.dataset.r, c=+e.target.dataset.c;
+    if(!selecting){
+      selecting=true;
+      startCell={r,c};
+      clearSelected();
+      e.target.classList.add('selected');
+    } else {
+      const endCell={r,c};
+      checkSelection(startCell,endCell);
+      selecting=false;
+      startCell=null;
+      clearSelected();
+    }
+  }
+
+  function checkSelection(start,end){
+    const dr=end.r-start.r, dc=end.c-start.c;
+    let dirR=0,dirC=0;
+    const len=Math.max(Math.abs(dr),Math.abs(dc))+1;
+    if(dr===0&&dc!==0) dirC=dc>0?1:-1;
+    else if(dc===0&&dr!==0) dirR=dr>0?1:-1;
+    else return; // diagonal not supported
+
+    let selected='';
+    const selCells=[];
+    for(let i=0;i<len;i++){
+      const nr=start.r+dirR*i, nc=start.c+dirC*i;
+      if(nr<0||nr>=SIZE||nc<0||nc>=SIZE) return;
+      selected+=grid[nr][nc];
+      selCells.push([nr,nc]);
+    }
+
+    const match=placed.find(p=>p.word===selected&&!foundWords.has(p.word));
+    if(match){
+      foundWords.add(match.word);
+      match.cells.forEach(([nr,nc])=>getCell(nr,nc).classList.add('found'));
+      document.getElementById('wsword-'+match.word).classList.add('found-word');
+      if(foundWords.size===WORDS.length){
+        document.getElementById('ws-msg').textContent='🎉 ¡Encontraste todas las palabras! ¡Excelente!';
+      } else {
+        document.getElementById('ws-msg').textContent=`✅ "${match.word}" encontrada! (${foundWords.size}/${WORDS.length})`;
+      }
+    }
+  }
+
+  function init(){
+    initGrid();
+    WORDS.forEach(w=>placeWord(w));
+    fillRandom();
+    renderGrid();
+    renderWordList();
+    document.getElementById('ws-msg').textContent='';
+  }
+
+  init();
+})();
+
+// ── DRAG MATCH ───────────────────────────────────────────────────
+(function(){
+  const pairs=[
+    {id:'A',concept:'HOLISMO',def:'El todo es más que la suma de sus partes; propiedades emergentes.'},
+    {id:'B',concept:'EQUIFINALIDAD',def:'Un sistema puede alcanzar el mismo estado final por diferentes caminos.'},
+    {id:'C',concept:'HOMEOSTASIS',def:'Tendencia del sistema a mantener su equilibrio interno.'},
+    {id:'D',concept:'ISOMORFISMO',def:'Leyes y estructuras similares entre sistemas de distinta naturaleza.'},
+    {id:'E',concept:'NEGUENTROPÍA',def:'Los sistemas abiertos se organizan importando energía del entorno.'},
+  ];
+
+  function shuffle(arr){return arr.slice().sort(()=>Math.random()-.5);}
+
+  function init(){
+    const dragsCol=document.getElementById('draggables-col');
+    const tgtsCol=document.getElementById('targets-col');
+    dragsCol.innerHTML='';tgtsCol.innerHTML='';
+    document.getElementById('match-result').innerHTML='';
+    document.getElementById('match-reset').style.display='none';
+
+    const shuffledConcepts=shuffle(pairs);
+    const shuffledDefs=shuffle(pairs);
+
+    shuffledConcepts.forEach(p=>{
+      const el=document.createElement('div');
+      el.className='draggable';
+      el.draggable=true;
+      el.dataset.id=p.id;
+      el.textContent=p.concept;
+      el.addEventListener('dragstart',e=>{
+        e.dataTransfer.setData('text/plain',p.id);
+        el.classList.add('dragging');
+      });
+      el.addEventListener('dragend',()=>el.classList.remove('dragging'));
+      dragsCol.appendChild(el);
+    });
+
+    shuffledDefs.forEach(p=>{
+      const el=document.createElement('div');
+      el.className='drop-target';
+      el.dataset.correctId=p.id;
+      el.textContent=p.def;
+      el.addEventListener('dragover',e=>{e.preventDefault();el.classList.add('over');});
+      el.addEventListener('dragleave',()=>el.classList.remove('over'));
+      el.addEventListener('drop',e=>{
+        e.preventDefault();
+        el.classList.remove('over');
+        const draggedId=e.dataTransfer.getData('text/plain');
+        el.dataset.droppedId=draggedId;
+        const concept=pairs.find(p=>p.id===draggedId);
+        el.innerHTML=`<strong style="color:var(--accent2);margin-right:.5rem;">${concept?concept.concept:''}</strong>${p.def}`;
+      });
+      tgtsCol.appendChild(el);
+    });
+  }
+
+  document.getElementById('match-check').addEventListener('click',()=>{
+    const targets=document.querySelectorAll('.drop-target');
+    let correct=0;
+    targets.forEach(t=>{
+      t.classList.remove('correct','wrong');
+      if(t.dataset.droppedId===t.dataset.correctId){
+        t.classList.add('correct');correct++;
+      } else if(t.dataset.droppedId){
+        t.classList.add('wrong');
+      }
+    });
+    const res=document.getElementById('match-result');
+    res.textContent=`Resultado: ${correct}/${targets.length} correctos. ${correct===targets.length?'🎉 ¡Perfecto!':'Intenta de nuevo.'}`;
+    res.style.color=correct===targets.length?'var(--accent)':'var(--accent2)';
+    document.getElementById('match-reset').style.display='inline-block';
+  });
+
+  document.getElementById('match-reset').addEventListener('click',init);
+  init();
+})();
+
+// ── QUIZ ─────────────────────────────────────────────────────────
+(function(){
+  const questions=[
+    {
+      q:'¿Quién es considerado el padre de la Teoría General de Sistemas?',
+      opts:['Norbert Wiener','Claude Shannon','Ludwig von Bertalanffy','René Descartes'],
+      correct:2,
+      feedback:'Ludwig von Bertalanffy, biólogo austríaco, formuló la TGS a partir de la década de 1920 y la publicó formalmente en 1968.'
+    },
+    {
+      q:'El principio que establece que "el todo es más que la suma de sus partes" se denomina:',
+      opts:['Isomorfismo','Holismo','Equifinalidad','Retroalimentación'],
+      correct:1,
+      feedback:'El holismo sostiene que las propiedades emergentes del sistema no pueden deducirse solo del análisis de sus partes individuales.'
+    },
+    {
+      q:'La capacidad de un sistema abierto de alcanzar el mismo estado final desde condiciones iniciales distintas se llama:',
+      opts:['Homeostasis','Neguentropía','Equifinalidad','Sinergia'],
+      correct:2,
+      feedback:'La equifinalidad es una propiedad exclusiva de los sistemas abiertos: el estado final no depende de las condiciones iniciales, sino de los parámetros del sistema.'
+    },
+    {
+      q:'¿En qué año se fundó la Sociedad para la Investigación General de Sistemas (SGSR)?',
+      opts:['1940','1948','1954','1968'],
+      correct:2,
+      feedback:'La SGSR fue fundada en 1954 por Bertalanffy, Boulding, Rapoport y Gerard para promover la TGS a nivel internacional.'
+    },
+    {
+      q:'La propiedad por la cual un sistema importa energía del entorno para contrarrestar el desorden se denomina:',
+      opts:['Entropía','Homeostasis','Neguentropía (Entropía Negativa)','Isomorfismo'],
+      correct:2,
+      feedback:'La neguentropía describe la capacidad de los sistemas abiertos de aumentar su organización interna, oponiéndose a la Segunda Ley de la Termodinámica.'
+    }
+  ];
+
+  let userAnswers=Array(questions.length).fill(null);
+
+  function renderQuiz(){
+    const form=document.getElementById('quiz-form');
+    form.innerHTML='';
+    questions.forEach((q,qi)=>{
+      const box=document.createElement('div');
+      box.className='quiz-question';
+      box.innerHTML=`<h4>${qi+1}. ${q.q}</h4>`;
+      q.opts.forEach((opt,oi)=>{
+        const btn=document.createElement('button');
+        btn.className='quiz-option';
+        btn.textContent=opt;
+        btn.addEventListener('click',()=>{
+          box.querySelectorAll('.quiz-option').forEach(b=>b.classList.remove('selected'));
+          btn.classList.add('selected');
+          userAnswers[qi]=oi;
+        });
+        box.appendChild(btn);
+      });
+      form.appendChild(box);
+    });
+    document.getElementById('quiz-submit').style.display='block';
+    document.getElementById('quiz-result').style.display='none';
+    userAnswers=Array(questions.length).fill(null);
+  }
+
+  document.getElementById('quiz-submit').addEventListener('click',()=>{
+    if(userAnswers.some(a=>a===null)){
+      alert('Por favor responde todas las preguntas antes de enviar.');return;
+    }
+    let score=0;
+    const feedback=document.getElementById('quiz-feedback');
+    feedback.innerHTML='';
+    questions.forEach((q,qi)=>{
+      const correct=userAnswers[qi]===q.correct;
+      if(correct) score++;
+      const item=document.createElement('div');
+      item.className='feedback-item '+(correct?'ok':'bad');
+      item.innerHTML=`${correct?'✅':'❌'} P${qi+1}: ${correct?'Correcto.':'Incorrecto.'} ${q.feedback}`;
+      feedback.appendChild(item);
+    });
+    document.getElementById('quiz-score-num').textContent=`${score}/5`;
+    const msgs=['Sigue repasando el material.','Buen intento, revisa los conceptos.','¡Muy bien! Casi perfecto.','¡Excelente dominio del tema!'];
+    document.getElementById('quiz-result-msg').textContent=score<=1?msgs[0]:score<=2?msgs[1]:score<=4?msgs[2]:msgs[3];
+    document.getElementById('quiz-submit').style.display='none';
+    document.getElementById('quiz-result').style.display='block';
+  });
+
+  document.getElementById('quiz-reset').addEventListener('click',renderQuiz);
+  renderQuiz();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>OVA · Teoría de la Organización y Cibernética</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --bg:#080c10;
+  --s1:#0d1117;
+  --s2:#111820;
+  --card:#131c26;
+  --border:#1e2d3d;
+  --g:#00ff9d;      /* green terminal */
+  --g2:#00cc7a;
+  --g-dim:rgba(0,255,157,.08);
+  --amber:#ffb347;
+  --amber-dim:rgba(255,179,71,.08);
+  --cyan:#00d4ff;
+  --cyan-dim:rgba(0,212,255,.08);
+  --red:#ff4757;
+  --text:#c9d8e8;
+  --muted:#4a6072;
+  --head:'Space Mono',monospace;
+  --body:'DM Sans',sans-serif;
+  --r:6px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--body);line-height:1.65;overflow-x:hidden}
+
+/* scanline overlay */
+body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.06) 2px,rgba(0,0,0,.06) 4px);
+  animation:scan 8s linear infinite;opacity:.4}
+@keyframes scan{0%{background-position:0 0}100%{background-position:0 100px}}
+
+/* circuit bg */
+body::after{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.03;
+  background-image:
+    linear-gradient(var(--g) 1px,transparent 1px),
+    linear-gradient(90deg,var(--g) 1px,transparent 1px);
+  background-size:40px 40px}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:200;height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 5vw;
+  background:rgba(8,12,16,.95);backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--border)}
+.brand{font-family:var(--head);font-size:.95rem;color:var(--g);letter-spacing:.05em}
+.brand em{color:var(--amber);font-style:normal}
+.nl{display:flex;gap:2rem;list-style:none}
+.nl a{color:var(--muted);text-decoration:none;font-size:.75rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;transition:color .2s;font-family:var(--head)}
+.nl a:hover{color:var(--g)}
+.nt{display:none;background:none;border:none;color:var(--text);font-size:1.3rem;cursor:pointer}
+@media(max-width:700px){
+  .nl{display:none;flex-direction:column;position:absolute;top:56px;left:0;right:0;background:var(--s1);padding:1.2rem 5vw;gap:.9rem;border-bottom:1px solid var(--border)}
+  .nl.open{display:flex}
+  .nt{display:block}
+}
+
+/* HERO — completely different layout: full-bleed terminal window */
+#hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:80px 5vw 60px;position:relative;z-index:1}
+.hero-terminal{max-width:900px;margin:0 auto;width:100%}
+.term-bar{background:var(--s2);border:1px solid var(--border);border-bottom:none;border-radius:var(--r) var(--r) 0 0;padding:.6rem 1rem;display:flex;align-items:center;gap:.5rem}
+.term-dot{width:10px;height:10px;border-radius:50%}
+.td1{background:#ff5f57}.td2{background:#febc2e}.td3{background:#28c840}
+.term-title{font-family:var(--head);font-size:.7rem;color:var(--muted);margin-left:.5rem;letter-spacing:.08em}
+.term-body{background:var(--s1);border:1px solid var(--border);border-radius:0 0 var(--r) var(--r);padding:2.5rem 2.2rem}
+.term-line{font-family:var(--head);font-size:.8rem;color:var(--muted);margin-bottom:.3rem}
+.term-line .p{color:var(--g)}
+.term-line .cmd{color:var(--text)}
+.term-line .out{color:var(--amber)}
+.hero-h1{font-family:var(--head);font-size:clamp(1.6rem,4.5vw,3rem);line-height:1.1;margin:1.5rem 0 1rem;color:var(--g);letter-spacing:-.01em}
+.hero-h1 span{color:var(--amber)}
+.hero-sub{color:var(--muted);font-size:1rem;max-width:580px;margin-bottom:2rem;font-family:var(--body)}
+.hero-badges{display:flex;gap:.6rem;flex-wrap:wrap;margin-bottom:2rem}
+.hbadge{font-family:var(--head);font-size:.68rem;letter-spacing:.08em;padding:.3rem .75rem;border-radius:3px;border:1px solid}
+.hb1{border-color:var(--g);color:var(--g);background:var(--g-dim)}
+.hb2{border-color:var(--amber);color:var(--amber);background:var(--amber-dim)}
+.hb3{border-color:var(--cyan);color:var(--cyan);background:var(--cyan-dim)}
+.hero-cta{display:flex;gap:.8rem;flex-wrap:wrap}
+.btn-g{background:var(--g);color:#000;padding:.65rem 1.5rem;border-radius:var(--r);text-decoration:none;font-weight:700;font-size:.85rem;font-family:var(--head);transition:box-shadow .2s,transform .15s}
+.btn-g:hover{box-shadow:0 0 20px rgba(0,255,157,.4);transform:translateY(-1px)}
+.btn-ghost{border:1px solid var(--border);color:var(--text);padding:.65rem 1.5rem;border-radius:var(--r);text-decoration:none;font-family:var(--head);font-size:.85rem;transition:border-color .2s,color .2s}
+.btn-ghost:hover{border-color:var(--g);color:var(--g)}
+.cursor{display:inline-block;width:10px;height:1.1em;background:var(--g);margin-left:2px;animation:blink .8s step-end infinite;vertical-align:middle}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+
+/* SECTIONS */
+section{padding:80px 5vw;position:relative;z-index:1}
+.ctr{max-width:1080px;margin:0 auto}
+.sh{margin-bottom:3rem}
+.sh .tag{font-family:var(--head);font-size:.7rem;letter-spacing:.15em;text-transform:uppercase;color:var(--g);display:flex;align-items:center;gap:.5rem;margin-bottom:.8rem}
+.sh .tag::before{content:'';display:inline-block;width:20px;height:1px;background:var(--g)}
+.sh h2{font-family:var(--head);font-size:clamp(1.5rem,3vw,2.1rem);line-height:1.2;margin-bottom:.8rem;color:var(--text)}
+.sh h2 em{font-style:normal;color:var(--g)}
+.sh p{color:var(--muted);max-width:620px;font-size:.95rem}
+
+/* TEORIA — horizontal scrolling tabs */
+#teoria{background:var(--s1)}
+.tabs{display:flex;gap:0;border-bottom:1px solid var(--border);margin-bottom:2rem;overflow-x:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{font-family:var(--head);font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;padding:.7rem 1.2rem;cursor:pointer;color:var(--muted);border-bottom:2px solid transparent;white-space:nowrap;background:none;border-top:none;border-left:none;border-right:none;transition:color .2s,border-color .2s}
+.tab:hover{color:var(--g)}
+.tab.active{color:var(--g);border-bottom-color:var(--g)}
+.tab-panels .panel{display:none}
+.tab-panels .panel.active{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;animation:fadeUp .35s ease}
+@media(max-width:680px){.tab-panels .panel.active{grid-template-columns:1fr}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.tcard{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:1.5rem}
+.tcard h3{font-family:var(--head);font-size:.95rem;color:var(--g);margin-bottom:.7rem;letter-spacing:.02em}
+.tcard p{color:var(--muted);font-size:.88rem;margin-bottom:.8rem}
+.tcard ul{color:var(--muted);font-size:.84rem;padding-left:1.1rem}
+.tcard ul li{margin-bottom:.35rem}
+.tcard .key{display:inline-block;margin-top:.8rem;font-family:var(--head);font-size:.68rem;letter-spacing:.08em;padding:.25rem .65rem;border-radius:3px;border:1px solid var(--g);color:var(--g);background:var(--g-dim)}
+.tcard.amber h3{color:var(--amber)}
+.tcard.amber .key{border-color:var(--amber);color:var(--amber);background:var(--amber-dim)}
+.tcard.cyan h3{color:var(--cyan)}
+.tcard.cyan .key{border-color:var(--cyan);color:var(--cyan);background:var(--cyan-dim)}
+
+/* EJEMPLOS — timeline vertical */
+#ejemplos{background:var(--bg)}
+.timeline{position:relative;padding-left:2.5rem}
+.timeline::before{content:'';position:absolute;left:.7rem;top:0;bottom:0;width:1px;background:var(--border)}
+.tl-item{position:relative;margin-bottom:2rem}
+.tl-dot{position:absolute;left:-1.85rem;top:.3rem;width:12px;height:12px;border-radius:50%;background:var(--g);box-shadow:0 0 8px rgba(0,255,157,.5);border:2px solid var(--bg)}
+.tl-item h4{font-family:var(--head);font-size:.88rem;color:var(--g);margin-bottom:.4rem;letter-spacing:.03em}
+.tl-item .tl-meta{font-family:var(--head);font-size:.68rem;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin-bottom:.5rem}
+.tl-item p{color:var(--muted);font-size:.88rem;background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:1rem 1.2rem}
+
+/* VIDEO */
+#video{background:var(--s1)}
+.videos-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem}
+@media(max-width:700px){.videos-grid{grid-template-columns:1fr}}
+.video-item{}
+.video-label{font-family:var(--head);font-size:.7rem;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:.6rem;display:flex;align-items:center;gap:.5rem}
+.video-label::before{content:'▶';color:var(--g);font-size:.6rem}
+.video-wrap{border-radius:var(--r);overflow:hidden;aspect-ratio:16/9;border:1px solid var(--border);background:var(--card)}
+.video-wrap iframe{width:100%;height:100%;border:none;display:block}
+.video-desc{font-size:.8rem;color:var(--muted);margin-top:.6rem}
+
+/* JUEGOS */
+#juegos{background:var(--bg)}
+.game-box{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:1.8rem;margin-bottom:1.5rem}
+.game-box h3{font-family:var(--head);font-size:.9rem;color:var(--g);margin-bottom:.4rem;letter-spacing:.04em}
+.game-box>p{color:var(--muted);font-size:.86rem;margin-bottom:1.4rem}
+
+/* COMPLETA LA FRASE */
+.fib-list{display:flex;flex-direction:column;gap:1.1rem}
+.fib-item{background:var(--s2);border:1px solid var(--border);border-radius:var(--r);padding:1.1rem 1.3rem}
+.fib-item p{font-size:.9rem;color:var(--text);line-height:1.8}
+.fib-input{font-family:var(--head);font-size:.82rem;background:transparent;border:none;border-bottom:2px solid var(--amber);color:var(--amber);outline:none;width:160px;padding:.1rem .3rem;letter-spacing:.04em;transition:border-color .2s}
+.fib-input:focus{border-color:var(--g)}
+.fib-input.correct{border-color:var(--g);color:var(--g)}
+.fib-input.wrong{border-color:var(--red);color:var(--red)}
+.fib-hint{font-family:var(--head);font-size:.7rem;color:var(--muted);margin-top:.5rem;display:none}
+.fib-hint.show{display:block}
+.fib-score{font-family:var(--head);font-size:1.3rem;color:var(--g);margin-top:.8rem;min-height:1.4rem}
+
+/* MEMORIA */
+.mem-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:.7rem}
+@media(max-width:500px){.mem-grid{grid-template-columns:repeat(3,1fr)}}
+.mem-card{aspect-ratio:3/2;perspective:600px;cursor:pointer}
+.mem-inner{width:100%;height:100%;position:relative;transform-style:preserve-3d;transition:transform .4s ease}
+.mem-card.flipped .mem-inner,.mem-card.matched .mem-inner{transform:rotateY(180deg)}
+.mem-face{position:absolute;inset:0;border-radius:var(--r);backface-visibility:hidden;display:flex;align-items:center;justify-content:center;border:1px solid var(--border)}
+.mem-back{background:var(--card);font-family:var(--head);font-size:1.1rem;color:var(--g)}
+.mem-front{background:var(--s2);transform:rotateY(180deg);padding:.4rem;text-align:center}
+.mem-front span{font-size:.72rem;color:var(--text);line-height:1.3;display:block;font-family:var(--body)}
+.mem-card.matched .mem-face{border-color:var(--g)}
+.mem-card.matched .mem-back{background:var(--g-dim)}
+.mem-card.matched .mem-front{background:var(--g-dim)}
+.mem-stats{font-family:var(--head);font-size:.78rem;color:var(--muted);margin-bottom:.9rem;letter-spacing:.05em}
+.mem-win{font-family:var(--head);font-size:.9rem;color:var(--g);margin-top:.8rem;min-height:1.2rem}
+
+/* Botones */
+.gbtn{background:var(--g);color:#000;border:none;padding:.55rem 1.2rem;border-radius:var(--r);cursor:pointer;font-family:var(--head);font-size:.78rem;font-weight:700;margin-top:.8rem;margin-right:.5rem;letter-spacing:.04em;transition:box-shadow .2s,transform .15s}
+.gbtn:hover{box-shadow:0 0 14px rgba(0,255,157,.35);transform:translateY(-1px)}
+.gbtn.sec{background:transparent;color:var(--text);border:1px solid var(--border)}
+.gbtn.sec:hover{border-color:var(--g);color:var(--g);box-shadow:none;transform:none}
+.gres{margin-top:.8rem;font-family:var(--head);font-size:.8rem;min-height:1.2rem}
+.ok{color:var(--g)}.bad{color:var(--red)}
+
+/* QUIZ */
+#quiz{background:var(--s1)}
+.qq{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:1.4rem;margin-bottom:1rem}
+.qn{color:var(--g);font-family:var(--head);font-size:.78rem;margin-right:.4rem}
+.qq p{font-size:.9rem}
+.qopts{display:flex;flex-direction:column;gap:.45rem;margin-top:.8rem}
+.qo{display:flex;align-items:center;gap:.65rem;background:var(--s2);border:1px solid var(--border);border-radius:var(--r);padding:.55rem .9rem;cursor:pointer;font-size:.86rem;transition:border-color .15s}
+.qo:hover{border-color:var(--g)}
+.qo input{accent-color:var(--g);width:14px;height:14px}
+.qo.correct{border-color:var(--g);background:var(--g-dim);color:var(--g)}
+.qo.wrong{border-color:var(--red);background:rgba(255,71,87,.08);color:var(--red)}
+.quiz-actions{margin-top:1.2rem}
+.qresult{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:2.5rem;text-align:center;margin-top:1.2rem}
+.qresult.hidden{display:none}
+.qscore{font-family:var(--head);font-size:3rem;color:var(--g);letter-spacing:-.02em}
+.qlbl{color:var(--muted);font-size:.8rem;font-family:var(--head);letter-spacing:.06em;margin-top:.3rem}
+.qfb{font-size:.95rem;margin:1rem 0 1.5rem;color:var(--text)}
+
+/* FOOTER */
+footer{text-align:center;padding:2rem 5vw;border-top:1px solid var(--border);color:var(--muted);font-size:.75rem;font-family:var(--head);letter-spacing:.05em;position:relative;z-index:1}
+footer strong{color:var(--g)}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="brand">OVA<em>::</em>TOC</div>
+  <button class="nt" id="nt">&#9776;</button>
+  <ul class="nl" id="nl">
+    <li><a href="#hero">_inicio</a></li>
+    <li><a href="#teoria">_teoría</a></li>
+    <li><a href="#ejemplos">_ejemplos</a></li>
+    <li><a href="#video">_video</a></li>
+    <li><a href="#juegos">_juegos</a></li>
+    <li><a href="#quiz">_quiz</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+<div class="hero-terminal">
+  <div class="term-bar">
+    <div class="term-dot td1"></div>
+    <div class="term-dot td2"></div>
+    <div class="term-dot td3"></div>
+    <span class="term-title">ova-toc.sh — bash — 80×24</span>
+  </div>
+  <div class="term-body">
+    <div class="term-line"><span class="p">student@ova:~$</span> <span class="cmd">load --module "teoria-organizacion-cibernetica"</span></div>
+    <div class="term-line"><span class="out">✔ Módulo cargado. Bienvenido al OVA.</span></div>
+    <div class="term-line" style="margin-top:.5rem"><span class="p">></span> <span class="cmd">describe --topic</span></div>
+    <h1 class="hero-h1">Teoría de la <span>Organización</span><br/>y Cibernética<span class="cursor"></span></h1>
+    <p class="hero-sub">Estudia cómo los sistemas organizacionales se controlan, comunican y adaptan usando los principios de la cibernética: retroalimentación, regulación y viabilidad.</p>
+    <div class="hero-badges">
+      <span class="hbadge hb1">Retroalimentación</span>
+      <span class="hbadge hb2">Modelo de Sistema Viable</span>
+      <span class="hbadge hb3">Cibernética de Wiener</span>
+      <span class="hbadge hb1">Homeostasis</span>
+      <span class="hbadge hb2">Ley de Variedad Requerida</span>
+    </div>
+    <div class="hero-cta">
+      <a href="#teoria" class="btn-g">Iniciar módulo →</a>
+      <a href="#quiz" class="btn-ghost">Ir a evaluación</a>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- TEORIA -->
+<section id="teoria">
+<div class="ctr">
+  <div class="sh">
+    <div class="tag">01 — Fundamentos</div>
+    <h2>Teoría de la <em>Organización</em> y Cibernética</h2>
+    <p>Explora los pilares conceptuales que definen cómo las organizaciones funcionan como sistemas cibernéticos capaces de aprender, adaptarse y sobrevivir.</p>
+  </div>
+  <div class="tabs" role="tablist">
+    <button class="tab active" data-tab="0">Cibernética</button>
+    <button class="tab" data-tab="1">Organización</button>
+    <button class="tab" data-tab="2">Retroalimentación</button>
+    <button class="tab" data-tab="3">Modelo Viable</button>
+    <button class="tab" data-tab="4">Wiener &amp; Beer</button>
+  </div>
+  <div class="tab-panels">
+
+    <!-- Panel 0 -->
+    <div class="panel active">
+      <div class="tcard">
+        <h3>¿Qué es la Cibernética?</h3>
+        <p>Ciencia del control y la comunicación en el animal y la máquina (Norbert Wiener, 1948). Estudia cómo los sistemas regulan su comportamiento mediante flujos de información.</p>
+        <ul>
+          <li>Control basado en retroalimentación</li>
+          <li>Comunicación entre sistema y entorno</li>
+          <li>Autorregulación y adaptación</li>
+          <li>Aplicable a máquinas, organismos y organizaciones</li>
+        </ul>
+        <span class="key">CONTROL + COMUNICACIÓN</span>
+      </div>
+      <div class="tcard amber">
+        <h3>Cibernética de Primer y Segundo Orden</h3>
+        <p>La cibernética de primer orden estudia sistemas observados externamente. La de segundo orden incluye al observador dentro del sistema, reconociendo su influencia.</p>
+        <ul>
+          <li>1.° orden: sistemas regulados desde afuera</li>
+          <li>2.° orden: sistemas que se auto-observan</li>
+          <li>Reflexividad y construcción del conocimiento</li>
+          <li>Heinz von Foerster como impulsor</li>
+        </ul>
+        <span class="key">OBSERVADOR INCLUIDO</span>
+      </div>
+    </div>
+
+    <!-- Panel 1 -->
+    <div class="panel">
+      <div class="tcard cyan">
+        <h3>Organización como Sistema</h3>
+        <p>La Teoría de la Organización concibe a las empresas e instituciones como sistemas abiertos que intercambian información, energía y materia con su entorno.</p>
+        <ul>
+          <li>Subsistemas interdependientes</li>
+          <li>Interacción continua con el entorno</li>
+          <li>Propiedades emergentes no planeadas</li>
+          <li>Totalidad mayor que la suma de sus partes</li>
+        </ul>
+        <span class="key">SISTEMA ABIERTO</span>
+      </div>
+      <div class="tcard">
+        <h3>Estructura y Función Organizacional</h3>
+        <p>Toda organización necesita mecanismos de coordinación, control y comunicación para mantener su cohesión interna frente a la variedad del entorno.</p>
+        <ul>
+          <li>Jerarquía y autonomía de subsistemas</li>
+          <li>Canales formales e informales de comunicación</li>
+          <li>Cultura organizacional como regulador</li>
+          <li>Toma de decisiones distribuida</li>
+        </ul>
+        <span class="key">ESTRUCTURA → VIABILIDAD</span>
+      </div>
+    </div>
+
+    <!-- Panel 2 -->
+    <div class="panel">
+      <div class="tcard">
+        <h3>Retroalimentación Negativa</h3>
+        <p>Mecanismo corrector que reduce la desviación entre el estado actual y el estado deseado. Fundamental para la estabilidad y el control organizacional.</p>
+        <ul>
+          <li>Detecta error → genera corrección</li>
+          <li>Mantiene el sistema en su meta</li>
+          <li>Ejemplo: control presupuestal, KPIs</li>
+          <li>Base del comportamiento de equilibrio</li>
+        </ul>
+        <span class="key">ERROR → CORRECCIÓN → META</span>
+      </div>
+      <div class="tcard amber">
+        <h3>Retroalimentación Positiva</h3>
+        <p>Mecanismo amplificador que refuerza los cambios en la dirección en que se producen. Impulsa el crecimiento pero puede desestabilizar si no se regula.</p>
+        <ul>
+          <li>Amplifica el estado del sistema</li>
+          <li>Impulsa crecimiento e innovación</li>
+          <li>Ejemplo: efecto red, aprendizaje organizacional</li>
+          <li>Requiere balance con retroalimentación negativa</li>
+        </ul>
+        <span class="key">CAMBIO → AMPLIFICACIÓN</span>
+      </div>
+    </div>
+
+    <!-- Panel 3 -->
+    <div class="panel">
+      <div class="tcard cyan">
+        <h3>Modelo de Sistema Viable (MSV)</h3>
+        <p>Desarrollado por Stafford Beer, describe las condiciones estructurales necesarias para que una organización sea viable y pueda sobrevivir en entornos cambiantes.</p>
+        <ul>
+          <li>Sistema 1: operaciones productivas</li>
+          <li>Sistema 2: coordinación anti-oscilación</li>
+          <li>Sistema 3: control interno y auditoría</li>
+          <li>Sistema 4: inteligencia y adaptación</li>
+          <li>Sistema 5: identidad y política normativa</li>
+        </ul>
+        <span class="key">VIABILIDAD ORGANIZACIONAL</span>
+      </div>
+      <div class="tcard">
+        <h3>Ley de Variedad Requerida (Ashby)</h3>
+        <p>Solo la variedad puede absorber variedad. El controlador de un sistema debe tener al menos tanta variedad como el sistema que controla para regularlo eficazmente.</p>
+        <ul>
+          <li>Principio de Requisite Variety (W.R. Ashby)</li>
+          <li>El entorno impone variedad al sistema</li>
+          <li>El gestor debe ampliar su repertorio de respuestas</li>
+          <li>Clave para diseño de estructuras adaptativas</li>
+        </ul>
+        <span class="key">VARIEDAD ↔ CONTROL</span>
+      </div>
+    </div>
+
+    <!-- Panel 4 -->
+    <div class="panel">
+      <div class="tcard amber">
+        <h3>Norbert Wiener (1894–1964)</h3>
+        <p>Matemático del MIT, fundador de la cibernética. Su obra <em>Cybernetics</em> (1948) estableció los conceptos de retroalimentación, información y control como base de una nueva ciencia interdisciplinar.</p>
+        <ul>
+          <li>Retroalimentación como principio universal</li>
+          <li>Unificó biología, ingeniería y ciencias sociales</li>
+          <li>Anticipó la inteligencia artificial</li>
+          <li>Énfasis en las implicaciones sociales de la tecnología</li>
+        </ul>
+        <span class="key">PADRE DE LA CIBERNÉTICA</span>
+      </div>
+      <div class="tcard">
+        <h3>Stafford Beer (1926–2002)</h3>
+        <p>Científico de gestión británico, creador del Modelo de Sistema Viable. Aplicó la cibernética a la organización empresarial y gubernamental, incluyendo el proyecto Cybersyn en Chile (1971).</p>
+        <ul>
+          <li>Fundador de la Cibernética de Gestión</li>
+          <li>Diseñó el MSV para organizaciones complejas</li>
+          <li>Proyecto Cybersyn: gobierno cibernético real</li>
+          <li>Brain of the Firm (1972) obra clave</li>
+        </ul>
+        <span class="key">CIBERNÉTICA ORGANIZACIONAL</span>
+      </div>
+    </div>
+
+  </div><!-- tab-panels -->
+</div>
+</section>
+
+<!-- EJEMPLOS -->
+<section id="ejemplos">
+<div class="ctr">
+  <div class="sh">
+    <div class="tag">02 — Aplicaciones</div>
+    <h2>Casos <em>Reales</em> de Cibernética Organizacional</h2>
+    <p>La cibernética ha dejado huella en la gestión moderna. Estos casos ilustran sus principios en acción.</p>
+  </div>
+  <div class="timeline">
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-meta">Gestión Empresarial · Stafford Beer</div>
+      <h4>Proyecto Cybersyn — Chile, 1971</h4>
+      <p>Red cibernética nacional diseñada para coordinar la economía chilena en tiempo real. Usaba telex, salas de control y modelos computarizados para procesar retroalimentación de cientos de empresas estatales y permitir decisiones gubernamentales ágiles. Primer intento real de gobierno cibernético.</p>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot" style="background:var(--amber);box-shadow:0 0 8px rgba(255,179,71,.5)"></div>
+      <div class="tl-meta">Manufactura · Toyota</div>
+      <h4>Sistema de Producción Toyota (TPS)</h4>
+      <p>El sistema Kanban y Jidoka son mecanismos de retroalimentación negativa en acción: detectan errores en tiempo real y detienen la producción para corregirlos. La planta se autorregula mediante señales visuales (Andon) que comunican desviaciones al estándar y activan respuestas inmediatas.</p>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot" style="background:var(--cyan);box-shadow:0 0 8px rgba(0,212,255,.5)"></div>
+      <div class="tl-meta">Tecnología · Internet</div>
+      <h4>Protocolo TCP/IP como sistema cibernético</h4>
+      <p>La transmisión de datos por internet es un ciclo cibernético: el receptor envía confirmaciones (ACKs) al emisor, quien ajusta la velocidad de envío según la retroalimentación recibida. La pérdida de paquetes es la señal de error que desencadena la corrección automática.</p>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-meta">Recursos Humanos · Organizaciones modernas</div>
+      <h4>Sistemas de evaluación de desempeño (OKRs)</h4>
+      <p>Los OKRs (Objectives and Key Results) son bucles de retroalimentación trimestrales: se define el estado deseado (objetivo), se mide el estado actual (key results) y se generan acciones correctivas. Google, Intel y miles de empresas los usan como mecanismo de control cibernético.</p>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot" style="background:var(--amber);box-shadow:0 0 8px rgba(255,179,71,.5)"></div>
+      <div class="tl-meta">Salud Pública · Epidemiología</div>
+      <h4>Sistemas de vigilancia epidemiológica</h4>
+      <p>Las redes de vigilancia sanitaria funcionan como sistemas cibernéticos: sensores (hospitales, laboratorios) detectan señales de alerta, la información se procesa centralmente y se activan respuestas de control (cuarentenas, vacunación). El MSV de Beer puede mapear directamente su estructura.</p>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- VIDEO -->
+<section id="video">
+<div class="ctr">
+  <div class="sh">
+    <div class="tag">03 — Recursos Audiovisuales</div>
+    <h2>Videos de <em>Apoyo</em></h2>
+    <p>Dos recursos seleccionados para profundizar en los conceptos de la cibernética y su relación con la teoría de sistemas.</p>
+  </div>
+  <div class="videos-grid">
+    <div class="video-item">
+      <div class="video-label">Video 01 · Gradus (2025)</div>
+      <div class="video-wrap">
+        <iframe src="https://www.youtube.com/embed/Heyc9LibN1s"
+          title="Los Sistemas Cibernéticos Explicados"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen></iframe>
+      </div>
+      <p class="video-desc">Los Sistemas Cibernéticos Explicados: De la Teoría a su Aplicación en TI Moderna — conceptos clave, casos reales y el bucle de retroalimentación.</p>
+    </div>
+    <div class="video-item">
+      <div class="video-label">Video 02 · Globuss Biogestión (2019)</div>
+      <div class="video-wrap">
+        <iframe src="https://www.youtube.com/embed/JGNA4nYzREA"
+          title="Teoría general de sistemas y cibernética"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen></iframe>
+      </div>
+      <p class="video-desc">Teoría General de Sistemas y Cibernética con simuladores — propiedades de redes, autoorganización, autorregulación y osciladores. Explicación clara y visual.</p>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- JUEGOS -->
+<section id="juegos">
+<div class="ctr">
+  <div class="sh">
+    <div class="tag">04 — Actividades</div>
+    <h2>Juegos de <em>Aprendizaje</em></h2>
+    <p>Consolida los conceptos con estas dos actividades interactivas.</p>
+  </div>
+
+  <!-- COMPLETA LA FRASE -->
+  <div class="game-box">
+    <h3>// JUEGO_01 → Completa la Frase</h3>
+    <p>Escribe la palabra que falta en cada oración sobre Teoría de la Organización y Cibernética. No distingue mayúsculas.</p>
+    <div class="fib-list" id="fibList"></div>
+    <button class="gbtn" id="checkFib" style="margin-top:1rem">Verificar</button>
+    <button class="gbtn sec" id="resetFib">↺ Reiniciar</button>
+    <div class="fib-score" id="fibScore"></div>
+  </div>
+
+  <!-- MEMORIA -->
+  <div class="game-box">
+    <h3>// JUEGO_02 → Memoria Cibernética</h3>
+    <p>Encuentra los pares: cada concepto tiene su definición. Haz clic para voltear las tarjetas y empareja.</p>
+    <div class="mem-stats" id="memStats">INTENTOS: 0 &nbsp;|&nbsp; PARES: 0 / 6</div>
+    <div class="mem-grid" id="memGrid"></div>
+    <div class="mem-win" id="memWin"></div>
+    <button class="gbtn sec" id="resetMem" style="margin-top:.8rem">↺ Reiniciar</button>
+  </div>
+</div>
+</section>
+
+<!-- QUIZ -->
+<section id="quiz">
+<div class="ctr">
+  <div class="sh">
+    <div class="tag">05 — Evaluación</div>
+    <h2>Quiz de <em>Comprensión</em></h2>
+    <p>Verifica tu aprendizaje sobre la Teoría de la Organización y Cibernética.</p>
+  </div>
+  <div id="quizForm"></div>
+  <div class="quiz-actions">
+    <button class="gbtn" id="submitQuiz">Enviar respuestas</button>
+  </div>
+  <div id="quizResult" class="qresult hidden"></div>
+</div>
+</section>
+
+<footer>
+  <p>OVA · <strong>Teoría de la Organización y Cibernética</strong> · Teoría General de Sistemas</p>
+</footer>
+
+<script>
+/* NAV */
+const nt=document.getElementById('nt'),nl=document.getElementById('nl');
+nt.addEventListener('click',()=>nl.classList.toggle('open'));
+nl.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>nl.classList.remove('open')));
+const secs=document.querySelectorAll('section[id]');
+window.addEventListener('scroll',()=>{
+  let c='';secs.forEach(s=>{if(window.scrollY>=s.offsetTop-130)c=s.id;});
+  nl.querySelectorAll('a').forEach(a=>{a.style.color=a.getAttribute('href')==='#'+c?'var(--g)':'';});
+},{passive:true});
+
+/* TABS */
+document.querySelectorAll('.tab').forEach(tab=>{
+  tab.addEventListener('click',()=>{
+    document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+    document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+    tab.classList.add('active');
+    document.querySelectorAll('.panel')[parseInt(tab.dataset.tab)].classList.add('active');
+  });
+});
+
+/* ===== JUEGO 1: COMPLETA LA FRASE ===== */
+const fibData=[
+  {before:'La cibernética fue fundada por Norbert', blank:'WIENER', after:'en 1948 con su obra Cybernetics.', hint:'Matemático del MIT, apellido de 6 letras.'},
+  {before:'El Modelo de Sistema Viable fue creado por Stafford', blank:'BEER', after:', aplicando la cibernética a las organizaciones.', hint:'Bebida también, apellido de 4 letras.'},
+  {before:'La Ley de Variedad Requerida fue formulada por W. Ross', blank:'ASHBY', after:', estableciendo que solo la variedad absorbe variedad.', hint:'Apellido de 5 letras.'},
+  {before:'La', blank:'HOMEOSTASIS', after:'es la capacidad de un sistema de mantener su equilibrio interno ante perturbaciones externas.', hint:'10 letras, mecanismo biológico de autorregulación.'},
+  {before:'En el MSV, el Sistema', blank:'CINCO', after:'representa la identidad y la política normativa de la organización.', hint:'Número en español, máxima autoridad del MSV.'},
+  {before:'La retroalimentación', blank:'NEGATIVA', after:'detecta errores y genera correcciones para mantener al sistema en su meta.', hint:'Opuesto a positiva, 8 letras.'},
+  {before:'El Proyecto', blank:'CYBERSYN', after:'fue un sistema de control económico cibernético implementado en Chile en 1971.', hint:'Nombre en inglés del proyecto chileno, 8 letras.'},
+];
+
+function buildFib(){
+  document.getElementById('fibScore').textContent='';
+  const list=document.getElementById('fibList'); list.innerHTML='';
+  fibData.forEach((item,i)=>{
+    const div=document.createElement('div'); div.className='fib-item';
+    div.innerHTML=`<p>${item.before} <input class="fib-input" id="fib${i}" maxlength="${item.blank.length+3}" placeholder="${'_'.repeat(item.blank.length)}" autocomplete="off" spellcheck="false"/> ${item.after}</p>
+    <div class="fib-hint" id="fibh${i}">💡 Pista: ${item.hint} | Respuesta: <strong>${item.blank}</strong></div>`;
+    list.appendChild(div);
+    div.querySelector('input').addEventListener('keydown',e=>{if(e.key==='Enter')document.getElementById('checkFib').click();});
+  });
+}
+buildFib();
+
+document.getElementById('checkFib').addEventListener('click',()=>{
+  let score=0;
+  fibData.forEach((item,i)=>{
+    const inp=document.getElementById('fib'+i);
+    const val=inp.value.trim().toUpperCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+    const ans=item.blank.normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+    inp.classList.remove('correct','wrong');
+    const ok=val===ans;
+    inp.classList.add(ok?'correct':'wrong');
+    const hint=document.getElementById('fibh'+i);
+    if(!ok)hint.classList.add('show');
+    if(ok)score++;
+    inp.disabled=true;
+  });
+  const sc=document.getElementById('fibScore');
+  sc.textContent='RESULTADO: '+score+'/'+fibData.length+(score===fibData.length?' ✔ PERFECTO':score>=4?' — BIEN':'— REPASA');
+  sc.style.color=score===fibData.length?'var(--g)':score>=4?'var(--amber)':'var(--red)';
+});
+document.getElementById('resetFib').addEventListener('click',buildFib);
+
+/* ===== JUEGO 2: MEMORIA ===== */
+const memPairs=[
+  {id:1, term:'CIBERNÉTICA',   def:'Ciencia del control y comunicación en sistemas (Wiener, 1948)'},
+  {id:2, term:'MSV',           def:'Modelo de 5 subsistemas para la viabilidad organizacional de Beer'},
+  {id:3, term:'HOMEOSTASIS',   def:'Capacidad de mantener el equilibrio interno ante perturbaciones'},
+  {id:4, term:'LEY DE ASHBY',  def:'Solo la variedad puede absorber variedad en un sistema'},
+  {id:5, term:'RETROALIMENTACIÓN NEG.', def:'Mecanismo corrector que reduce desviaciones hacia la meta'},
+  {id:6, term:'CYBERSYN',      def:'Proyecto cibernético de gestión económica en Chile, 1971'},
+];
+let memFlipped=[],memMatched=new Set(),memAttempts=0,memLock=false;
+
+function buildMem(){
+  memFlipped=[];memMatched=new Set();memAttempts=0;memLock=false;
+  document.getElementById('memWin').textContent='';
+  updateMemStats();
+  const cards=[];
+  memPairs.forEach(p=>{
+    cards.push({id:p.id,type:'term',text:p.term});
+    cards.push({id:p.id,type:'def', text:p.def});
+  });
+  cards.sort(()=>Math.random()-.5);
+  const grid=document.getElementById('memGrid'); grid.innerHTML='';
+  cards.forEach((card,idx)=>{
+    const div=document.createElement('div'); div.className='mem-card'; div.dataset.idx=idx; div.dataset.id=card.id; div.dataset.type=card.type;
+    div.innerHTML=`<div class="mem-inner"><div class="mem-face mem-back">?</div><div class="mem-face mem-front"><span>${card.text}</span></div></div>`;
+    div.addEventListener('click',()=>onMemClick(div));
+    grid.appendChild(div);
+  });
+}
+
+function updateMemStats(){
+  document.getElementById('memStats').textContent='INTENTOS: '+memAttempts+' \u00a0|\u00a0 PARES: '+memMatched.size+' / '+memPairs.length;
+}
+
+function onMemClick(card){
+  if(memLock||card.classList.contains('flipped')||card.classList.contains('matched'))return;
+  card.classList.add('flipped');
+  memFlipped.push(card);
+  if(memFlipped.length===2){
+    memAttempts++;
+    memLock=true;
+    const[a,b]=memFlipped;
+    if(a.dataset.id===b.dataset.id&&a.dataset.type!==b.dataset.type){
+      a.classList.add('matched'); b.classList.add('matched');
+      memMatched.add(a.dataset.id);
+      memFlipped=[];memLock=false;
+      updateMemStats();
+      if(memMatched.size===memPairs.length){
+        document.getElementById('memWin').textContent='✔ ¡COMPLETADO! Encontraste todos los pares en '+memAttempts+' intentos.';
+        document.getElementById('memWin').style.color='var(--g)';
+      }
+    } else {
+      setTimeout(()=>{
+        a.classList.remove('flipped'); b.classList.remove('flipped');
+        memFlipped=[];memLock=false;
+        updateMemStats();
+      },1100);
+    }
+  }
+}
+buildMem();
+document.getElementById('resetMem').addEventListener('click',buildMem);
+
+/* QUIZ */
+const qdata=[
+  {q:'¿Quién fundó la cibernética y publicó Cybernetics en 1948?',
+   opts:['Ludwig von Bertalanffy','Norbert Wiener','Stafford Beer','W. Ross Ashby'],c:1},
+  {q:'La Ley de Variedad Requerida establece que:',
+   opts:['El sistema siempre colapsa ante la variedad del entorno','Solo la variedad puede absorber variedad','Los sistemas simples son más viables','La variedad debe minimizarse en toda organización'],c:1},
+  {q:'¿Cuántos sistemas componen el Modelo de Sistema Viable de Stafford Beer?',
+   opts:['3','4','5','7'],c:2},
+  {q:'¿Qué tipo de retroalimentación detecta errores y genera correcciones hacia la meta?',
+   opts:['Retroalimentación positiva','Retroalimentación reforzadora','Retroalimentación negativa','Retroalimentación amplificadora'],c:2},
+  {q:'El Proyecto Cybersyn (Chile, 1971) fue diseñado por:',
+   opts:['Norbert Wiener','Ludwig von Bertalanffy','Stafford Beer','Heinz von Foerster'],c:2},
+  {q:'¿Qué propiedad describe la capacidad de un sistema de mantener su equilibrio interno?',
+   opts:['Viabilidad','Homeostasis','Variedad','Emergencia'],c:1},
+  {q:'La cibernética de segundo orden se diferencia de la de primer orden en que:',
+   opts:['Solo estudia máquinas','Incluye al observador dentro del sistema','Ignora la retroalimentación','Se aplica únicamente a organismos vivos'],c:1},
+];
+function buildQuiz(){
+  const f=document.getElementById('quizForm');f.innerHTML='';
+  document.getElementById('quizResult').classList.add('hidden');
+  document.getElementById('submitQuiz').disabled=false;
+  qdata.forEach((item,qi)=>{
+    const div=document.createElement('div');div.className='qq';div.dataset.qi=qi;
+    const p=document.createElement('p');p.innerHTML='<span class="qn">Q'+(qi+1)+'.</span>'+item.q;
+    div.appendChild(p);
+    const opts=document.createElement('div');opts.className='qopts';
+    item.opts.forEach((opt,oi)=>{
+      const lbl=document.createElement('label');lbl.className='qo';
+      lbl.innerHTML='<input type="radio" name="q'+qi+'" value="'+oi+'"/> '+opt;
+      opts.appendChild(lbl);
+    });
+    div.appendChild(opts);f.appendChild(div);
+  });
+}
+buildQuiz();
+document.getElementById('submitQuiz').addEventListener('click',()=>{
+  let score=0,all=true;
+  qdata.forEach((item,qi)=>{
+    const sel=document.querySelector('input[name="q'+qi+'"]:checked');
+    const qDiv=document.querySelector('.qq[data-qi="'+qi+'"]');
+    if(!sel){all=false;return;}
+    const ans=parseInt(sel.value);
+    qDiv.querySelectorAll('.qo').forEach((o,oi)=>{
+      if(oi===item.c)o.classList.add('correct');
+      else if(oi===ans&&ans!==item.c)o.classList.add('wrong');
+    });
+    if(ans===item.c)score++;
+    qDiv.querySelectorAll('input').forEach(i=>i.disabled=true);
+  });
+  if(!all){alert('Responde todas las preguntas antes de enviar.');return;}
+  document.getElementById('submitQuiz').disabled=true;
+  const pct=Math.round((score/qdata.length)*100);
+  const r=document.getElementById('quizResult');r.classList.remove('hidden');
+  let e='😕',m='Repasa los conceptos e intenta de nuevo.';
+  if(pct>=85){e='🎉';m='¡Excelente! Dominas la Teoría de la Organización y Cibernética.';}
+  else if(pct>=57){e='👍';m='Buen trabajo. Revisa los temas donde fallaste.';}
+  r.innerHTML='<div class="qlbl">RESULTADO</div><div class="qscore">'+score+'/'+qdata.length+'</div><div class="qlbl">'+pct+'% DE ACIERTOS</div><div class="qfb">'+e+' '+m+'</div><button class="gbtn" id="retakeBtn">↺ Reintentar</button>';
+  r.scrollIntoView({behavior:'smooth',block:'center'});
+  document.getElementById('retakeBtn').addEventListener('click',buildQuiz);
+});
+</script>
+</body>
+</html>
